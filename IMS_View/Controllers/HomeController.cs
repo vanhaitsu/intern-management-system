@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using AutoMapper;
-using IMS.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using IMS_View.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Model.ViewModels.AccountModel;
 
 namespace IMS.Controllers
 {
@@ -32,13 +33,37 @@ namespace IMS.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            Account account = await _accountService.CheckLogin(email, password);
+            AccountLoginModel account = await _accountService.CheckLogin(email, password);
             if (account == null)
             {
                 ViewBag.Error = "Email or password is wrong.\nPlease check again!";
                 return View();
             }
-            return RedirectToAction("Index", "Admin");
+            else
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
+                    new Claim(ClaimTypes.Name, account.Email),
+                    new Claim(ClaimTypes.Role, account.Role)
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
+                    new AuthenticationProperties()
+                    {
+                        IsPersistent = true
+                    });
+            }
+            if (account.Role == "Admin")
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                return RedirectToAction("Index", "HR");
+            }
         }
 
         [HttpGet]
@@ -61,6 +86,13 @@ namespace IMS.Controllers
                 ViewBag.Message = "Please validate the inputed value!";
                 return View(accountRegisterModel);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

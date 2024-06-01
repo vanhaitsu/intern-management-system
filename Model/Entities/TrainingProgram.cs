@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMS.Models.Entities
 {
-    public class TrainingProgram
+    public class TrainingProgram : BaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Duration { get; set; }

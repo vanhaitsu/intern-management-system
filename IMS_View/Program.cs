@@ -9,6 +9,7 @@ using IMS_VIew.Services.Interfaces;
 using IMS_View.Services.Services;
 using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace IMS_View
 {
@@ -27,6 +28,12 @@ namespace IMS_View
                     //b => b.MigrationsAssembly("IMS"));
                 //options.UseSqlServer(b => b.MigrationsAssembly("WarrantyManagement"));
             });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o =>
+                {
+                    o.LoginPath = "/Home/Login";
+                });
 
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllersWithViews();

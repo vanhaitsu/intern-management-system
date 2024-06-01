@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IMS.Models.ViewModels
+namespace Model.ViewModels.AccountModel
 {
     public class AccountRegisterModel
     {

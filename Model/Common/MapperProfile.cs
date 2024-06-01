@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IMS.Models.Entities;
-using IMS.Models.ViewModels;
+using Model.ViewModels.AccountModel;
 
 namespace IMS.Models.Common
 {
