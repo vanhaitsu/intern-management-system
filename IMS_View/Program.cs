@@ -10,6 +10,7 @@ using IMS_View.Services.Services;
 using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Model.Common;
 
 namespace IMS_View
 {
@@ -25,7 +26,7 @@ namespace IMS_View
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DbContext"));
-                    //b => b.MigrationsAssembly("IMS"));
+                //b => b.MigrationsAssembly("IMS"));
                 //options.UseSqlServer(b => b.MigrationsAssembly("WarrantyManagement"));
             });
 
@@ -52,6 +53,8 @@ namespace IMS_View
 
             var app = builder.Build();
 
+            InitializeRoles(app.Services).Wait();
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -72,6 +75,11 @@ namespace IMS_View
                 pattern: "{controller=Home}/{action=Login}/{id?}");
 
             app.Run();
+        }
+
+        private static async Task InitializeRoles(IServiceProvider serviceProvider)
+        {
+            await InitialSeeding.Initialize(serviceProvider);
         }
     }
 }

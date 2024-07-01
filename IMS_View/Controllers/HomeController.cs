@@ -60,6 +60,10 @@ namespace IMS.Controllers
             {
                 return RedirectToAction("Index", "Admin");
             }
+            else if (account.Role == "Mentor")
+            {
+                return RedirectToAction("Index", "Mentor");
+            }
             else
             {
                 return RedirectToAction("Index", "HR");
@@ -79,14 +83,15 @@ namespace IMS.Controllers
             {
                 if (await _accountService.SignUp(accountRegisterModel))
                     ViewBag.Message = "Register successfully!";
-                    return View(accountRegisterModel);
-                }
+                return View(accountRegisterModel);
+            }
             else
             {
                 ViewBag.Message = "Please validate the inputed value!";
                 return View(accountRegisterModel);
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
