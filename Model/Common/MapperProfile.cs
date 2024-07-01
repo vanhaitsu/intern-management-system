@@ -9,8 +9,8 @@ namespace IMS.Models.Common
         public MapperProfile() 
         {
             CreateMap<AccountRegisterModel, Account>();
-            CreateMap<AccountGetModel, Account>();
-            CreateMap<Account, AccountGetModel>();
+            CreateMap<AccountGetModel, Account>().ReverseMap();
+            CreateMap<Account, AccountUpdateModel>().ForMember(dest => dest.RoleName, opt => opt.Ignore()).ReverseMap();
         }
     }
 }

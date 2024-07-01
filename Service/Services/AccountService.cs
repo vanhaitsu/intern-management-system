@@ -58,9 +58,24 @@ namespace IMS_View.Services.Services
             return false;
         }
 
-        public async Task<List<Account>> GetAll()
+        public async Task<bool> Create(AccountRegisterModel accountRegisterModel)
         {
-            var accounts = await _unitOfWork.AccountRepository.GetAllAsync();
+            Account user = _mapper.Map<Account>(accountRegisterModel);
+            Role role = await _unitOfWork.RoleRepository.GetAsync(accountRegisterModel.RoleId);
+            user.RoleId = role.Id;
+            user.IsDeleted = false;
+            user.Role = role;
+            _unitOfWork.AccountRepository.AddAsync(user);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<Account> GetAccountAsync(Guid id)
+        {
+            var accounts = await _unitOfWork.AccountRepository.GetAsync(id);
             if(accounts != null)
             {
                 return accounts;
@@ -70,20 +85,26 @@ namespace IMS_View.Services.Services
 
         public async Task<bool> Update(Guid id, AccountUpdateModel accountUpdateModel)
         {
-            var existedAccount = _unitOfWork.AccountRepository.GetAsync(id);
+            var existedAccount = await _unitOfWork.AccountRepository.GetAsync(id);
             if (existedAccount != null)
             {
-                Role role = await _unitOfWork.RoleRepository.GetByName(accountUpdateModel.RoleName);
-                Account user = _mapper.Map<Account>(accountUpdateModel);
-                user.RoleId = role.Id;
-                _unitOfWork.AccountRepository.Update(user);
+                var roleExists = await _unitOfWork.RoleRepository.GetAsync(accountUpdateModel.RoleId);
+                if (roleExists == null)
+                {
+                    return false; 
+                }
+                _mapper.Map(accountUpdateModel, existedAccount);
+               // existedAccount.RoleId = accountUpdateModel.RoleId;
+                existedAccount.Role = roleExists;
+                _unitOfWork.AccountRepository.Update(existedAccount);
                 if (await _unitOfWork.SaveChangeAsync() > 0)
                 {
-                    return true;
+                    return true; 
                 }
             }
-            return false;
+            return false; 
         }
+
 
         public async Task<bool> Delete(Guid id)
         {
@@ -107,6 +128,7 @@ namespace IMS_View.Services.Services
             foreach (Account account in accounts)
             {
                 var accountModel = _mapper.Map<AccountGetModel>(account);
+                accountModel.Status = account.IsDeleted;
                 foreach (Role role in roles)
                 {
                     if (account.RoleId == role.Id)

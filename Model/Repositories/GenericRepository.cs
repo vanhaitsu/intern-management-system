@@ -28,7 +28,7 @@ namespace IMS.Models.Repositories
         public async Task AddAsync(TEntity entity)
         {
             entity.CreatedDate = DateTime.UtcNow;
-            //entity.CreatedBy = _claimsService.GetCurrentUserId();
+            entity.IsDeleted = false;
             await _dbSet.AddAsync(entity);
         }
 
