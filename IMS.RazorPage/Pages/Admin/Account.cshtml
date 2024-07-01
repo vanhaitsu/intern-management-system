@@ -1,0 +1,170 @@
+﻿@page
+@using System.Security.Claims
+@using IMS.Models.Entities
+@using Model.ViewModels.AccountModel
+@model AccountManagementModel
+@{
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    @{
+        var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        var accountList = ViewData["Accounts"] as List<AccountGetModel>;
+        var accountUpdate = Model.accountUpdate;
+    }
+    @* <div class="d-flex vh-100">
+        <div class="col-2 vh-100 border-end p-3">
+            <nav class="nav flex-column nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active fs-5" aria-current="page" href="#">
+                        <i class="bi bi-person"></i>
+                        User
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link mt-2 .text-danger fs-5" href="#">
+                        <i class="bi bi-box-arrow-right"></i>
+                        @email
+                    </a>
+                </li>
+            </nav>
+        </div> *@
+        <div class="col-10 vh-100" style="background-color: #f8f9fa;">
+            <div class="input-group mt-3 m-auto w-50">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <span class="input-group-text" id="basic-addon2">
+                    <i class="bi bi-search"></i>
+                </span>
+            </div>
+            <div class="m-4">
+                @if (accountList != null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Full name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var account in accountList)
+                            {
+                                var modalId = $"modal-{account.Id}";
+                                <tr>
+                                    <th scope="row">@(accountList.IndexOf(account) + 1)</th>
+                                    <td>@account.FullName</td>
+                                    <td>@account.Email</td>
+                                    <td>@account.RoleId</td>
+                                    <td>
+                                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#@modalId">
+                                            <i class="bi bi-three-dots"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="@modalId-Label">Edit Account</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="post">
+                                                    <div class="mb-3">
+                                                        <label for="basic-url-@account.Id" class="form-label" asp-for="@accountUpdate.FullName">Name</label>
+                                                        <input type="text" value="@account.FullName" class="form-control" id="basic-url-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.FullName">
+                                                        <span asp-validation-for="@accountUpdate.FullName" class="text-danger"></span>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="basic-url-email-@account.Id" class="form-label" asp-for="@accountUpdate.Email">Email</label>
+                                                        <input type="text" value="@account.Email" class="form-control" id="basic-url-email-@account.Id" asp-for="@accountUpdate.Email">
+                                                        <span asp-validation-for="@accountUpdate.Email" class="text-danger"></span>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" asp-for="@accountUpdate.Address">Address</label>
+                                                        <input type="text" value="@account.Address" class="form-control" id="basic-url-address-@account.Id" asp-for="@accountUpdate.Address">
+                                                        <span asp-validation-for="@accountUpdate.Address" class="text-danger"></span>
+                                                    </div>
+
+                                                    <div class="d-flex">
+                                                        <div class="mb-3 col-5">
+                                                            <label class="form-label" asp-for="@accountUpdate.PhoneNumber">Phone</label>
+                                                            <input type="text" value="@account.PhoneNumber" class="form-control" id="basic-url-phone-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.PhoneNumber">
+                                                            <span asp-validation-for="@accountUpdate.PhoneNumber" class="text-danger"></span>
+                                                        </div>
+
+                                                        <div class="mb-3 col-5">
+                                                            <label class="form-label" asp-for="@accountUpdate.DOB">Birthday</label>
+                                                            <input type="text" value="@account.DOB" class="form-control" id="basic-url-dob-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.DOB">
+                                                            <span asp-validation-for="@accountUpdate.DOB" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex">
+                                                        <div class="mb-3 col-5">
+                                                            <label class="form-label" asp-for="@accountUpdate.Gender">Gender</label>
+                                                            <select class="form-select" value="@account.Gender" aria-label="Default select example" asp-for="@accountUpdate.Gender">
+                                                                <option value="Male">Male</option>
+                                                                <option value="Female">Female</option>
+                                                            </select>
+                                                            <span asp-validation-for="@accountUpdate.Gender" class="text-danger"></span>
+                                                        </div>
+
+                                                        <div class="mb-3 col-5">
+                                                            <label class="form-label" asp-for="@accountUpdate.RoleId">Role</label>
+                                                            <input type="text" value="@account.RoleName" class="form-control" id="basic-url-role-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.RoleId">
+                                                            <span asp-validation-for="@accountUpdate.RoleId" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </tbody>
+
+                    </table>
+                }
+            </div>
+
+            
+            <div class="m-auto">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>

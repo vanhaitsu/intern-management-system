@@ -7,5 +7,6 @@ namespace IMS_View.Services.Interfaces
     {
         Task<AccountLoginModel> CheckLogin(string email, string password);
         Task<bool> SignUp(AccountRegisterModel accountRegisterModel);
+        Task<List<AccountGetModel>> GetAllAccounts();
     }
 }

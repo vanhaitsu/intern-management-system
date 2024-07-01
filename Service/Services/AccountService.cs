@@ -2,7 +2,7 @@
 using IMS.Models.Entities;
 using IMS.Models.Interfaces;
 using IMS_View.Services.Interfaces;
-using Microsoft.Identity.Client;
+using Model.Enums;
 using Model.ViewModels.AccountModel;
 
 namespace IMS_View.Services.Services
@@ -56,6 +56,26 @@ namespace IMS_View.Services.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<AccountGetModel>> GetAllAccounts()
+        {
+            List<AccountGetModel> accountGetModels = new List<AccountGetModel>();
+            List<Account> accounts = await _unitOfWork.AccountRepository.GetAllAsync();
+            List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
+            foreach (Account account in accounts)
+            {
+                var accountModel = _mapper.Map<AccountGetModel>(account);
+                foreach (Role role in roles)
+                {
+                    if (account.RoleId == role.Id)
+                    {
+                        accountModel.RoleName = role.Name;
+                    }
+                }
+                accountGetModels.Add(accountModel);
+            }
+            return accountGetModels;
         }
     }
 }

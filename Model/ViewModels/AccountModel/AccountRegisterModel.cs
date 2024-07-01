@@ -11,6 +11,9 @@ namespace Model.ViewModels.AccountModel
         [Required(ErrorMessage = "Gender is required")]
         public string Gender { get; set; }
 
+        [Required(ErrorMessage = "Role is required")]
+        public string RoleId { get; set; }
+
         [Required(ErrorMessage = "Date of Birth is required")]
         public DateTime DOB { get; set; }
 
