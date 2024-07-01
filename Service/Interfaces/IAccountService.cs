@@ -10,5 +10,6 @@ namespace IMS_View.Services.Interfaces
         Task<bool> SignUp(AccountRegisterModel accountRegisterModel);
         Task<bool> Update(Guid id,AccountUpdateModel accountUpdateModel);
         Task<bool> Delete(Guid id);
+        Task<List<AccountGetModel>> GetAllAccounts();
     }
 }

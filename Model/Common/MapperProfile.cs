@@ -9,6 +9,8 @@ namespace IMS.Models.Common
         public MapperProfile() 
         {
             CreateMap<AccountRegisterModel, Account>();
+            CreateMap<AccountGetModel, Account>();
+            CreateMap<Account, AccountGetModel>();
         }
     }
 }

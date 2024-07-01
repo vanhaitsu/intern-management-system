@@ -33,14 +33,5 @@ namespace Model.ViewModels.AccountModel
         [Required(ErrorMessage = "Address is required")]
         [StringLength(256, ErrorMessage = "Address must be no more than 256 characters")]
         public string Address { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        [StringLength(128, MinimumLength = 8, ErrorMessage = "Password must be from 8 to 128 characters")]
-        public string Password { get; set; }
-
-        [Required(ErrorMessage = "Confirm Password is required")]
-        [StringLength(128, MinimumLength = 8, ErrorMessage = "Confirm Password must be from 8 to 128 characters")]
-        [Compare("Password", ErrorMessage = "Password and Confirm Password does not match")]
-        public string ConfirmPassword { get; set; }
     }
 }
