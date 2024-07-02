@@ -15,6 +15,7 @@ namespace Model.ViewModels.AccountModel
         public Guid RoleId { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]
+        [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
 
         [Required(ErrorMessage = "PhoneNumber is required"), Phone(ErrorMessage = "Invalid phone format")]

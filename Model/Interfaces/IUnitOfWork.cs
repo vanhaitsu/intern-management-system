@@ -1,6 +1,4 @@
-﻿using IMS_View.Models.Interfaces;
-using Model.Interfaces;
-
+﻿
 namespace IMS.Models.Interfaces
 {
     public interface IUnitOfWork
@@ -9,6 +7,8 @@ namespace IMS.Models.Interfaces
         IAccountRepository AccountRepository { get; }
         IRoleRepository RoleRepository {  get; }
         ITraineeRepository TraineeRepository { get; }
+
+        ITrainingProgramRepository TrainingProgramRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

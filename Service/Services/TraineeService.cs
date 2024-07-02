@@ -4,14 +4,15 @@ using IMS.Models.Interfaces;
 using IMS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Model.ViewModels.TraineeModel;
+using Model.ViewModels.AccountModel;
 
 namespace IMS_View.Services.Services
 {
-    public class TraneeService: ITraineeService
+    public class TraineeService: ITraineeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public TraneeService(IUnitOfWork unitOfWork, IMapper mapper)
+        public TraineeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -43,9 +44,11 @@ namespace IMS_View.Services.Services
             return loginModel;
         }
 
-        public async Task<bool> SignUp(TraineeRegisterModel traineeRegisterModel)
+
+        public async Task<bool> Create(TraineeRegisterModel traineeRegisterModel)
         {
             Trainee trainee = _mapper.Map<Trainee>(traineeRegisterModel);
+            trainee.IsDeleted = false;
             _unitOfWork.TraineeRepository.AddAsync(trainee);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {
@@ -54,11 +57,15 @@ namespace IMS_View.Services.Services
             return false;
         }
 
-        public async Task<bool> Create(TraineeRegisterModel traineeRegisterModel)
+        public async Task<bool> CreateRange(List<TraineeRegisterModel> traineeRegisterModels)
         {
-            Trainee trainee = _mapper.Map<Trainee>(traineeRegisterModel);
-            trainee.IsDeleted = false;
-            _unitOfWork.TraineeRepository.AddAsync(trainee);
+            List<Trainee> trainees = _mapper.Map<List<Trainee>>(traineeRegisterModels);
+            foreach(var trainee in trainees)
+            {
+                trainee.IsDeleted = false;
+                trainee.Password = "123456789";
+            }
+            _unitOfWork.TraineeRepository.AddRangeAsync(trainees);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {
                 return true;
@@ -81,7 +88,33 @@ namespace IMS_View.Services.Services
             var existedTrainee = await _unitOfWork.TraineeRepository.GetAsync(id);
             if (existedTrainee != null)
             {
+                TrainingProgram programExists = null;
+                if (!string.IsNullOrEmpty(traineeUpdateModel.ProgramName))
+                {
+                    programExists = await _unitOfWork.TrainingProgramRepository.GetAsync(traineeUpdateModel.ProgramId);
+                    if (programExists == null)
+                    {
+                        return false;
+                    }
+
+                    if (existedTrainee.TrainingProgram != null)
+                    {
+                        if (existedTrainee.TrainingProgram.Name == traineeUpdateModel.ProgramName)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {  
+                        existedTrainee.TrainingProgram = programExists;
+                    }
+                }
                 _mapper.Map(traineeUpdateModel, existedTrainee);
+                if (!string.IsNullOrEmpty(traineeUpdateModel.ProgramName) && existedTrainee.TrainingProgram == null)
+                {
+                    existedTrainee.TrainingProgram = programExists;
+                }
+
                 _unitOfWork.TraineeRepository.Update(existedTrainee);
                 if (await _unitOfWork.SaveChangeAsync() > 0)
                 {
@@ -90,6 +123,7 @@ namespace IMS_View.Services.Services
             }
             return false;
         }
+
 
 
         public async Task<bool> Delete(Guid id)

@@ -2,7 +2,6 @@
 using IMS.Models.Entities;
 using IMS.Models.Interfaces;
 using IMS.Models.Repositories;
-using IMS_View.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace IMS_View.Models.Repositories

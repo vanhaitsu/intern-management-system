@@ -145,7 +145,7 @@
 
                                                     <div class="mb-3 col-5">
                                                         <label class="form-label" asp-for="@accountUpdate.DOB">Birthday</label>
-                                                        <input type="text" value="@account.DOB" class="form-control" id="basic-url-dob-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.DOB">
+                                                        <input type="text" value="@account.DOB?.ToString("dd-MM-yyyy")" class="form-control" id="basic-url-dob-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.DOB">
                                                         <span asp-validation-for="@accountUpdate.DOB" class="text-danger"></span>
                                                     </div>
                                                 </div>

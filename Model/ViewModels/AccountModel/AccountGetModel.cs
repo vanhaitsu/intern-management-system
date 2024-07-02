@@ -14,6 +14,7 @@ namespace Model.ViewModels.AccountModel
         public string Gender { get; set; }
         public Guid? RoleId { get; set; }
         public string RoleName { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? DOB { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }

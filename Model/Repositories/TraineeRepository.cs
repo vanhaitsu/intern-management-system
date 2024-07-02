@@ -1,18 +1,10 @@
 ﻿using IMS.Models;
 using IMS.Models.Entities;
 using IMS.Models.Interfaces;
-using IMS.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Model.Interfaces;
-using Model.ViewModels.AccountModel;
 using Model.ViewModels.TraineeModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Model.Repositories
+namespace IMS.Models.Repositories
 {
     public class TraineeRepository : GenericRepository<Trainee>, ITraineeRepository
     {

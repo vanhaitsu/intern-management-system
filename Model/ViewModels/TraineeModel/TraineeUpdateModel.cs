@@ -12,8 +12,9 @@ namespace Model.ViewModels.TraineeModel
         [Required(ErrorMessage = "Gender is required")]
         public string Gender { get; set; }
 
-        [Required(ErrorMessage = "ProgramId is required")]
         public Guid ProgramId { get; set; }
+
+        public string ProgramName { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]
         public DateTime DOB { get; set; }
