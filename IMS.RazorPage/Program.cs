@@ -10,6 +10,9 @@ using IMS_View.Services.Services;
 using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Model.Common;
+using Model.Interfaces;
+using Model.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,13 +41,16 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ITraineeService, TraneeService>();
 
 var app = builder.Build();
+await InitialSeeding.Initialize(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -64,3 +70,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+//private static async Task InitializeRolesAsync(IServiceProvider serviceProvider)
+//{
+//    await InitialSeeding.Initialize(serviceProvider);
+//}

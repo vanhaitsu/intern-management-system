@@ -1,4 +1,5 @@
 ﻿using IMS_View.Models.Interfaces;
+using Model.Interfaces;
 
 namespace IMS.Models.Interfaces
 {
@@ -7,6 +8,7 @@ namespace IMS.Models.Interfaces
         AppDbContext DbContext { get; }
         IAccountRepository AccountRepository { get; }
         IRoleRepository RoleRepository {  get; }
+        ITraineeRepository TraineeRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

@@ -18,26 +18,43 @@ namespace IMS.Models.Repositories
         {
             return await _dbContext.Accounts.SingleOrDefaultAsync(a => a.Email.Equals(email));
         }
+        public IQueryable<Account> GetAll()
+        {
+            return _dbContext.Accounts.AsQueryable();
+        }
 
-        public async Task<List<AccountGetModel>> GetAllAccountsWithRole(int pageSize, int pageNumber)
+        public async Task<List<AccountGetModel>> GetAllAccountsWithRole(int pageSize, int pageNumber, string searchTerm)
         {
-            var accountModels = await _dbContext.Accounts
-            .Include(a => a.Role)
-            .Select(a => new AccountGetModel
-        {
-            Id = a.Id,
-            FullName = a.FullName,
-            Address = a.Address,
-            DOB = a.DOB,
-            Email = a.Email,
-            Gender = a.Gender,
-            PhoneNumber = a.PhoneNumber,
-            RoleId = a.RoleId,
-            RoleName = a.Role.Name // Access the Role navigation property
-        })
-        .Skip(pageNumber).Take(pageSize).ToListAsync();
+            IQueryable<Account> query = _dbContext.Accounts.Include(a => a.Role);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(a =>
+                    a.FullName.Contains(searchTerm.ToLower()) ||
+                    a.Email.Contains(searchTerm.ToLower()) ||
+                    a.PhoneNumber.Contains(searchTerm.ToLower())
+                );
+            }
+
+            var accountModels = await query
+                .Select(a => new AccountGetModel
+                {
+                    Id = a.Id,
+                    FullName = a.FullName,
+                    Address = a.Address,
+                    DOB = a.DOB,
+                    Email = a.Email,
+                    Gender = a.Gender,
+                    PhoneNumber = a.PhoneNumber,
+                    RoleId = a.RoleId,
+                    RoleName = a.Role.Name,
+                    Status = a.IsDeleted
+                })
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return accountModels;
         }
+
     }
 }
