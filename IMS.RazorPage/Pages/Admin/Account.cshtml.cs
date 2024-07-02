@@ -3,6 +3,7 @@ using IMS_View.Services.Interfaces;
 using IMS_VIew.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Model.Enums;
 using Model.ViewModels.AccountModel;
 
 namespace IMS.RazorPage.Pages.Admin
@@ -20,17 +21,31 @@ namespace IMS.RazorPage.Pages.Admin
         [BindProperty]
         public AccountUpdateModel accountUpdate { set; get; }
 
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+
+        [BindProperty]
+        public int PageNumber { get; set; } = 1;
+
+        [BindProperty]
+        public int PageSize { get; set; } = 10;
+
         public AccountManagementModel(IAccountService accountService, IRoleService roleService)
         {
             _accountService = accountService;
             _roleService = roleService;
         }
+        public List<AccountGetModel> Accounts { get; set; }
+        public List<Role> Roles { get; set; }
+        public int TotalAccounts { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            List<AccountGetModel> accounts = await _accountService.GetAllAccounts();
-            List<Role> roles = await _roleService.GetAllRoles(100, 1);
-            ViewData["Accounts"] = accounts;
-            ViewData["Roles"] = roles;
+            Accounts = await _accountService.GetAllAccounts(PageSize, PageNumber, SearchTerm);
+            Roles = await _roleService.GetAllRoles(100, 1);
+            TotalAccounts = await _accountService.GetTotalAccountsCount(SearchTerm);
+            ViewData["Accounts"] = Accounts;
+            ViewData["Roles"] = Roles;
+            ViewData["TotalAccountsCount"] = TotalAccounts;
             return Page();
         }
 
@@ -50,6 +65,7 @@ namespace IMS.RazorPage.Pages.Admin
             }
 
         }
+
 
         public async Task<IActionResult> OnPostAddAsync()
         {
@@ -80,12 +96,34 @@ namespace IMS.RazorPage.Pages.Admin
             var deleteResult = await _accountService.Delete(id);
             if (!deleteResult)
             {
-                Message = "Failed to block customer. Please try again.";
+                Message = "Failed to block account. Please try again.";
                 return Page();
             }
             else
             {
                 TempData["SuccessMessage"] = "Account block successfully.";
+            }
+            return RedirectToPage("./Account");
+        }
+
+        public async Task<IActionResult> OnPostRestoreAsync(Guid id)
+        {
+            var accountToDelete = await _accountService.GetAccountAsync(id);
+            if (accountToDelete == null)
+            {
+                Message = "Account not found.";
+                return Page();
+            }
+
+            var restoreResult = await _accountService.Restore(id);
+            if (!restoreResult)
+            {
+                Message = "Failed to Restore account. Please try again.";
+                return Page();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Account restore successfully.";
             }
             return RedirectToPage("./Account");
         }

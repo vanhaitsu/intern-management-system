@@ -17,8 +17,7 @@ namespace Model.Common
         private static readonly string[] roles =
        {
             Enums.RoleEnum.Admin.ToString(),
-            Enums.RoleEnum.HR.ToString(),
-            Enums.RoleEnum.Mentor.ToString()
+            Enums.RoleEnum.Mentor.ToString(),
         };
 
 

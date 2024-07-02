@@ -65,7 +65,7 @@ namespace IMS.RazorPage.Pages
             }
             else
             {
-                return RedirectToAction("Index", "HR");
+                return RedirectToAction("/Mentor/Trainee");
             }
         }
 

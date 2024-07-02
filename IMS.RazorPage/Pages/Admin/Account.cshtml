@@ -21,6 +21,9 @@
         var accountList = ViewData["Accounts"] as List<AccountGetModel>;
         var accountUpdate = Model.accountUpdate;
         var newAccount = Model.account;
+        int totalAccountsCount = (int)ViewData["TotalAccountsCount"];
+        int pageSize = Model.PageSize;
+        int totalPages = (int)Math.Ceiling((decimal)totalAccountsCount / pageSize);
     }
     @* <div class="d-flex vh-100">
     <div class="col-2 vh-100 border-end p-3">
@@ -40,12 +43,21 @@
     </nav>
     </div> *@
     <div class="col-10 vh-100" style="background-color: #f8f9fa;">
-        <div class="input-group mt-3 m-auto w-50">
-            <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <span class="input-group-text" id="basic-addon2">
-                <i class="bi bi-search"></i>
-            </span>
+        <div class="container mt-3">
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    <form action="./Account" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" name="SearchTerm">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAddAccount">
             Add Account
         </button>
@@ -80,9 +92,21 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <form method="post" asp-page-handler="Delete" asp-route-id="@account.Id">
-                                        <button type="submit" class="btn btn-danger">Block</button>
-                                    </form>
+                                    @if (account.Status.HasValue)
+                                    {
+                                        if (account.Status.Value)
+                                        {
+                                            <form method="post" asp-page-handler="Restore" asp-route-id="@account.Id">
+                                                <button type="submit" class="btn btn-success">UnBlock</button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@account.Id">
+                                                <button type="submit" class="btn btn-danger">Block</button>
+                                            </form>
+                                        }
+                                    }
                                 </td>
                             </tr>
                             <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
@@ -268,15 +292,21 @@
         <div class="m-auto">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Page("/Account", new { SearchTerm = Model.SearchTerm, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
+                    </li>
+                    @for (var i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Page("/Account", new { SearchTerm = Model.SearchTerm, PageNumber = i, PageSize = Model.PageSize })">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Page("/Account", new { SearchTerm = Model.SearchTerm, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
+                    </li>
                 </ul>
             </nav>
         </div>
-    </div>
     </div>
 
 

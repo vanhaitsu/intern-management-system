@@ -9,7 +9,6 @@ namespace Model.Enums
     public enum RoleEnum
     {
         Admin,
-        HR,
         Mentor,
     }
 }
