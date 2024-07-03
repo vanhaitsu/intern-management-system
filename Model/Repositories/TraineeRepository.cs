@@ -9,7 +9,6 @@ namespace IMS.Models.Repositories
     public class TraineeRepository : GenericRepository<Trainee>, ITraineeRepository
     {
         private readonly AppDbContext _dbContext;
-
         public TraineeRepository(AppDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
@@ -49,7 +48,7 @@ namespace IMS.Models.Repositories
                     Code = a.Code,
                     University = a.University,
                     Status = a.Status,
-                    ProgramId =a.ProgramId,
+                    ProgramId = a.ProgramId,
                     ProgramName = a.TrainingProgram.Name,
                     IsDelete = a.IsDeleted
                 })
@@ -59,5 +58,44 @@ namespace IMS.Models.Repositories
 
             return traineeModels;
         }
+
+        public async Task<List<TraineeGetModel>> GetTraineesByMentor(int pageSize, int pageNumber, string searchTerm, Guid accountId)
+        {
+            IQueryable<Trainee> query = _dbContext.Trainees.Include(a => a.Scores).Include(a => a.TrainingProgram);
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(a =>
+                    a.FullName.Contains(searchTerm.ToLower()) ||
+                    a.Email.Contains(searchTerm.ToLower()) ||
+                    a.PhoneNumber.Contains(searchTerm.ToLower())
+                );
+            }
+
+            var traineeModels = await query
+                .Where(a => a.TrainingProgram != null && a.TrainingProgram.AccountId == accountId)
+                .Select(a => new TraineeGetModel
+                {
+                    Id = a.Id,
+                    FullName = a.FullName,
+                    Address = a.Address,
+                    DOB = a.DOB,
+                    Email = a.Email,
+                    Gender = a.Gender,
+                    PhoneNumber = a.PhoneNumber,
+                    Code = a.Code,
+                    University = a.University,
+                    Status = a.Status,
+                    ProgramId = a.ProgramId,
+                    ProgramName = a.TrainingProgram.Name,
+                    IsDelete = a.IsDeleted
+                })
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return traineeModels;
+        }
+
     }
 }

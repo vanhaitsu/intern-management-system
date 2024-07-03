@@ -19,5 +19,10 @@ namespace IMS.Models.Repositories
         {
             return await _dbContext.TrainingPrograms.FirstOrDefaultAsync(r => r.Name.Equals(name));
         }
+
+        public async Task<TrainingProgram> GetByAccountId(Guid accountId)
+        {
+            return await _dbContext.TrainingPrograms.FirstOrDefaultAsync(r => r.AccountId == accountId);
+        }
     }
 }

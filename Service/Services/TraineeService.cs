@@ -44,6 +44,29 @@ namespace IMS_View.Services.Services
             return loginModel;
         }
 
+        public async Task<bool> CheckExistedTrainee(string email)
+        {
+            Trainee trainee = new Trainee();
+            trainee = await _unitOfWork.TraineeRepository.GetTraineeByMail(email);
+            if (trainee == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<List<string>> GetAllTraineeEmails()
+        {
+            var trainees = _unitOfWork.TraineeRepository.GetAll(); 
+
+            if (trainees == null)
+            {
+                return new List<string>(); 
+            }
+
+            var emails = trainees.Select(trainee => trainee.Email).ToList();
+            return emails;
+        }
 
         public async Task<bool> Create(TraineeRegisterModel traineeRegisterModel)
         {
@@ -160,6 +183,11 @@ namespace IMS_View.Services.Services
             return await _unitOfWork.TraineeRepository.GetAllTrainees(pageSize, pageNumber, searchTerm);
         }
 
+        public async Task<List<TraineeGetModel>> GetTraineesByMentor(int pageSize, int pageNumber, string searchTerm, Guid accountId)
+        {
+            return await _unitOfWork.TraineeRepository.GetTraineesByMentor(pageSize, pageNumber, searchTerm, accountId);
+        }
+
         public async Task<int> GetTotalTraineesCount(string searchTerm)
         {
             IQueryable<Trainee> query = _unitOfWork.TraineeRepository.GetAll().AsQueryable();
@@ -172,6 +200,27 @@ namespace IMS_View.Services.Services
                     a.Email.Contains(searchTerm.ToLower()) ||
                     a.PhoneNumber.Contains(searchTerm.ToLower())
                 );
+            }
+
+            return await query.CountAsync();
+        }
+
+        public async Task<int> GetTotal(string searchTerm, Guid accountId)
+        {
+            IQueryable<Trainee> query = _unitOfWork.TraineeRepository.GetAll().AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(a =>
+                    a.FullName.Contains(searchTerm.ToLower()) ||
+                    a.Email.Contains(searchTerm.ToLower()) ||
+                    a.PhoneNumber.Contains(searchTerm.ToLower())
+                );
+            }
+            if(accountId != null)
+            {
+                query = query.Where(a => a.TrainingProgram != null && a.TrainingProgram.AccountId == accountId);
             }
 
             return await query.CountAsync();

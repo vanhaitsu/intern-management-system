@@ -53,6 +53,12 @@ namespace IMS.RazorPage.Pages.Admin
         {
 
             AccountUpdateModel updateModel = accountUpdate;
+            var existedAccount =  await _accountService.CheckExistedAccount(updateModel.Email);
+            if (existedAccount)
+            {
+                Message = "Email is already existed!";
+                return Page();
+            }
             if (await _accountService.Update(id, updateModel))
             {
                 Message = "Update successfully!";
@@ -71,6 +77,12 @@ namespace IMS.RazorPage.Pages.Admin
         {
             if (!ModelState.IsValid)
             {
+                var existedAccount = await _accountService.CheckExistedAccount(newAccount.Email);
+                if (existedAccount)
+                {
+                    Message = "Email is already existed!";
+                    return Page();
+                }
                 if (await _accountService.Create(newAccount))
                 {
                     Message = "Add successfully!";

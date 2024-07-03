@@ -11,5 +11,6 @@ namespace IMS.Models.Interfaces
     public interface ITrainingProgramRepository : IGenericRepository<TrainingProgram>
     {
         Task<TrainingProgram> GetByName(string name);
+        Task<TrainingProgram> GetByAccountId(Guid accountId);
     }
 }

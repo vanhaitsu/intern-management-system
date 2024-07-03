@@ -1,22 +1,18 @@
 using IMS.Models.Entities;
 using IMS_View.Services.Interfaces;
-using IMS_View.Services.Services;
 using IMS_VIew.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model.Enums;
 using Model.ViewModels.TraineeModel;
-using System.Data;
-using OfficeOpenXml;
-using Microsoft.VisualBasic;
-using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using System.Text;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using System.Globalization;
+using System.Security.Claims;
+using System.Text;
 
-namespace IMS.RazorPage.Pages.Admin
+namespace IMS.RazorPage.Pages.Mentor
 {
-    public class TraineeManagementModel : PageModel
+    public class TraineeModel : PageModel
     {
         private readonly ITraineeService _traineeService;
         private readonly IRoleService _roleService;
@@ -43,7 +39,7 @@ namespace IMS.RazorPage.Pages.Admin
         public List<TrainingProgram> Programs { get; set; }
         public int TotalTrainees { get; set; }
 
-        public TraineeManagementModel(ITraineeService traineeService, ITrainingProgramService trainingProgramService)
+        public TraineeModel(ITraineeService traineeService, ITrainingProgramService trainingProgramService)
         {
             _traineeService = traineeService;
             _trainingProgramService = trainingProgramService;
@@ -54,12 +50,16 @@ namespace IMS.RazorPage.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Trainees = await _traineeService.GetAllTrainees(PageSize, PageNumber, SearchTerm);
-            TotalTrainees = await _traineeService.GetTotalTraineesCount(SearchTerm);
-            Programs = await _trainingProgramService.GetAllPrograms(100, 1);
-            ViewData["Trainees"] = Trainees;
-            ViewData["Programs"] = Programs;
-            ViewData["TotalTraineesCount"] = TotalTrainees;
+            var accountIdString = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (Guid.TryParse(accountIdString, out Guid accountId))
+            {
+                Trainees = await _traineeService.GetTraineesByMentor(PageSize, PageNumber, SearchTerm, accountId);
+                TotalTrainees = await _traineeService.GetTotal(SearchTerm, accountId);
+                Programs = await _trainingProgramService.GetAllPrograms(100, 1);
+                ViewData["Trainees"] = Trainees;
+                ViewData["Programs"] = Programs;
+                ViewData["TotalTraineesCount"] = TotalTrainees;
+            }
             return Page();
         }
 

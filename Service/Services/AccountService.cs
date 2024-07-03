@@ -46,6 +46,18 @@ namespace IMS_View.Services.Services
             return loginModel;
         }
 
+
+        public async Task<bool> CheckExistedAccount(string email)
+        {
+            Account account = new Account();
+            account = await _unitOfWork.AccountRepository.GetAccountByMail(email);
+            if (account == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> SignUp(AccountRegisterModel accountRegisterModel)
         {
             Account user = _mapper.Map<Account>(accountRegisterModel);
