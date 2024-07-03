@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMS.Models.Entities;
 using IMS.Models.Interfaces;
+using Model.Enums;
 using Model.ViewModels.TraineeModel;
 using Model.ViewModels.TrainingProgramModel;
 using Service.Interfaces;
@@ -36,6 +37,7 @@ namespace Service.Services
         {
             TrainingProgram trainingProgram = _mapper.Map<TrainingProgram>(trainingProgramCreateModel);
             trainingProgram.IsDeleted = false;
+            trainingProgram.Status = TrainingPrgramStatus.Processing.ToString();
             _unitOfWork.TrainingProgramRepository.AddAsync(trainingProgram);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {

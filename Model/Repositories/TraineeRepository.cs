@@ -3,6 +3,7 @@ using IMS.Models.Entities;
 using IMS.Models.Interfaces;
 using IMS.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Model.Interfaces;
 using Model.ViewModels.AccountModel;
 using Model.ViewModels.TraineeModel;
@@ -58,6 +59,41 @@ namespace Model.Repositories
                     University = a.University,
                     Status = a.Status,
                     ProgramId =a.ProgramId,
+                    ProgramName = a.TrainingProgram.Name,
+                    IsDelete = a.IsDeleted
+                })
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return traineeModels;
+        }
+
+        public async Task<List<TraineeGetModel>> GetTraineesByProgram(int pageSize, int pageNumber, 
+            Guid trainingProgramId)
+        {
+            IQueryable<Trainee> query = _dbContext.Trainees.Include(a => a.TrainingProgram);
+            if (trainingProgramId != null)
+            {
+                query = query.Where(a =>
+                    a.ProgramId == trainingProgramId
+                );
+            }
+
+            var traineeModels = await query
+                .Select(a => new TraineeGetModel
+                {
+                    Id = a.Id,
+                    FullName = a.FullName,
+                    Address = a.Address,
+                    DOB = a.DOB,
+                    Email = a.Email,
+                    Gender = a.Gender,
+                    PhoneNumber = a.PhoneNumber,
+                    Code = a.Code,
+                    University = a.University,
+                    Status = a.Status,
+                    ProgramId = a.ProgramId,
                     ProgramName = a.TrainingProgram.Name,
                     IsDelete = a.IsDeleted
                 })

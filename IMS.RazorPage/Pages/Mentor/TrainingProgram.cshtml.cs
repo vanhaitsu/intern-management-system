@@ -27,19 +27,19 @@ namespace IMS.RazorPage.Pages.Mentor
             return Page();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> OnPostAsync(string action)
-        {
-            switch (action)
-            {
-                case "create":
-                    return await CreateProgram();
-                default:
-                    return Page();
-            }
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> OnPostAsync(string action)
+        //{
+        //    switch (action)
+        //    {
+        //        case "create":
+        //            return await CreateProgram();
+        //        default:
+        //            return Page();
+        //    }
+        //}
 
-        public async Task<IActionResult> CreateProgram()
+        public async Task<IActionResult> OnPostCreateProgramAsync()
         {
             if (!ModelState.IsValid)
             {
