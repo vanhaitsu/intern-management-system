@@ -1,5 +1,4 @@
 ﻿using IMS.Models.Interfaces;
-using IMS_View.Models.Interfaces;
 using Model.Interfaces;
 
 
@@ -15,8 +14,8 @@ namespace IMS.Models.Common
         private readonly ITraineeRepository _traineeRepository;
         private readonly ITrainingProgramRepository _trainingProgramRepository;
         public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
-                        IRoleRepository roleRepository, IScoreRepository scoreRepository)
-                        IRoleRepository roleRepository, ITraineeRepository traineeRepository, ITrainingProgramRepository trainingProgramRepository)
+                        IRoleRepository roleRepository, IScoreRepository scoreRepository,
+                        ITraineeRepository traineeRepository, ITrainingProgramRepository trainingProgramRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;

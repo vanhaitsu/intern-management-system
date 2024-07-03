@@ -1,7 +1,6 @@
 ﻿using IMS.Models;
 using IMS.Models.Entities;
 using IMS.Models.Repositories;
-using IMS_View.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Model.Interfaces;
 using System;

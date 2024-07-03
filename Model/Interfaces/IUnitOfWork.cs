@@ -1,4 +1,4 @@
-﻿using IMS_View.Models.Interfaces;
+﻿using IMS.Models.Interfaces;
 using Model.Interfaces;
 
 namespace IMS.Models.Interfaces

@@ -53,6 +53,7 @@ namespace IMS.RazorPage.Pages.Mentor
             var accountIdString = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (Guid.TryParse(accountIdString, out Guid accountId))
             {
+
                 Trainees = await _traineeService.GetTraineesByMentor(PageSize, PageNumber, SearchTerm, accountId);
                 TotalTrainees = await _traineeService.GetTotal(SearchTerm, accountId);
                 Programs = await _trainingProgramService.GetAllPrograms(100, 1);
