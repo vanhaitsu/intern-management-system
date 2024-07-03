@@ -112,10 +112,10 @@ namespace IMS.Models
                 .WithMany(a => a.TrainingPrograms)
                 .HasForeignKey(tp => tp.AccountId);
 
-            modelBuilder.Entity<TrainingProgram>()
-                .HasOne(tp => tp.Assignment)
-                .WithMany(a => a.TrainingPrograms)
-                .HasForeignKey(tp => tp.AssignmentId);
+            //modelBuilder.Entity<TrainingProgram>()
+            //    .HasOne(tp => tp.Assignment)
+            //    .WithMany(a => a.TrainingPrograms)
+            //    .HasForeignKey(tp => tp.AssignmentId);
         }
 
     }

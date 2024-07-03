@@ -5,10 +5,12 @@
         public string Name { get; set; }
         public string Status { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime Enđate { get; set; }
+        public DateTime EndDate { get; set; }
         public string Type { get; set; }
 
         //Relationship
-        public virtual ICollection<TrainingProgram> TrainingPrograms { get; set; }
+        public Guid? TrainingProgramId { get; set; }
+        public virtual TrainingProgram? TrainingProgram { get; set; }
+        
     }
 }

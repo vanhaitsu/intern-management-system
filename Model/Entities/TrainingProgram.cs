@@ -8,14 +8,14 @@ namespace IMS.Models.Entities
         public string Code { get; set; }
         public string Name { get; set; }
         public string Duration { get; set; }
+        public string? Password { get; set; }
         public string Status { get; set; }
 
         //Relationship
         public Guid? AccountId { get; set; }
         public virtual Account? Account { get; set; }
 
-        public Guid? AssignmentId { get; set; }
-        public virtual Assignment? Assignment { get; set;}
+        public virtual ICollection<Assignment> Assignments { get; set; }
 
         public virtual ICollection<Trainee> Trainees { get; set; }
 
