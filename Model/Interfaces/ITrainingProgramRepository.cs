@@ -12,5 +12,7 @@ namespace IMS.Models.Interfaces
     {
         Task<TrainingProgram> GetByName(string name);
         Task<TrainingProgram> GetByAccountId(Guid accountId);
+        Task<List<TrainingProgram>> GetByAccount(Guid accountId);
+        Task<TrainingProgram> GetByCode(string code);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMS.Models.Entities;
 using Model.ViewModels.AccountModel;
+using Model.ViewModels.TrainingProgramModel;
 using Model.ViewModels.TraineeModel;
 
 namespace IMS.Models.Common
@@ -23,6 +24,8 @@ namespace IMS.Models.Common
                 return null;
             }
             return programId;
+
+            CreateMap<TrainingProgramCreateModel, TrainingProgram>();
         }
     }
 }
