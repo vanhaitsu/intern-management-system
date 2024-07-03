@@ -10,6 +10,10 @@ using IMS_View.Services.Services;
 using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Model.Repositories;
+using Model.Interfaces;
+using Service.Services;
+using Service.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,11 +42,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IScoreService, ScoreService>();
 
 var app = builder.Build();
 
