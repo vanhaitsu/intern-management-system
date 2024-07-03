@@ -4,7 +4,6 @@ using IMS.Models.Repositories;
 using IMS.Models.Interfaces;
 using IMS.Models;
 using Microsoft.EntityFrameworkCore;
-using Model.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +22,20 @@ namespace IMS.Models.Repositories
         }
 
         public async Task<TrainingProgram> GetByName(string name)
-        public async Task<List<TrainingProgram>> GetByAccount(Guid accountId)
         {
             return await _dbContext.TrainingPrograms.FirstOrDefaultAsync(r => r.Name.Equals(name));
+        }
+        public async Task<List<TrainingProgram>> GetByAccount(Guid accountId)
+        {
             return await _dbContext.TrainingPrograms.Where(tp => tp.AccountId == accountId).ToListAsync();
         }
 
         public async Task<TrainingProgram> GetByCode(string code)
-        public async Task<TrainingProgram> GetByAccountId(Guid accountId)
         {
             return await _dbContext.TrainingPrograms.SingleOrDefaultAsync(tp => tp.Code == code);
+        }
+        public async Task<TrainingProgram> GetByAccountId(Guid accountId)
+        {
             return await _dbContext.TrainingPrograms.FirstOrDefaultAsync(r => r.AccountId == accountId);
         }
     }

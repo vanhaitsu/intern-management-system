@@ -3,7 +3,6 @@ using IMS.Models.Entities;
 using IMS.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Model.Interfaces;
 using Model.ViewModels.AccountModel;
 using Model.ViewModels.TraineeModel;
 

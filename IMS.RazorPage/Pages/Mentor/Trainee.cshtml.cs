@@ -162,7 +162,7 @@ namespace IMS.RazorPage.Pages.Mentor
                     UploadedTrainees = new List<TraineeRegisterModel>();
                     for (int row = worksheet.Dimension.Start.Row + 1; row <= worksheet.Dimension.End.Row; row++)
                     {
-                        var dobString = worksheet.Cells[row, 6].GetValue<string>();
+                        var dobString = worksheet.Cells[row, 7].GetValue<string>();
                         DateTime dob;
                         if (!DateTime.TryParseExact(dobString, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dob))
                         {
@@ -170,13 +170,14 @@ namespace IMS.RazorPage.Pages.Mentor
                         }
                         UploadedTrainees.Add(new TraineeRegisterModel
                         {
-                            FullName = worksheet.Cells[row, 1].GetValue<string>(),
-                            Email = worksheet.Cells[row, 2].GetValue<string>(),
-                            Address = worksheet.Cells[row, 3].GetValue<string>(),
-                            University = worksheet.Cells[row, 4].GetValue<string>(),
-                            PhoneNumber = worksheet.Cells[row, 5].GetValue<string>(),
+                            Code = worksheet.Cells[row, 1].GetValue<string>(),
+                            FullName = worksheet.Cells[row, 2].GetValue<string>(),
+                            Email = worksheet.Cells[row, 3].GetValue<string>(),
+                            Address = worksheet.Cells[row, 4].GetValue<string>(),
+                            University = worksheet.Cells[row, 5].GetValue<string>(),
+                            PhoneNumber = worksheet.Cells[row, 6].GetValue<string>(),
                             DOB = dob,
-                            Gender = worksheet.Cells[row, 7].GetValue<string>(),
+                            Gender = worksheet.Cells[row, 8].GetValue<string>(),
                         });
                     }
                 }

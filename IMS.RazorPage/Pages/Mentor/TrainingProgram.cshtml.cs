@@ -2,8 +2,10 @@ using IMS.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Model.ViewModels.TrainingProgramModel;
-using Service.Interfaces;
 using System.Security.Claims;
+using IMS_VIew.Services.Services;
+using IMS_View.Services.Interfaces;
+using System.Text;
 
 namespace IMS.RazorPage.Pages.Mentor
 {
@@ -27,18 +29,6 @@ namespace IMS.RazorPage.Pages.Mentor
             return Page();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> OnPostAsync(string action)
-        //{
-        //    switch (action)
-        //    {
-        //        case "create":
-        //            return await CreateProgram();
-        //        default:
-        //            return Page();
-        //    }
-        //}
-
         public async Task<IActionResult> OnPostCreateProgramAsync()
         {
             if (!ModelState.IsValid)
@@ -61,5 +51,11 @@ namespace IMS.RazorPage.Pages.Mentor
             }
             return Page();
         }
+        public IActionResult OnPostSaveProgramId(Guid programId)
+        {
+            HttpContext.Session.Set("ProgramId", Encoding.UTF8.GetBytes(programId.ToString()));
+            return Page();
+        }
     }
+
 }

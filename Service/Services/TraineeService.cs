@@ -96,6 +96,34 @@ namespace IMS_View.Services.Services
             return false;
         }
 
+        public async Task<bool> UpdateRange(List<TraineeRegisterModel> traineeRegisterModels)
+        {
+            List<Trainee> traineesToUpdate = await _unitOfWork.TraineeRepository.GetAllAsync();
+
+            foreach (var model in traineeRegisterModels)
+            {
+                var existingTrainee = traineesToUpdate.FirstOrDefault(t => t.Email == model.Email);
+
+                if (existingTrainee != null)
+                {
+                    _mapper.Map(model, existingTrainee); 
+
+                    existingTrainee.IsDeleted = false;
+                    existingTrainee.Password = "123456789";
+                }
+            }
+            _unitOfWork.TraineeRepository.UpdateRange(traineesToUpdate);
+
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+
+
         public async Task<Trainee> GetTraineeAsync(Guid id)
         {
             var trainees = await _unitOfWork.TraineeRepository.GetAsync(id);

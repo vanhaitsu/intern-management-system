@@ -102,19 +102,23 @@
                                 @foreach (var trainingProgram in Model.TrainingPrograms)
                                 {
                                     <li class="list-group-item">
-                                        <div class="d-flex justify-content-between" onclick="redirectToProgramDetail()">
-                                            <div >
+                                        <div class="d-flex justify-content-between" onclick="redirectToProgramDetail('@trainingProgram.Id')">
+                                            <div>
                                                 <h5 class="mb-1">@trainingProgram.Name (@trainingProgram.Code)</h5>
                                                 <p class="mb-1"><strong>Status:</strong> @trainingProgram.Status</p>
-                                                <p class="mb-1"><strong>Creation Date:</strong> @trainingProgram.CreatedDate.Value.ToShortDateString()</p>
+                                                <p class="mb-1">
+                                                    <strong>Creation Date:</strong>
+                                                    @if (trainingProgram.CreatedDate.HasValue)
+                                                    {
+                                                        @trainingProgram.CreatedDate.Value.ToShortDateString()
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>N/A</span>
+                                                    }
+                                                </p>
                                             </div>
                                             <div class="align-self-center">
-                                                @* <form method="post">
-                                        <input type="hidden" name="BookingReservationId" value="@trainingProgram.BookingReservationID" />
-                                        <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
-                                        <button type="submit" class="btn btn-outline-danger">Cancel</button>
-                                        </form> *@
-
                                             </div>
                                         </div>
                                     </li>
@@ -129,8 +133,8 @@
 </div>
 @section Scripts {
     <script>
-        function redirectToProgramDetail() {
-            window.location.href = "/Mentor/TrainingProgramDetail";
+        function redirectToProgramDetail(ProgramId) {
+            window.location.href = `/Mentor/TrainingProgramDetail?programId=${ProgramId}`;
         }
     </script>
 }

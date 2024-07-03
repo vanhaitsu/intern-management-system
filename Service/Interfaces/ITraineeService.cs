@@ -24,5 +24,6 @@ namespace IMS_View.Services.Interfaces
         Task<int> GetTotal(string searchTerm, Guid accountId);
         Task<bool> Restore(Guid id);
         Task<bool> CreateRange(List<TraineeRegisterModel> traineeRegisterModels);
+        Task<bool> UpdateRange(List<TraineeRegisterModel> traineeRegisterModels);
     }
 }

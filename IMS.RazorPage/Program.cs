@@ -10,10 +10,6 @@ using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Model.Common;
-using Model.Interfaces;
-using Model.Repositories;
-using Service.Interfaces;
-using Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +52,7 @@ builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ITraineeService, TraneeService>();
+builder.Services.AddScoped<ITraineeService, TraineeService>();
 builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 
 var app = builder.Build();
