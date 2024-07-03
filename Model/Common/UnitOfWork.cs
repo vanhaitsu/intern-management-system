@@ -2,6 +2,7 @@
 using IMS_View.Models.Interfaces;
 using Model.Interfaces;
 
+
 namespace IMS.Models.Common
 {
     public class UnitOfWork : IUnitOfWork
@@ -11,12 +12,17 @@ namespace IMS.Models.Common
         private readonly IRoleRepository _roleRepository;
         private readonly IScoreRepository _scoreRepository;
 
+        private readonly ITraineeRepository _traineeRepository;
+        private readonly ITrainingProgramRepository _trainingProgramRepository;
         public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
                         IRoleRepository roleRepository, IScoreRepository scoreRepository)
+                        IRoleRepository roleRepository, ITraineeRepository traineeRepository, ITrainingProgramRepository trainingProgramRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
             _roleRepository = roleRepository;
+            _traineeRepository = traineeRepository;
+            _trainingProgramRepository = trainingProgramRepository;
             _scoreRepository = scoreRepository;
         }
 
@@ -24,6 +30,8 @@ namespace IMS.Models.Common
 
         public IAccountRepository AccountRepository => _accountRepository;
         public IRoleRepository RoleRepository => _roleRepository;
+        public ITraineeRepository TraineeRepository => _traineeRepository;
+        public ITrainingProgramRepository TrainingProgramRepository => _trainingProgramRepository;
         public IScoreRepository ScoreRepository => _scoreRepository;
 
         public async Task<int> SaveChangeAsync()

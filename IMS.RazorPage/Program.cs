@@ -2,7 +2,6 @@ using IMS.Models;
 using IMS.Models.Common;
 using IMS.Models.Interfaces;
 using IMS.Models.Repositories;
-using IMS_View.Models.Interfaces;
 using IMS_View.Models.Repositories;
 using IMS_View.Services.Interfaces;
 using IMS_VIew.Services.Interfaces;
@@ -14,11 +13,19 @@ using Model.Repositories;
 using Model.Interfaces;
 using Service.Services;
 using Service.Interfaces;
+using Model.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5); 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -42,6 +49,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
+builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 
 
@@ -49,8 +58,11 @@ builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
+builder.Services.AddScoped<ITraineeService, TraineeService>();
+builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 
 var app = builder.Build();
+await InitialSeeding.Initialize(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -64,9 +76,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapRazorPages();
 
 app.Run();
+//private static async Task InitializeRolesAsync(IServiceProvider serviceProvider)
+//{
+//    await InitialSeeding.Initialize(serviceProvider);
+//}
