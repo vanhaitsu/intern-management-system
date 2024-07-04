@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model.ViewModels.AccountModel;
 using System.Security.Claims;
-using IMS_View.Services.Interfaces;
+using IMS.Services.Interfaces;
+using IMS.Repositories.AccountModel;
 
 namespace IMS.RazorPage.Pages
 {

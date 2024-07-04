@@ -1,7 +1,7 @@
-using IMS_View.Services.Interfaces;
+using IMS.Repositories.AccountModel;
+using IMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model.ViewModels.AccountModel;
 
 namespace IMS.RazorPage.Pages
 {
