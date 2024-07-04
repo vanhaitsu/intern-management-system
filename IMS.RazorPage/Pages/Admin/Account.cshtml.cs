@@ -1,10 +1,10 @@
-using IMS.Models.Entities;
-using IMS_View.Services.Interfaces;
-using IMS_VIew.Services.Interfaces;
+using IMS.Repositories.AccountModel;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Models.AccountModel;
+using IMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Model.Enums;
-using Model.ViewModels.AccountModel;
+
 
 namespace IMS.RazorPage.Pages.Admin
 {
@@ -20,29 +20,34 @@ namespace IMS.RazorPage.Pages.Admin
         public AccountRegisterModel newAccount { set; get; }
         [BindProperty]
         public AccountUpdateModel accountUpdate { set; get; }
+        public List<AccountGetModel> Accounts { get; set; }
+        public List<Role> Roles { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public AccountFilterModel filterModel { get; set; } = new AccountFilterModel();
+        public int TotalAccounts { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 10;
 
         [BindProperty(SupportsGet = true)]
         public string SearchTerm { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
-
-        [BindProperty]
-        public int PageSize { get; set; } = 10;
 
         public AccountManagementModel(IAccountService accountService, IRoleService roleService)
         {
             _accountService = accountService;
             _roleService = roleService;
         }
-        public List<AccountGetModel> Accounts { get; set; }
-        public List<Role> Roles { get; set; }
-        public int TotalAccounts { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
-            Accounts = await _accountService.GetAllAccounts(PageSize, PageNumber, SearchTerm);
-            Roles = await _roleService.GetAllRoles(100, 1);
-            TotalAccounts = await _accountService.GetTotalAccountsCount(SearchTerm);
+            filterModel.PageSize = PageSize;
+            filterModel.PageNumber = PageNumber;
+            filterModel.Search = SearchTerm;
+            Accounts = await _accountService.GetAllAccounts(filterModel);
+            Roles = await _roleService.GetAllRoles();
+            TotalAccounts = await _accountService.GetTotalAccountsCount(filterModel);
             ViewData["Accounts"] = Accounts;
             ViewData["Roles"] = Roles;
             ViewData["TotalAccountsCount"] = TotalAccounts;
@@ -51,13 +56,22 @@ namespace IMS.RazorPage.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
+            var updateModel = accountUpdate;
+            var existedAccount = await _accountService.GetAccountAsync(id);
 
-            AccountUpdateModel updateModel = accountUpdate;
-            var existedAccount =  await _accountService.CheckExistedAccount(updateModel.Email);
-            if (existedAccount)
+            if (existedAccount == null)
             {
-                Message = "Email is already existed!";
+                Message = "Account not found.";
                 return Page();
+            }
+            if (updateModel.Email != existedAccount.Email)
+            {
+                var emailExists = await _accountService.CheckExistedAccount(updateModel.Email);
+                if (emailExists)
+                {
+                    Message = "Email is already existed!";
+                    return Page();
+                }
             }
             if (await _accountService.Update(id, updateModel))
             {
@@ -69,8 +83,8 @@ namespace IMS.RazorPage.Pages.Admin
                 Message = "Failed to update!";
                 return Page();
             }
-
         }
+
 
 
         public async Task<IActionResult> OnPostAddAsync()

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using IMS.Services.Interfaces;
 using IMS.Repositories.AccountModel;
+using IMS.Repositories.Models.InternModel;
+using IMS.Repositories.Models.CommonModel;
 
 namespace IMS.RazorPage.Pages
 {
@@ -12,37 +14,54 @@ namespace IMS.RazorPage.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IAccountService _accountService;
+        private readonly IInternService _internService;
 
-        public string Message { set; get; }
+        public string Message { get; set; }
         [BindProperty]
-        public AccountLoginModel account { set; get; }
+        public LoginModel account { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger, IAccountService accountService)
+        [BindProperty]
+        public string role { get; set; }
+        public IndexModel(ILogger<IndexModel> logger, IAccountService accountService, IInternService internService)
         {
             _logger = logger;
             _accountService = accountService;
+            _internService = internService;
         }
-        
+
         public void OnGet()
         {
 
         }
 
-        public async Task<IActionResult> OnPostAsync() 
+        public async Task<IActionResult> OnPostAsync()
         {
-            AccountLoginModel accountModel = new();
-            if (!ModelState.IsValid)
+            LoginModel accountModel = new();
+            if (ModelState.IsValid)
             {
                 Message = "Email or password is wrong.\nPlease check again!";
                 return Page();
             }
             else
             {
-                accountModel = await _accountService.CheckLogin(account.Email, account.Password);
-                if (accountModel == null)
+                if (role == "Staff")
                 {
-                    Message = "Email or password is not correct!";
-                    return Page();
+                    accountModel = await _accountService.CheckLogin(account.Email, account.Password);
+                    if (accountModel == null)
+                    {
+                        Message = "Email or password is not correct!";
+                        return Page();
+                    }
+
+                }
+                else
+                {
+                    accountModel = await _internService.CheckLogin(account.Email, account.Password);
+                    if (accountModel == null)
+                    {
+                        Message = "Email or password is not correct!";
+                        return Page();
+                    }
                 }
                 var claims = new List<Claim>
                 {
@@ -63,45 +82,18 @@ namespace IMS.RazorPage.Pages
             {
                 return RedirectToPage("/Admin/Account");
             }
+            else if(accountModel.Role == "HR")
+            {
+                return RedirectToPage("/HR/Intern");
+            }
+            else if(accountModel.Role == "Mentor")
+            {
+                return RedirectToPage("/Mentor/Intern");
+            }
             else
             {
-                return RedirectToPage("/Mentor/Trainee");
+                return RedirectToPage("/Intern/Intern");
             }
         }
-
-        //public async Task<IActionResult> Login(string email, string password)
-        //{
-        //    AccountLoginModel account = await _accountService.CheckLogin(email, password);
-        //    if (account == null)
-        //    {
-        //        Message = "Email or password is wrong.\nPlease check again!";
-        //        return Page();
-        //    }
-        //    else
-        //    {
-        //        var claims = new List<Claim>
-        //        {
-        //            new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-        //            new Claim(ClaimTypes.Name, account.Email),
-        //            new Claim(ClaimTypes.Role, account.Role)
-        //        };
-
-        //        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        //        var principal = new ClaimsPrincipal(identity);
-        //        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
-        //            new AuthenticationProperties()
-        //            {
-        //                IsPersistent = true
-        //            });
-        //    }
-        //    if (account.Role == "Admin")
-        //    {
-        //        return RedirectToPage("/Account");
-        //    }
-        //    else
-        //    {
-        //        return RedirectToPage("Index", "HR");
-        //    }
-        //}
     }
 }

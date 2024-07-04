@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using IMS.Models.Interfaces;
 using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
+using IMS.Repositories.Models.AccountModel;
+using IMS.Repositories.Models.CommonModel;
 using IMS.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace IMS.Services.Services
 {
@@ -17,10 +21,10 @@ namespace IMS.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<AccountLoginModel> CheckLogin(string email, string password)
+        public async Task<LoginModel> CheckLogin(string email, string password)
         {
             Account account = new Account();
-            AccountLoginModel loginModel = new AccountLoginModel();
+            LoginModel loginModel = new LoginModel();
             if (!string.IsNullOrEmpty(email))
             {
                 account = await _unitOfWork.AccountRepository.GetAccountByMail(email);
@@ -31,14 +35,10 @@ namespace IMS.Services.Services
                 else
                 {
                     Role role = await _unitOfWork.RoleRepository.GetAsync(account.RoleId.Value);
-                    loginModel.Id = account.Id;
                     loginModel.Email = account.Email;
                     loginModel.Password = account.Password;
+                    loginModel.Id = account.Id;
                     loginModel.FullName = account.FullName;
-                    loginModel.PhoneNumber = account.PhoneNumber;
-                    loginModel.DOB = account.DOB;
-                    loginModel.Gender = account.Gender;
-                    loginModel.Address = account.Address;
                     loginModel.Role = role.Name;
                 }
             }
@@ -106,7 +106,7 @@ namespace IMS.Services.Services
                     return false;
                 }
                 _mapper.Map(accountUpdateModel, existedAccount);
-                // existedAccount.RoleId = accountUpdateModel.RoleId;
+                existedAccount.Id = id;
                 existedAccount.Role = roleExists;
                 _unitOfWork.AccountRepository.Update(existedAccount);
                 if (await _unitOfWork.SaveChangeAsync() > 0)
@@ -147,58 +147,63 @@ namespace IMS.Services.Services
             return false;
         }
 
-        public async Task<List<AccountGetModel>> GetAllAccounts(int pageSize, int pageNumber, string searchTerm)
+        public async Task<List<AccountGetModel>> GetAllAccounts(AccountFilterModel filterModel)
         {
-            return await _unitOfWork.AccountRepository.GetAllAccountsWithRole(pageSize, pageNumber, searchTerm);
+            var accountList = await _unitOfWork.AccountRepository.GetAllAsync(
+                filter: x =>
+                    (filterModel.Role == null || x.Role.Name == filterModel.Role) &&
+                    (string.IsNullOrEmpty(filterModel.Search) || x.FullName.ToLower().Contains(filterModel.Search.ToLower()) ||
+                     x.Email.ToLower().Contains(filterModel.Search.ToLower())),
+                orderBy: x => filterModel.OrderByDescending
+                    ? x.OrderByDescending(x => x.CreationDate)
+                    : x.OrderBy(x => x.CreationDate),
+                pageIndex: filterModel.PageNumber,
+                pageSize: filterModel.PageSize,
+                includeProperties: "Role"
+            );
+
+            List<AccountGetModel> accountDetailList = null;
+
+            if (accountList != null)
+            {
+                accountDetailList = accountList.Data.Select(x => new AccountGetModel
+                {
+                    Id = x.Id,
+                    FullName = x.FullName,
+                    Email = x.Email,
+                    DOB = x.DOB,
+                    Gender = x.Gender,
+                    PhoneNumber = x.PhoneNumber,
+                    Address = x.Address,
+                    Status = x.IsDeleted,
+                    RoleId = x.RoleId,
+                    RoleName = x.Role?.Name 
+                }).ToList();
+            }
+
+            return accountDetailList ?? new List<AccountGetModel>();
         }
 
-        public async Task<int> GetTotalAccountsCount(string searchTerm)
+
+        public async Task<int> GetTotalAccountsCount(AccountFilterModel filterModel)
         {
             IQueryable<Account> query = _unitOfWork.AccountRepository.GetAll().AsQueryable();
 
 
-            if (!string.IsNullOrEmpty(searchTerm))
+            if (!string.IsNullOrEmpty(filterModel.Search))
             {
+                var search = filterModel.Search.ToLower();
                 query = query.Where(a =>
-                    a.FullName.Contains(searchTerm.ToLower()) ||
-                    a.Email.Contains(searchTerm.ToLower()) ||
-                    a.PhoneNumber.Contains(searchTerm.ToLower())
+                    a.FullName.ToLower().Contains(search) ||
+                    a.Email.ToLower().Contains(search)
                 );
+            }
+            if (!string.IsNullOrEmpty(filterModel.Role))
+            {
+                query = query.Where(a => a.Role.Name == filterModel.Role);
             }
 
             return await query.CountAsync();
-        }
-        public async Task<List<AccountGetModel>> SearchAccountsAsync(string searchTerm)
-        {
-            List<AccountGetModel> accountGetModels = new List<AccountGetModel>();
-            //List<Account> accounts = await _unitOfWork.AccountRepository.GetAllAsync();
-            //List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
-
-            List<Account> accounts = null;
-            List<Role> roles = null;
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                accounts = accounts.Where(a =>
-                    a.FullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    a.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    a.PhoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
-            }
-
-            foreach (Account account in accounts)
-            {
-                var accountModel = _mapper.Map<AccountGetModel>(account);
-                accountModel.Status = account.IsDeleted;
-                foreach (Role role in roles)
-                {
-                    if (account.RoleId == role.Id)
-                    {
-                        accountModel.RoleName = role.Name;
-                    }
-                }
-                accountGetModels.Add(accountModel);
-            }
-            return accountGetModels;
         }
     }
 }

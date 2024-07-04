@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.Enums
 {
-    public enum TrainingPrgramStatus
+    public enum TrainingProgramStatus
     {
         Processing,
         Done,

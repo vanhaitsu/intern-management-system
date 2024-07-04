@@ -26,18 +26,9 @@ namespace IMS.Services.Services
             return null;
         }
 
-        public async Task<List<Role>> GetAllRoles(int pageSize, int pageNumber)
+        public async Task<List<Role>> GetAllRoles()
         {
-            if (pageSize == 0)
-            {
-                pageSize = int.Parse(Pagination.defaultPageSize.ToString());
-            }
-            if (pageNumber == 0)
-            {
-                pageNumber = int.Parse(Pagination.defaultPageNumber.ToString());
-            }
-            //List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
-            List<Role> roles = null;
+            List<Role> roles = await _unitOfWork.RoleRepository.GetRoles();
             return roles;
         }
     }

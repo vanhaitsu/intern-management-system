@@ -1,7 +1,7 @@
 ﻿@page
-@using System.Security.Claims
-@using IMS.Models.Entities
-@using Model.ViewModels.AccountModel
+@using System.Security.Claims;
+@using IMS.Repositories.AccountModel
+@using IMS.Repositories.Entities;
 @model AccountManagementModel
 @{
 }
@@ -19,9 +19,10 @@
     @{
         var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
         var accountList = ViewData["Accounts"] as List<AccountGetModel>;
+        var filterModel = Model.filterModel;
         var accountUpdate = Model.accountUpdate;
         var newAccount = Model.account;
-        int totalAccountsCount = (int)ViewData["TotalAccountsCount"];
+        int totalAccountsCount = ViewData["TotalAccountsCount"] != null ? (int)ViewData["TotalAccountsCount"] : 0;
         int pageSize = Model.PageSize;
         int totalPages = (int)Math.Ceiling((decimal)totalAccountsCount / pageSize);
     }
@@ -46,12 +47,23 @@
         <div class="container mt-3">
             <div class="row justify-content-center">
                 <div class="col-6">
-                    <form action="./Account" method="get">
+                    <form method="get">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" name="SearchTerm">
+                            <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+                                   aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
                                 <i class="bi bi-search"></i>
                             </button>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="roleSelect">Role</label>
+                            <select class="form-select" id="roleSelect" name="filterModel.Role" asp-for="filterModel.Role">
+                                <option value="">All</option>
+                                <option value="Admin">Admin</option>
+                                <option value="HR">HR</option>
+                                <option value="Mentor">Mentor</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit">Filter</button>
                         </div>
                     </form>
                 </div>
@@ -163,15 +175,19 @@
                                                     <div class="mb-3 col-5">
                                                         <label class="form-label" asp-for="accountUpdate.RoleId">Role</label>
                                                         <select class="form-select" asp-for="accountUpdate.RoleId">
-                                                            @foreach (var role in (List<Role>)ViewData["Roles"])
+                                                            @if (ViewData["Roles"] != null)
                                                             {
-                                                                if (account != null && account.RoleId == role.Id)
+                                                                var roles = (List<Role>)ViewData["Roles"];
+                                                                foreach (var role in roles)
                                                                 {
-                                                                    <option value="@role.Id" selected>@role.Name</option>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <option value="@role.Id">@role.Name</option>
+                                                                    if (account != null && account.RoleId == role.Id)
+                                                                    {
+                                                                        <option value="@role.Id" selected>@role.Name</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@role.Id">@role.Name</option>
+                                                                    }
                                                                 }
                                                             }
                                                         </select>
@@ -293,16 +309,16 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
-                        <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.SearchTerm, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
+                        <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
                     </li>
                     @for (var i = 1; i <= totalPages; i++)
                     {
                         <li class="page-item @(Model.PageNumber == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.SearchTerm, PageNumber = i, PageSize = Model.PageSize })">@i</a>
+                            <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.filterModel.Search, PageNumber = i, PageSize = Model.PageSize })">@i</a>
                         </li>
                     }
                     <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
-                        <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.SearchTerm, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
+                        <a class="page-link" href="@Url.Page("./Account", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
                     </li>
                 </ul>
             </nav>

@@ -44,33 +44,32 @@
                     </div>
 
                     <form method="post">
+                        <!-- Role select -->
+                        <div class="form-group form-floating mb-3">
+                            <select class="form-select" asp-for="role" id="roleSelect">
+                                <option value="">Select role</option>
+                                <option value="Staff">Staff</option>
+                                <option value="Intern">Intern</option>
+                            </select>
+                            <label for="roleSelect">Role</label>
+                            <span asp-validation-for="role" class="text-danger"></span>
+                        </div>
+
                         <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            @* <div class="form-floating mb-3">
-                                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
-                                <label for="floatingInput">Email address</label>
-                                <div class="valid-feedback">
-                                    Please provide a valid email!
-                                </div>
-                            </div> *@
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="@account.Email" />
-                                <label asp-for="@account.Email" for="floatingInput">Email address</label>
-                                <span asp-validation-for="@account.Email" class="text-danger"></span>
+                                <input class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="account.Email" />
+                                <label asp-for="account.Email" for="floatingInput">Email address</label>
+                                <span asp-validation-for="account.Email" class="text-danger"></span>
                             </div>
                         </div>
 
                         <!-- Password input -->
                         <div data-mdb-input-init class="form-outline mb-3">
-                            @* <div class="form-floating">
-                                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-                                <label for="floatingPassword">Password</label>
-                            </div> *@
-
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" id="floatingInput" type="password" placeholder="name@example.com" asp-for="@account.Password" />
-                                <label asp-for="@account.Password" for="floatingInput">Password</label>
-                                <span asp-validation-for="@account.Password" class="text-danger"></span>
+                                <input class="form-control" id="floatingInput" type="password" placeholder="name@example.com" asp-for="account.Password" />
+                                <label asp-for="account.Password" for="floatingInput">Password</label>
+                                <span asp-validation-for="account.Password" class="text-danger"></span>
                             </div>
                         </div>
 

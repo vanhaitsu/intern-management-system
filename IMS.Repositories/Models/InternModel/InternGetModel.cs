@@ -1,25 +1,33 @@
-﻿using System;
+﻿using IMS.Repositories.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Repositories.AccountModel
+namespace IMS.Repositories.Models.InternModel
 {
-    public class AccountLoginModel
+    public class InternGetModel
     {
         public Guid Id { get; set; }
-        public string? Role { get; set; }
         public string? FullName { get; set; }
-
-        [Required(ErrorMessage = "Email is required"), EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
-        [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
         public string? PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
         public string? Gender { get; set; }
         public string? Address { get; set; }
+        public string? Image { get; set; }
+        public string? WorkHistory { get; set; }
+        public string? Skill { get; set; }
+        public string? Education { get; set; }
+        public bool? IsDelete { get; set; }
+
+        public string assignment { get; set; }
+        public List<string>? feedbacks { get; set; }
+        public string? mentorName { get; set; }
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@page
+﻿@* @page
 @model IMS.RazorPage.Pages.Mentor.TrainingProgramModel
 @{
 }
@@ -43,7 +43,6 @@
                             <span asp-validation-for="TrainingProgramCreateModel.Password" class="text-danger"></span>
                         </div>
 
-                        @* <button type="submit" class="btn btn-primary w-100">Create Customer</button> *@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>
@@ -56,35 +55,6 @@
     </div>
     @if (Model.TrainingPrograms != null && Model.TrainingPrograms.Count > 0)
     {
-        @* <table class="table table-bordered mt-4 table-striped table-hover">
-    <thead class="table-dark">
-    <tr>
-    <th scope="col">Code</th>
-    <th scope="col">Name</th>
-    <th scope="col">Status</th>
-    <th scope="col">Creation Date</th>
-    <th scope="col">Actions</th>
-    </tr>
-    </thead>
-    <tbody id="roomTableBody">
-    @foreach (var trainingProgram in Model.TrainingPrograms)
-    {
-    <tr>
-    <td>@trainingProgram.Code</td>
-    <td>@trainingProgram.Name</td>
-    <td>@trainingProgram.Status</td>
-    <td>@trainingProgram.CreatedDate.Value.ToShortDateString()</td>
-    <td>
-    <form method="post">
-    <input type="hidden" name="BookingReservationId" value="@trainingProgram.BookingReservationID" />
-    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
-    <button type="submit" class="btn btn-outline-danger">Cancel</button>
-    </form>
-    </td>
-    </tr>
-    }
-    </tbody>
-    </table> *@
         <div class="container mt-5">
             <div class="row mb-4">
                 <div class="col">
@@ -138,3 +108,4 @@
         }
     </script>
 }
+ *@
