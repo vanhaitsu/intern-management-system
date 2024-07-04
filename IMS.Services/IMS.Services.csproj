@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\IMS.Repositories.csproj" />
+    <ProjectReference Include="..\IMS.Repositories\IMS.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

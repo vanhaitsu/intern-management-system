@@ -45,7 +45,7 @@ namespace IMS.Repositories.Common
 
         private static async Task AddRoleAsync(SqlConnection connection, string roleName)
         {
-            var query = "INSERT INTO Roles (Name) VALUES (@RoleName)";
+            var query = "INSERT INTO Roles (Name, CreationDate, IsDeleted) VALUES (@RoleName, GETDATE(), 'false')";
             using (var command = new SqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@RoleName", roleName);
