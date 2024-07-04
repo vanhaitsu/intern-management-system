@@ -1,6 +1,6 @@
-﻿using IMS.Models.Entities;
+﻿using IMS.Repositories.Entities;
 
-namespace IMS_VIew.Services.Interfaces
+namespace IMS.Services.Interfaces
 {
     public interface IRoleService
     {

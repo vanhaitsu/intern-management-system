@@ -1,7 +1,7 @@
-﻿using IMS.Models.Entities;
-using Model.ViewModels.AccountModel;
+﻿using IMS.Repositories.AccountModel;
+using IMS.Repositories.Entities;
 
-namespace IMS_View.Services.Interfaces
+namespace IMS.Services.Interfaces
 {
     public interface IAccountService
     {

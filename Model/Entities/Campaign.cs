@@ -1,13 +1,13 @@
-﻿namespace IMS.Models.Entities
+﻿namespace IMS.Repositories.Entities
 {
     public class Campaign : BaseEntity
     {
-        public string? Code { get; set; }
-        public string? Name { get; set; }
-        public string? Status { get; set; }
+        public string Name { get; set; }
+        public string? Description { get; set; }
+        public DateTime? StartDate { get; set; } // Optional
+        public DateTime? EndDate { get; set; } // Optional
 
         //Relationship
-        public virtual ICollection<ProgramCampaign> ProgramCampaigns { get; set; }
-        public virtual ICollection<Lesson> Lessons { get; set; }
+        public virtual ICollection<Application>? Applications { get; set; } = new List<Application>();
     }
 }

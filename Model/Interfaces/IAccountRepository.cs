@@ -1,7 +1,7 @@
-﻿using IMS.Models.Entities;
-using Model.ViewModels.AccountModel;
+﻿using IMS.Repositories.AccountModel;
+using IMS.Repositories.Entities;
 
-namespace IMS.Models.Interfaces
+namespace IMS.Repositories.Interfaces
 {
     public interface IAccountRepository : IGenericRepository<Account>
     {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Model.ViewModels.AccountModel
+namespace IMS.Repositories.AccountModel
 {
-    public class AccountUpdateModel
+    public class AccountRegisterModel
     {
         [Required(ErrorMessage = "FirstName is required")]
         [StringLength(50, ErrorMessage = "FirstName must be no more than 50 characters")]
@@ -17,8 +12,6 @@ namespace Model.ViewModels.AccountModel
         public string Gender { get; set; }
 
         [Required(ErrorMessage = "Role is required")]
-        public string RoleName { get; set; }
-
         public Guid RoleId { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]
@@ -35,5 +28,14 @@ namespace Model.ViewModels.AccountModel
         [Required(ErrorMessage = "Address is required")]
         [StringLength(256, ErrorMessage = "Address must be no more than 256 characters")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(128, MinimumLength = 8, ErrorMessage = "Password must be from 8 to 128 characters")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Confirm Password is required")]
+        [StringLength(128, MinimumLength = 8, ErrorMessage = "Confirm Password must be from 8 to 128 characters")]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password does not match")]
+        public string ConfirmPassword { get; set; }
     }
 }

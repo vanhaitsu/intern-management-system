@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using IMS.Models.Entities;
-using IMS.Models.Interfaces;
-using IMS_VIew.Services.Interfaces;
-using Model.Enums;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Enums;
+using IMS.Repositories.Interfaces;
+using IMS.Services.Interfaces;
 
-namespace IMS_VIew.Services.Services
+namespace IMS.Services.Services
 {
     public class RoleService : IRoleService
     {
@@ -36,7 +36,8 @@ namespace IMS_VIew.Services.Services
             {
                 pageNumber = int.Parse(Pagination.defaultPageNumber.ToString());
             }
-            List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
+            //List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
+            List<Role> roles = null;
             return roles;
         }
     }

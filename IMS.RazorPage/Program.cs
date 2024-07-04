@@ -1,18 +1,11 @@
-using IMS.Models;
-using IMS.Models.Common;
-using IMS.Models.Interfaces;
-using IMS.Models.Repositories;
-using IMS_View.Models.Interfaces;
-using IMS_View.Models.Repositories;
-using IMS_View.Services.Interfaces;
-using IMS_VIew.Services.Interfaces;
-using IMS_View.Services.Services;
-using IMS_VIew.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Model.Common;
-using Model.Interfaces;
-using Model.Repositories;
+using IMS.Repositories;
+using IMS.Repositories.Common;
+using IMS.Repositories.Interfaces;
+using IMS.Repositories.Repositories;
+using IMS.Services.Interfaces;
+using IMS.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,13 +34,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
-
+//builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
+//builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ITraineeService, TraneeService>();
+//builder.Services.AddScoped<ITraineeService, TraneeService>();
+//builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+//builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

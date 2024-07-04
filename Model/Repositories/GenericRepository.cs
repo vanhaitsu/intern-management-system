@@ -1,6 +1,9 @@
-﻿using IMS.Models.Entities;
-using IMS.Models.Interfaces;
+﻿using IMS.Repositories;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Interfaces;
+using IMS.Repositories.QueryModels;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace IMS.Models.Repositories
 {
@@ -13,22 +16,71 @@ namespace IMS.Models.Repositories
             _dbSet = dbContext.Set<TEntity>();
         }
 
-        public async Task<TEntity?> GetAsync(Guid id)
+        public async Task<TEntity?> GetAsync(Guid id, string includeProperties = "")
         {
-            var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+            IQueryable<TEntity> query = _dbSet;
+            foreach (var includeProperty in includeProperties.Split
+                         (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            var result = await query.FirstOrDefaultAsync(x => x.Id == id);
             // todo should throw exception when result is not found
             return result;
         }
 
-        public Task<List<TEntity>> GetAllAsync()
+        public async Task<QueryResultModel<List<TEntity>>> GetAllAsync(
+            Expression<Func<TEntity, bool>> filter = null, // Các hàm filter
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, // Các hàm sort
+            string includeProperties = "", // Chỉ định lấy field nào của object
+            int? pageIndex = null,
+            int? pageSize = null)
         {
-            return _dbSet.ToListAsync();
+            int totalCount = 0;
+
+            IQueryable<TEntity> query = _dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            totalCount = await query.CountAsync();
+
+            foreach (var includeProperty in includeProperties.Split
+                         (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty.Trim());
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            // Implementing pagination
+            if (pageIndex.HasValue && pageSize.HasValue)
+            {
+                // Ensure the pageIndex and pageSize are valid
+                int validPageIndex = pageIndex.Value > 0 ? pageIndex.Value - 1 : 0;
+                int validPageSize =
+                    pageSize.Value > 0
+                        ? pageSize.Value : 10;
+                        //: PaginationConstant.DEFAULT_MIN_PAGE_SIZE;
+
+                query = query.Skip(validPageIndex * validPageSize).Take(validPageSize);
+            }
+
+            return new QueryResultModel<List<TEntity>>()
+            {
+                TotalCount = totalCount,
+                Data = query.ToList(),
+            };
         }
 
         public async Task AddAsync(TEntity entity)
         {
-            entity.CreatedDate = DateTime.UtcNow;
-            entity.IsDeleted = false;
+            entity.CreationDate = DateTime.UtcNow;
             await _dbSet.AddAsync(entity);
         }
 
@@ -36,15 +88,15 @@ namespace IMS.Models.Repositories
         {
             foreach (var entity in entities)
             {
-                entity.CreatedDate = DateTime.UtcNow;
-                //entity.CreatedBy = _claimsService.GetCurrentUserId();
+                entity.CreationDate = DateTime.UtcNow;
             }
+
             await _dbSet.AddRangeAsync(entities);
         }
+
         public void Update(TEntity entity)
         {
-            entity.ModifiedDate = DateTime.UtcNow;
-            //entity.ModifiedBy = _claimsService.GetCurrentUserId();
+            entity.ModificationDate = DateTime.UtcNow;
             _dbSet.Update(entity);
         }
 
@@ -52,9 +104,9 @@ namespace IMS.Models.Repositories
         {
             foreach (var entity in entities)
             {
-                entity.ModifiedDate = DateTime.UtcNow;
-                //entity.ModifiedBy = _claimsService.GetCurrentUserId();
+                entity.ModificationDate = DateTime.UtcNow;
             }
+
             _dbSet.UpdateRange(entities);
         }
 
@@ -62,7 +114,6 @@ namespace IMS.Models.Repositories
         {
             entity.IsDeleted = true;
             entity.DeletionDate = DateTime.UtcNow;
-            //entity.DeletedBy = _claimsService.GetCurrentUserId();
             _dbSet.Update(entity);
         }
 
@@ -72,8 +123,30 @@ namespace IMS.Models.Repositories
             {
                 entity.IsDeleted = true;
                 entity.DeletionDate = DateTime.UtcNow;
-                //entity.DeletedBy = _claimsService.GetCurrentUserId();
             }
+
+            _dbSet.UpdateRange(entities);
+        }
+
+        public void Restore(TEntity entity)
+        {
+            entity.IsDeleted = false;
+            entity.DeletionDate = null;
+            entity.DeletedBy = null;
+            entity.ModificationDate = DateTime.UtcNow;
+            _dbSet.Update(entity);
+        }
+
+        public void RestoreRange(List<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.IsDeleted = false;
+                entity.DeletionDate = null;
+                entity.DeletedBy = null;
+                entity.ModificationDate = DateTime.UtcNow;
+            }
+
             _dbSet.UpdateRange(entities);
         }
 

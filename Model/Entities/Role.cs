@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace IMS.Models.Entities
+﻿namespace IMS.Repositories.Entities
 {
     public class Role : BaseEntity
     {

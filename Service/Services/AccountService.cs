@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using IMS.Models.Entities;
-using IMS.Models.Interfaces;
-using IMS_View.Services.Interfaces;
+using IMS.Repositories.AccountModel;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Interfaces;
+using IMS.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Model.Enums;
-using Model.ViewModels.AccountModel;
 
-namespace IMS_View.Services.Services
+namespace IMS.Services.Services
 {
     public class AccountService : IAccountService
     {
@@ -160,8 +159,11 @@ namespace IMS_View.Services.Services
         public async Task<List<AccountGetModel>> SearchAccountsAsync(string searchTerm)
         {
             List<AccountGetModel> accountGetModels = new List<AccountGetModel>();
-            List<Account> accounts = await _unitOfWork.AccountRepository.GetAllAsync();
-            List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
+            //List<Account> accounts = await _unitOfWork.AccountRepository.GetAllAsync();
+            //List<Role> roles = await _unitOfWork.RoleRepository.GetAllAsync();
+
+            List<Account> accounts = null;
+            List<Role> roles = null;
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 accounts = accounts.Where(a =>

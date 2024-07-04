@@ -1,7 +1,6 @@
-﻿using IMS.Models.Entities;
-using IMS.Models.Interfaces;
+﻿using IMS.Repositories.Entities;
 
-namespace IMS_View.Models.Interfaces
+namespace IMS.Repositories.Interfaces
 {
     public interface IRoleRepository : IGenericRepository<Role>
     {

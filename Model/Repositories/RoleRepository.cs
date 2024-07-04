@@ -1,11 +1,9 @@
-﻿using IMS.Models;
-using IMS.Models.Entities;
-using IMS.Models.Interfaces;
-using IMS.Models.Repositories;
-using IMS_View.Models.Interfaces;
+﻿using IMS.Models.Repositories;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace IMS_View.Models.Repositories
+namespace IMS.Repositories.Repositories
 {
     public class RoleRepository : GenericRepository<Role>, IRoleRepository
     {

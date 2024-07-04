@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{C145EF9B-30B4-4EE6-8D7D-F9451AF82F50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMS.Repositories", "Model\IMS.Repositories.csproj", "{C145EF9B-30B4-4EE6-8D7D-F9451AF82F50}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{ECFC1788-1ED8-4323-BF87-50809FE59BE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMS.Services", "Service\IMS.Services.csproj", "{ECFC1788-1ED8-4323-BF87-50809FE59BE8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMS.RazorPage", "IMS.RazorPage\IMS.RazorPage.csproj", "{733ED06C-1F94-4AB2-999E-2F5A41F017F5}"
 EndProject

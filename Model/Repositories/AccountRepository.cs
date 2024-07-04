@@ -1,9 +1,10 @@
-﻿using IMS.Models.Entities;
-using IMS.Models.Interfaces;
+﻿using IMS.Models.Repositories;
+using IMS.Repositories.AccountModel;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Model.ViewModels.AccountModel;
 
-namespace IMS.Models.Repositories
+namespace IMS.Repositories.Repositories
 {
     public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
@@ -55,6 +56,5 @@ namespace IMS.Models.Repositories
 
             return accountModels;
         }
-
     }
 }

@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IMS.Models.Entities;
-using IMS.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Model.Enums;
-using Microsoft.Data.SqlClient;
-using System.Security.Cryptography;
+﻿using Microsoft.Data.SqlClient;
 
-namespace Model.Common
+namespace IMS.Repositories.Common
 {
     public class InitialSeeding
     {
         private static readonly string[] roles =
        {
-            Enums.RoleEnum.Admin.ToString(),
-            Enums.RoleEnum.Mentor.ToString(),
+           Enums.RoleEnum.Admin.ToString(),
+           Enums.RoleEnum.HR.ToString(),
+           Enums.RoleEnum.Mentor.ToString(),
         };
 
 
