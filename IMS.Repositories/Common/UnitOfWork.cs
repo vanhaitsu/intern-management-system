@@ -9,14 +9,18 @@ using IMS.Repositories.Interfaces;
         private readonly AppDbContext _dbContext;
         private readonly IAccountRepository _accountRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ITrainingProgramRepository _trainingProgramRepository;
     private readonly IInternRepository _internRepository;
 
+        public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
+                        IRoleRepository roleRepository, ITrainingProgramRepository trainingProgramRepository)
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository, 
                         IRoleRepository roleRepository, IInternRepository internRepository)
         {
             _dbContext = dbContext;
             _accountRepository = accountRepository;
             _roleRepository = roleRepository;
+            _trainingProgramRepository = trainingProgramRepository;
         _internRepository = internRepository;
         }
 
@@ -24,6 +28,7 @@ using IMS.Repositories.Interfaces;
 
         public IAccountRepository AccountRepository => _accountRepository;
         public IRoleRepository RoleRepository => _roleRepository;
+        public ITrainingProgramRepository TrainingProgramRepository => _trainingProgramRepository;
 
     public IInternRepository InternRepository => _internRepository;
 

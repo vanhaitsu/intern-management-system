@@ -92,7 +92,11 @@ namespace IMS.RazorPage.Pages
             }
             else
             {
+<<<<<<< HEAD
+                return RedirectToPage("/Mentor/TrainingProgramList");
+=======
                 return RedirectToPage("/Intern/Intern");
+>>>>>>> origin/main
             }
         }
     }
