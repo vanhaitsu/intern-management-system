@@ -16,7 +16,8 @@ namespace IMS.Repositories.Repositories
 
         public async Task<List<TrainingProgram>> GetByAccount(Guid accountId)
         {
-            return await _dbContext.TrainingPrograms.Where(tp => tp.CreatedBy == accountId).ToListAsync();
+            return await _dbContext.TrainingPrograms.Where(tp => tp.CreatedBy == accountId &&
+            tp.IsDeleted == false).ToListAsync();
         }
     }
 }
