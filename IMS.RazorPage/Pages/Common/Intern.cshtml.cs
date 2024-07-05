@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 
-namespace IMS.RazorPage.Pages
+namespace IMS.RazorPage.Pages.Common
 {
     public class InternManagementModel : PageModel
     {
