@@ -46,13 +46,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IInternRepository, InternRepository>();
-
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<IApplicationrepository, ApplicationRepository>();
 
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IInternService, InternService>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

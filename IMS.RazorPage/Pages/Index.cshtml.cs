@@ -57,6 +57,7 @@ namespace IMS.RazorPage.Pages
                 else
                 {
                     accountModel = await _internService.CheckLogin(account.Email, account.Password);
+                    accountModel.Role = "Intern";
                     if (accountModel == null)
                     {
                         Message = "Email or password is not correct!";
@@ -92,7 +93,7 @@ namespace IMS.RazorPage.Pages
             }
             else
             {
-                return RedirectToPage("/Intern/Intern");
+                return RedirectToPage("/Intern/Campaign");
             }
         }
     }

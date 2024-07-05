@@ -8,6 +8,8 @@ namespace IMS.Repositories.Interfaces
         IAccountRepository AccountRepository { get; }
         IRoleRepository RoleRepository {  get; }
         IInternRepository InternRepository { get; }
+        ICampaignRepository CampaignRepository { get; }
+        IApplicationrepository ApplicationRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
