@@ -61,33 +61,46 @@ namespace IMS.RazorPage.Pages.HR
             if (existedCampaign == null)
             {
                 Message = "Campaign not found.";
+                TempData["ErrorMessage"] = Message;
                 return Page();
             }
-            
+
             if (await _campaignService.Update(id, updateModel))
             {
                 Message = "Update successfully!";
-                return RedirectToPage("./Campaign");
+                TempData["SuccessMessage"] = Message;
+                return RedirectToPage("/HR/Campaign");
             }
             else
             {
                 Message = "Failed to update!";
+                TempData["ErrorMessage"] = Message;
                 return Page();
             }
         }
         public async Task<IActionResult> OnPostAddAsync()
         {
+            if (newCampaign.Name == null || newCampaign.Description == null)
+            {
+                Message = "Information cannot empty!";
+                TempData["ErrorMessage"] = Message;
+                return RedirectToPage("/HR/Campaign");
+            }
+
             if (!ModelState.IsValid)
             {
                 
                 if (await _campaignService.Create(newCampaign))
                 {
                     Message = "Add successfully!";
-                    return RedirectToPage("./Campaign");
+
+                    TempData["SuccessMessage"] = Message;
+                    return RedirectToPage("/HR/Campaign");
                 }
                 else
                 {
                     Message = "Something went wrong!";
+                    TempData["ErrorMessage"] = Message;
                 }
             }
             return Page();
@@ -99,6 +112,7 @@ namespace IMS.RazorPage.Pages.HR
             if (campaignToDelete == null)
             {
                 Message = "Campaign not found.";
+                TempData["ErrorMessage"] = Message;
                 return Page();
             }
 
@@ -106,13 +120,16 @@ namespace IMS.RazorPage.Pages.HR
             if (!deleteResult)
             {
                 Message = "Failed to delete campaign. Please try again.";
+                TempData["ErrorMessage"] = Message;
+
                 return Page();
             }
             else
             {
                 TempData["SuccessMessage"] = "Campaign deleted successfully.";
+
             }
-            return RedirectToPage("./Campaign");
+            return RedirectToPage("/HR/Campaign");
         }
         public async Task<IActionResult> OnPostActiveAsync(Guid id)
         {
@@ -120,6 +137,7 @@ namespace IMS.RazorPage.Pages.HR
             if (campaignToActive == null)
             {
                 Message = "Campaign not found.";
+                TempData["ErrorMessage"] = Message;
                 return Page();
             }
 
@@ -127,13 +145,14 @@ namespace IMS.RazorPage.Pages.HR
             if (!activeResult)
             {
                 Message = "Failed to active campaign. Please try again.";
+                TempData["ErrorMessage"] = Message;
                 return Page();
             }
             else
             {
                 TempData["SuccessMessage"] = "Campaign active successfully.";
             }
-            return RedirectToPage("./Campaign");
+            return RedirectToPage("/HR/Campaign");
         }
 
     }

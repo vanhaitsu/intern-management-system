@@ -2,6 +2,8 @@
 @model IMS.RazorPage.Pages.HR.CampaignModel
 @using IMS.Repositories.Models.CampaignModel
 @{
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var successMessage = TempData["SuccessMessage"] as string;
 }
 <!DOCTYPE html>
 
@@ -22,6 +24,20 @@
         int pageSize = Model.PageSize;
         int totalPages = (int)Math.Ceiling((decimal)totalCampaignsCount / pageSize);
     }
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @successMessage
+        </div>
+    }
+    
 
     <div class="container mt-3">
         <div class="row justify-content-center">
