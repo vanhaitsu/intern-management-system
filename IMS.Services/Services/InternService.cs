@@ -105,47 +105,20 @@ namespace IMS_View.Services.Services
             return null;
         }
 
-        //public async Task<bool> Update(Guid id, InternUpdateModel internUpdateModel)
-        //{
-        //    var existedIntern = await _unitOfWork.InternRepository.GetAsync(id);
-        //    if (existedIntern != null)
-        //    {
-        //        TrainingProgram programExists = null;
-        //        if (!string.IsNullOrEmpty(internUpdateModel.ProgramName))
-        //        {
-        //            programExists = await _unitOfWork.TrainingProgramRepository.GetAsync(internUpdateModel.ProgramId);
-        //            if (programExists == null)
-        //            {
-        //                return false;
-        //            }
-
-        //            if (existedIntern.TrainingProgram != null)
-        //            {
-        //                if (existedIntern.TrainingProgram.Name == internUpdateModel.ProgramName)
-        //                {
-        //                    return false;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                existedIntern.TrainingProgram = programExists;
-        //            }
-        //        }
-        //        _mapper.Map(internUpdateModel, existedIntern);
-        //        if (!string.IsNullOrEmpty(internUpdateModel.ProgramName) && existedIntern.TrainingProgram == null)
-        //        {
-        //            existedIntern.TrainingProgram = programExists;
-        //        }
-
-        //        _unitOfWork.InternRepository.Update(existedIntern);
-        //        if (await _unitOfWork.SaveChangeAsync() > 0)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
+        public async Task<bool> Update(Guid id, InternUpdateModel internUpdateModel)
+        {
+            var existedIntern = await _unitOfWork.InternRepository.GetAsync(id);
+            if (existedIntern != null)
+            {
+                _mapper.Map(internUpdateModel, existedIntern);
+                _unitOfWork.InternRepository.Update(existedIntern);
+                if (await _unitOfWork.SaveChangeAsync() > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         public async Task<bool> Delete(Guid id)

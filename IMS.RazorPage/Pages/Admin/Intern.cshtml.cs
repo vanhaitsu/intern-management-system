@@ -2,6 +2,7 @@ using IMS.Repositories.Entities;
 using IMS.Repositories.Models.AccountModel;
 using IMS.Repositories.Models.InternModel;
 using IMS.Services.Interfaces;
+using IMS.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -57,20 +58,35 @@ namespace IMS.RazorPage.Pages.Mentor
             return Page();
         }
 
-        //public async Task<IActionResult> OnPostAsync(Guid id)
-        //{
-        //    InternUpdateModel updateModel = internUpdate;
-        //    if (await _internService.Update(id, updateModel))
-        //    {
-        //        Message = "Update successfully!";
-        //        return RedirectToPage("./Intern");
-        //    }
-        //    else
-        //    {
-        //        Message = "Failed to update!";
-        //        return Page();
-        //    }
-        //}
+        public async Task<IActionResult> OnPostAsync(Guid id)
+        {
+            InternUpdateModel updateModel = internUpdate;
+            var existedIntern = await _internService.GetInternAsync(id);
+            if (existedIntern == null)
+            {
+                Message = "Intern not found.";
+                return Page();
+            }
+            if (updateModel.Email != existedIntern.Email)
+            {
+                var emailExists = await _internService.CheckExistedIntern(updateModel.Email);
+                if (emailExists)
+                {
+                    Message = "Email is already existed!";
+                    return Page();
+                }
+            }
+            if (await _internService.Update(id, updateModel))
+            {
+                Message = "Update successfully!";
+                return RedirectToPage("./Intern");
+            }
+            else
+            {
+                Message = "Failed to update!";
+                return Page();
+            }
+        }
 
         public async Task<IActionResult> OnPostAddAsync()
         {

@@ -19,6 +19,7 @@ namespace IMS.Services.Interfaces
         Task<Intern> GetInternAsync(Guid id);
         Task<List<InternGetModel>> GetAllInterns(InternFilterModel filterModel);
         Task<int> GetTotalInternsCount(InternFilterModel filterModel);
+        Task<bool> Update(Guid id, InternUpdateModel internUpdateModel);
         Task<bool> Delete(Guid id);
         Task<bool> Restore(Guid id);
     }
