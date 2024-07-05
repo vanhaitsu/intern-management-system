@@ -87,7 +87,7 @@ namespace IMS.RazorPage.Pages
             }
             else if (accountModel.Role == "Mentor")
             {
-                return RedirectToPage("/Mentor/Intern");
+                return RedirectToPage("/Mentor/TrainingProgramList");
             }
             else
             {

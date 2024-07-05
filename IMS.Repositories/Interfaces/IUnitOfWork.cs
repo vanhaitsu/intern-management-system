@@ -7,8 +7,8 @@ namespace IMS.Repositories.Interfaces
         AppDbContext DbContext { get; }
         IAccountRepository AccountRepository { get; }
         IRoleRepository RoleRepository {  get; }
+        ITrainingProgramRepository TrainingProgramRepository { get; }
         IInternRepository InternRepository { get; }
-
         public Task<int> SaveChangeAsync();
     }
 }
