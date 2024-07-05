@@ -60,7 +60,7 @@
     </div>
     <!-- Modal upload file -->
     <div class="modal fade" id="uploadedInternsModal" tabindex="-1" aria-labelledby="uploadedInternsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="uploadedInternsModalLabel">Confirm Uploaded Interns</h5>
@@ -73,10 +73,12 @@
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Address</th>
-                                <th>University</th>
+                                <th>Education</th>
                                 <th>Phone Number</th>
                                 <th>DOB</th>
                                 <th>Gender</th>
+                                <th>Skill</th>
+                                <th>Work History</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,13 +94,15 @@
                                         <td>@intern.PhoneNumber</td>
                                         <td>@intern.DOB</td>
                                         <td>@intern.Gender</td>
+                                        <td>@intern.Skill</td>
+                                        <td>@intern.WorkHistory</td>
                                     </tr>
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="8">No interns uploaded.</td>
+                                    <td colspan="9">No interns uploaded.</td>
                                 </tr>
                             }
                         </tbody>
@@ -118,14 +122,25 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 var shouldShowModal = @(Model.UploadedInterns != null && Model.UploadedInterns.Count > 0 ? "true" : "false");
-
                 if (shouldShowModal) {
-                    var uploadedinternsModal = new bootstrap.Modal(document.getElementById('uploadedinternsModal'));
-                    uploadedinternsModal.show();
+                    var uploadedInternsModal = new bootstrap.Modal(document.getElementById('uploadedInternsModal'));
+                    uploadedInternsModal.show();
                 }
             });
         </script>
+        <style>
+            .modal-dialog-scrollable {
+                max-width: 100%;
+                width: auto;
+                margin: 1.75rem auto;
+            }
+
+            .modal-content {
+                width: auto;
+            }
+        </style>
     }
+
 
     <div class="m-4">
         @if (internList != null)
@@ -134,7 +149,6 @@
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col">Code</th>
                         <th scope="col">Full name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Status</th>

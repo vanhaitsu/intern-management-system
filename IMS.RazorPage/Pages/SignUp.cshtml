@@ -13,7 +13,7 @@
 </head>
 <body>
     @{
-        var account = Model.account;
+        var intern = Model.intern;
         var message = Model.Message;
     }
     <div class="toast align-items-center bg-success text-light fs-6 border-0" role="alert" aria-live="assertive" aria-atomic="true" id="messageToast" data-bs-delay="5000" data-bs-autohide="true"
@@ -29,110 +29,135 @@
     <form method="post">
         <section class="vh-100">
             <div class="container-fluid h-custom h-100">
-                <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="text-center text-lg-start d-flex flex-column align-items-center">
+                <div class="row d-flex justify-content-center align-items-stretch h-100">
+                    <div class="col-12 text-center text-lg-start d-flex flex-column align-items-center">
                         <p class="fw-bold mt-2 pt-1 mb-0 text-center" style="font-size: 1.5rem; margin-bottom: 20px;">
-                            Welcome back
+                            Register to become an intern
                         </p>
                         <p class="small fw-bold mt-2 pt-1 mb-0 text-center">
-                            Already have an account? <a href="/Home/Login"
-                                                        class="link-primary-emphasis">Login</a>
+                            Already have an account? <a href="/Home/Login" class="link-primary-emphasis">Login</a>
                         </p>
                     </div>
-                    <div class="col-md-8 col-lg-8 col-xl-4">
-                        <div data-mdb-input-init class="form-outline mb-2">
+                    <div class="col-md-8 col-lg-8 col-xl-4 d-flex flex-column align-items-stretch">
+                        <!-- Email input -->
+                        <div class="form-outline mb-2">
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="@account.Email" />
-                                <label asp-for="@account.Email" for="floatingInput">Email address</label>
-                                <span asp-validation-for="@account.Email" class="text-danger"></span>
-                            </div>
-
-                            <div data-mdb-input-init class="form-outline mb-2">
-                                <div class="form-group form-floating mb-3">
-                                    <input class="form-control" id="floatingInput" placeholder="Full name" asp-for="@account.FullName" />
-                                    <label asp-for="@account.FullName" for="floatingInput">Full name</label>
-                                    <span asp-validation-for="@account.FullName" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            
-
-                            <div data-mdb-input-init class="form-outline mb-2">
-                                <div class="form-group form-floating mb-3">
-                                    <input class="form-control" type="password" id="floatingInput" placeholder="Password" asp-for="@account.Password" />
-                                    <label asp-for="@account.Password" for="floatingInput">Password</label>
-                                    <span asp-validation-for="@account.Password" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div data-mdb-input-init class="form-outline mb-2">
-                                <div class="form-group form-floating mb-3">
-                                    <input class="form-control" type="password" id="floatingInput" placeholder="ConfirmPassword" asp-for="@account.ConfirmPassword" />
-                                    <label asp-for="@account.ConfirmPassword" for="floatingInput">ConfirmPassword</label>
-                                    <span asp-validation-for="@account.ConfirmPassword" class="text-danger"></span>
-                                </div>
+                                <input class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="intern.Email" />
+                                <label asp-for="intern.Email" for="floatingInput">Email address</label>
+                                <span asp-validation-for="intern.Email" class="text-danger"></span>
                             </div>
                         </div>
 
+                        <!-- Full Name input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <input class="form-control" id="floatingInput" placeholder="Full name" asp-for="intern.FullName" />
+                                <label asp-for="intern.FullName" for="floatingInput">Full name</label>
+                                <span asp-validation-for="intern.FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <input class="form-control" type="password" id="floatingInput" placeholder="Password" asp-for="intern.Password" />
+                                <label asp-for="intern.Password" for="floatingInput">Password</label>
+                                <span asp-validation-for="intern.Password" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <input class="form-control" type="password" id="floatingInput" placeholder="Confirm Password" asp-for="intern.ConfirmPassword" />
+                                <label asp-for="intern.ConfirmPassword" for="floatingInput">Confirm Password</label>
+                                <span asp-validation-for="intern.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Education input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <input class="form-control" id="floatingInput" placeholder="Education" asp-for="intern.Education" />
+                                <label asp-for="intern.Education" for="floatingInput">Education</label>
+                                <span asp-validation-for="intern.Education" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Skill input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <input class="form-control" id="floatingInput" placeholder="Skill" asp-for="intern.Skill" />
+                                <label asp-for="intern.Skill" for="floatingInput">Skill</label>
+                                <span asp-validation-for="intern.Skill" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-8 col-lg-8 col-xl-4 offset-xl-1">
-                        <div data-mdb-input-init class="form-outline mb-2">
+
+                    <div class="col-md-8 col-lg-8 col-xl-4 d-flex flex-column align-items-stretch">
+                        <!-- Phone Number input -->
+                        <div class="form-outline mb-2">
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" id="floatingInput" placeholder="PhoneNumber" asp-for="@account.PhoneNumber" />
-                                <label asp-for="@account.PhoneNumber" for="floatingInput">PhoneNumber</label>
-                                <span asp-validation-for="@account.PhoneNumber" class="text-danger"></span>
+                                <input class="form-control" id="floatingInput" placeholder="Phone Number" asp-for="intern.PhoneNumber" />
+                                <label asp-for="intern.PhoneNumber" for="floatingInput">Phone Number</label>
+                                <span asp-validation-for="intern.PhoneNumber" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div data-mdb-input-init class="form-outline mb-2">
+                        <!-- Date of Birth input -->
+                        <div class="form-outline mb-2">
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" type="date" id="floatingInput" placeholder="Birthday" asp-for="@account.DOB" />
-                                <label asp-for="@account.DOB" for="floatingInput">Birthday</label>
-                                <span asp-validation-for="@account.DOB" class="text-danger"></span>
+                                <input class="form-control" type="date" id="floatingInput" placeholder="Birthday" asp-for="intern.DOB" />
+                                <label asp-for="intern.DOB" for="floatingInput">Birthday</label>
+                                <span asp-validation-for="intern.DOB" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div data-mdb-input-init class="form-outline mb-2">
+                        <!-- Gender input -->
+                        <div class="form-outline mb-2">
                             <div class="form-floating mb-3 p-lg-3 d-flex justify-content-around">
                                 <div class="form-group">
-                                    <input class="form-check-input" type="radio" value="Male" id="flexRadioDefault1" asp-for="@account.Gender">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        Male
-                                    </label>
+                                    <input class="form-check-input" type="radio" value="Male" id="flexRadioDefault1" asp-for="intern.Gender">
+                                    <label class="form-check-label" for="flexRadioDefault1">Male</label>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-check-input" type="radio" value="Female" id="flexRadioDefault2" asp-for="@account.Gender">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        Female
-                                    </label>
+                                    <input class="form-check-input" type="radio" value="Female" id="flexRadioDefault2" asp-for="intern.Gender">
+                                    <label class="form-check-label" for="flexRadioDefault2">Female</label>
                                 </div>
-                                <span asp-validation-for="@account.Gender" class="text-danger"></span>
+                                <span asp-validation-for="intern.Gender" class="text-danger"></span>
                             </div>
                         </div>
 
-
-                        <div data-mdb-input-init class="form-outline mb-2">
+                        <!-- Address input -->
+                        <div class="form-outline mb-2">
                             <div class="form-group form-floating mb-3">
-                                <input class="form-control" id="floatingInput" placeholder="Birthday" asp-for="@account.Address" />
-                                <label asp-for="@account.Address" for="floatingInput">Address</label>
-                                <span asp-validation-for="@account.Address" class="text-danger"></span>
+                                <input class="form-control" id="floatingInput" placeholder="Address" asp-for="intern.Address" />
+                                <label asp-for="intern.Address" for="floatingInput">Address</label>
+                                <span asp-validation-for="intern.Address" class="text-danger"></span>
                             </div>
                         </div>
 
-
-
+                        <!-- Work History input -->
+                        <div class="form-outline mb-2">
+                            <div class="form-group form-floating mb-3">
+                                <textarea class="form-control" id="floatingInput" placeholder="Work History" asp-for="intern.WorkHistory"></textarea>
+                                <label asp-for="intern.WorkHistory" for="floatingInput">Work History</label>
+                                <span asp-validation-for="intern.WorkHistory" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-center text-lg-start d-flex flex-column align-items-center">
+
+                    <div class="text-center text-lg-start d-flex flex-column align-items-center mt-4">
                         <button type="submit" id="submitBtn" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem;">
                             Register
                         </button>
-
                     </div>
                 </div>
             </div>
         </section>
     </form>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {

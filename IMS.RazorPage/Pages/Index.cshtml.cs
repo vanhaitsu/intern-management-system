@@ -20,8 +20,6 @@ namespace IMS.RazorPage.Pages
         [BindProperty]
         public LoginModel account { get; set; }
 
-        [BindProperty]
-        public string role { get; set; }
         public IndexModel(ILogger<IndexModel> logger, IAccountService accountService, IInternService internService)
         {
             _logger = logger;
@@ -36,57 +34,58 @@ namespace IMS.RazorPage.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            LoginModel accountModel = new();
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                Message = "Email or password is wrong.\nPlease check again!";
+                ViewData["Error"] = "Email or password is wrong.\nPlease check again!";
                 return Page();
+            }
+
+            LoginResult loginResult;
+            if (account.RoleCheck == "Staff")
+            {
+                loginResult = await _accountService.CheckLogin(account.Email, account.Password);
             }
             else
             {
-                if (role == "Staff")
-                {
-                    accountModel = await _accountService.CheckLogin(account.Email, account.Password);
-                    if (accountModel == null)
-                    {
-                        Message = "Email or password is not correct!";
-                        return Page();
-                    }
-
-                }
-                else
-                {
-                    accountModel = await _internService.CheckLogin(account.Email, account.Password);
-                    if (accountModel == null)
-                    {
-                        Message = "Email or password is not correct!";
-                        return Page();
-                    }
-                }
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, accountModel.Id.ToString()),
-                    new Claim(ClaimTypes.Name, accountModel.Email),
-                    new Claim(ClaimTypes.Role, accountModel.Role)
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
-                    new AuthenticationProperties()
-                    {
-                        IsPersistent = true
-                    });
+                loginResult = await _internService.CheckLogin(account.Email, account.Password);
             }
+
+            if (!string.IsNullOrEmpty(loginResult.ErrorMessage))
+            {
+                ViewData["Error"] = loginResult.ErrorMessage;
+                return Page();
+            }
+
+            var accountModel = loginResult.LoginModel;
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, accountModel.Id.ToString()),
+        new Claim(ClaimTypes.Name, accountModel.Email)
+    };
+
+            if (!string.IsNullOrEmpty(accountModel.Role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, accountModel.Role));
+            }
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
+                new AuthenticationProperties()
+                {
+                    IsPersistent = true
+                });
+
             if (accountModel.Role == "Admin")
             {
                 return RedirectToPage("/Admin/Account");
             }
-            else if(accountModel.Role == "HR")
+            else if (accountModel.Role == "HR")
             {
                 return RedirectToPage("/HR/Intern");
             }
-            else if(accountModel.Role == "Mentor")
+            else if (accountModel.Role == "Mentor")
             {
                 return RedirectToPage("/Mentor/TrainingProgramList");
             }
@@ -95,5 +94,6 @@ namespace IMS.RazorPage.Pages
                 return RedirectToPage("/Intern/Intern");
             }
         }
+
     }
 }

@@ -29,6 +29,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Intern">Intern</a>
                                 </li>
+                                <form method="post" asp-page="/Admin/Intern" asp-page-handler="Logout" class="nav-item">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                                 </li>
@@ -41,6 +44,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/HR/TrainingProgram">Program</a>
                                 </li>
+                                <form method="post" asp-page="/Admin/Intern" asp-page-handler="Logout" class="nav-item">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
                             }
                             @if (User.IsInRole("Mentor"))
                             {
@@ -50,6 +56,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgram">Program</a>
                                 </li>
+                                <form method="post" asp-page="/Admin/Intern" asp-page-handler="Logout" class="nav-item">
+                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                </form>
                             }
                         }
                     </ul>

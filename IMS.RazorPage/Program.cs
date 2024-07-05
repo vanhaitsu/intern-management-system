@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(5); 
@@ -33,8 +32,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o =>
     {
-        o.LoginPath = "/Login";
+        o.LoginPath = "/Index";
     });
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
@@ -79,7 +79,3 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
-//private static async Task InitializeRolesAsync(IServiceProvider serviceProvider)
-//{
-//    await InitialSeeding.Initialize(serviceProvider);
-//}
