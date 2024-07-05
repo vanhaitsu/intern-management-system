@@ -4,8 +4,8 @@ namespace IMS.Repositories.AccountModel
 {
     public class AccountRegisterModel
     {
-        [Required(ErrorMessage = "FirstName is required")]
-        [StringLength(50, ErrorMessage = "FirstName must be no more than 50 characters")]
+        [Required(ErrorMessage = "FullName is required")]
+        [StringLength(50, ErrorMessage = "FullName must be no more than 50 characters")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Gender is required")]
@@ -15,6 +15,7 @@ namespace IMS.Repositories.AccountModel
         public Guid RoleId { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]
+        [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
 
         [Required(ErrorMessage = "PhoneNumber is required"), Phone(ErrorMessage = "Invalid phone format")]

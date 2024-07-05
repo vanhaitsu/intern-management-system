@@ -24,10 +24,10 @@
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Account">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="./Trainee">Trainee</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Intern">Intern</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
@@ -36,10 +36,7 @@
                             @if (User.IsInRole("Mentor"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/Trainee">Trainee</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/Intern">Home</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgram">Program</a>
