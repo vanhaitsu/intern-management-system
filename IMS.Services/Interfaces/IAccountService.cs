@@ -7,10 +7,10 @@ namespace IMS.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<LoginModel> CheckLogin(string email, string password);
+        Task<LoginResult> CheckLogin(string email, string password);
         Task<bool> CheckExistedAccount(string email);
         Task<Account> GetAccountAsync(Guid id);
-        Task<bool> SignUp(AccountRegisterModel accountRegisterModel);
+       // Task<bool> SignUp(AccountRegisterModel accountRegisterModel);
         Task<bool> Update(Guid id,AccountUpdateModel accountUpdateModel);
         Task<bool> Delete(Guid id);
         Task<List<AccountGetModel>> GetAllAccounts(AccountFilterModel filterModel);

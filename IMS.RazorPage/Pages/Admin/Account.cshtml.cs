@@ -2,12 +2,15 @@ using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Models.AccountModel;
 using IMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
 namespace IMS.RazorPage.Pages.Admin
 {
+    [Authorize]
     public class AccountManagementModel : PageModel
     {
         private readonly IAccountService _accountService;
@@ -61,7 +64,7 @@ namespace IMS.RazorPage.Pages.Admin
 
             if (existedAccount == null)
             {
-                Message = "Account not found.";
+                ViewData["Error"] = "Account not found.";
                 return Page();
             }
             if (updateModel.Email != existedAccount.Email)
@@ -69,7 +72,7 @@ namespace IMS.RazorPage.Pages.Admin
                 var emailExists = await _accountService.CheckExistedAccount(updateModel.Email);
                 if (emailExists)
                 {
-                    Message = "Email is already existed!";
+                    ViewData["Error"] = "Email is already existed!";
                     return Page();
                 }
             }
@@ -80,7 +83,7 @@ namespace IMS.RazorPage.Pages.Admin
             }
             else
             {
-                Message = "Failed to update!";
+                ViewData["Error"] = "Failed to update!";
                 return Page();
             }
         }
@@ -94,7 +97,7 @@ namespace IMS.RazorPage.Pages.Admin
                 var existedAccount = await _accountService.CheckExistedAccount(newAccount.Email);
                 if (existedAccount)
                 {
-                    Message = "Email is already existed!";
+                    ViewData["Error"] = "Email is already existed!";
                     return Page();
                 }
                 if (await _accountService.Create(newAccount))
@@ -104,7 +107,7 @@ namespace IMS.RazorPage.Pages.Admin
                 }
                 else
                 {
-                    Message = "Something went wrong!";
+                    ViewData["Error"] = "Something went wrong!";
                 }
             }
             return Page();
@@ -115,14 +118,14 @@ namespace IMS.RazorPage.Pages.Admin
             var accountToDelete = await _accountService.GetAccountAsync(id);
             if (accountToDelete == null)
             {
-                Message = "Account not found.";
+                ViewData["Error"] = "Account not found.";
                 return Page();
             }
 
             var deleteResult = await _accountService.Delete(id);
             if (!deleteResult)
             {
-                Message = "Failed to block account. Please try again.";
+                ViewData["Error"] = "Failed to block account. Please try again.";
                 return Page();
             }
             else
@@ -137,14 +140,14 @@ namespace IMS.RazorPage.Pages.Admin
             var accountToDelete = await _accountService.GetAccountAsync(id);
             if (accountToDelete == null)
             {
-                Message = "Account not found.";
+                ViewData["Error"] = "Account not found.";
                 return Page();
             }
 
             var restoreResult = await _accountService.Restore(id);
             if (!restoreResult)
             {
-                Message = "Failed to Restore account. Please try again.";
+                ViewData["Error"] = "Failed to Restore account. Please try again.";
                 return Page();
             }
             else
