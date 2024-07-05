@@ -35,13 +35,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
-//builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
+builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 //builder.Services.AddScoped<ITraineeService, TraneeService>();
-//builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 //builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();

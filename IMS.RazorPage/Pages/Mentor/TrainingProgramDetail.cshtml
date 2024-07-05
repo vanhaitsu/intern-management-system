@@ -1,0 +1,14 @@
+﻿@page
+@model IMS.RazorPage.Pages.Mentor.TrainingProgramDetailModel
+@{
+    ViewData["Title"] = "Training Program Detail";
+}
+<h1>Training Program Detail</h1>
+
+@if (Model.TrainingProgram != null)
+{
+    <span>Program's name:</span> <h6 class="mb-1">@Model.TrainingProgram.Name</h6>
+}
+
+
+

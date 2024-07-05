@@ -65,7 +65,7 @@ namespace IMS.RazorPage.Pages
             }
             else
             {
-                return RedirectToPage("/Mentor/Trainee");
+                return RedirectToPage("/Mentor/TrainingProgramList");
             }
         }
 

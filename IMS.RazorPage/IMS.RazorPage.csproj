@@ -24,8 +24,4 @@
     <ProjectReference Include="..\IMS.Services\IMS.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Mentor\" />
-  </ItemGroup>
-
 </Project>

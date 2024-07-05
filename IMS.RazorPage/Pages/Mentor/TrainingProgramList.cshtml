@@ -1,0 +1,138 @@
+﻿@page
+@model IMS.RazorPage.Pages.Mentor.TrainingProgramListModel
+@{
+}
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateProgram">
+        Create new program
+    </button>
+</div>
+
+<div class="modal fade" id="modalCreateProgram" tabindex="-1" aria-labelledby="modalCreateProgramLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create new program</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="CreateProgram" class="d-flex flex-column gap-4">
+                    <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
+
+                    <div class="form-floating">
+                        <input asp-for="TrainingProgramCreateModel.Name" type="tel" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="TrainingProgramCreateModel.Name" for="floatingInput"></label>
+                        <span asp-validation-for="TrainingProgramCreateModel.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="TrainingProgramCreateModel.Duration" type="number" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="TrainingProgramCreateModel.Duration" for="floatingInput"></label>
+                        <span asp-validation-for="TrainingProgramCreateModel.Duration" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="TrainingProgramCreateModel.StartDate" type="date" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="TrainingProgramCreateModel.StartDate" for="floatingInput"></label>
+                        <span asp-validation-for="TrainingProgramCreateModel.StartDate" class="text-danger"></span>
+                    </div>
+
+                    @* <button type="submit" class="btn btn-primary w-100">Create Customer</button> *@
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@if (Model.TrainingPrograms != null && Model.TrainingPrograms.Count > 0)
+{
+    @* <table class="table table-bordered mt-4 table-striped table-hover">
+    <thead class="table-dark">
+    <tr>
+    <th scope="col">Code</th>
+    <th scope="col">Name</th>
+    <th scope="col">Status</th>
+    <th scope="col">Creation Date</th>
+    <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody id="roomTableBody">
+    @foreach (var trainingProgram in Model.TrainingPrograms)
+    {
+    <tr>
+    <td>@trainingProgram.Code</td>
+    <td>@trainingProgram.Name</td>
+    <td>@trainingProgram.Status</td>
+    <td>@trainingProgram.CreatedDate.Value.ToShortDateString()</td>
+    <td>
+    <form method="post">
+    <input type="hidden" name="BookingReservationId" value="@trainingProgram.BookingReservationID" />
+    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+    <button type="submit" class="btn btn-outline-danger">Cancel</button>
+    </form>
+    </td>
+    </tr>
+    }
+    </tbody>
+    </table> *@
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="text-center">Training Programs Overview</h2>
+            </div>
+        </div>
+        <div class="row mb-4">
+    <div class="col">
+        <div class="">
+            <div class="">
+                <ul class="list-group list-group-flush">
+                    <div class="d-flex">
+                        @foreach (var trainingProgram in Model.TrainingPrograms)
+                        {
+                            <div class="col-md-4 mb-3">
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between" onclick="redirectToProgramDetail('@trainingProgram.Id')">
+                                        <div>
+                                            <h6 class="mb-1"><strong>Name: </strong>@trainingProgram.Name</h6>
+                                                    @if (@trainingProgram.StartDate != null)
+                                                    {
+                                                        <p class="mb-1"><strong>Start date:</strong> @trainingProgram.StartDate.Value.ToShortDateString()</p>
+                                                        <p class="mb-1"><strong>End date:</strong> @trainingProgram.EndDate.Value.ToShortDateString()</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p></p>
+                                                        <p></p>
+                                                    }
+
+                                        </div>
+                                        <div class="align-self-center">
+                                            @* Optional actions or buttons here *@
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        }
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+}
+</div>
+@section Scripts {
+    <script>
+        function redirectToProgramDetail(trainingProgramId) {
+            window.location.href = `/Mentor/TrainingProgramDetail?name=${encodeURIComponent(trainingProgramId)}`;
+            // window.location.href = "/Mentor/TrainingProgramDetail";
+        }
+    </script>
+}

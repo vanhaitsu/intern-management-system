@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
-using IMS.Models.Entities;
-using IMS.Models.Interfaces;
-using Model.Enums;
-using Model.ViewModels.TraineeModel;
-using Model.ViewModels.TrainingProgramModel;
-using Service.Interfaces;
+using IMS.Repositories.Entities;
+using IMS.Repositories.Interfaces;
+using IMS.Repositories.Models.TrainingProgramModel;
+using IMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace IMS.Services.Services
 {
     public class TrainingProgramService : ITrainingProgramService
     {
@@ -28,16 +26,20 @@ namespace Service.Services
             return await _unitOfWork.TrainingProgramRepository.GetByAccount(accountId);
         }
 
-        public async Task<TrainingProgram> GetByCode(string code)
+        public async Task<TrainingProgram> Get (Guid id)
         {
-            return await _unitOfWork.TrainingProgramRepository.GetByCode(code);
+            return await _unitOfWork.TrainingProgramRepository.GetAsync(id);
         }
 
         public async Task<bool> Create(TrainingProgramCreateModel trainingProgramCreateModel)
         {
             TrainingProgram trainingProgram = _mapper.Map<TrainingProgram>(trainingProgramCreateModel);
             trainingProgram.IsDeleted = false;
-            trainingProgram.Status = TrainingPrgramStatus.Processing.ToString();
+            if (trainingProgramCreateModel.StartDate != null && trainingProgramCreateModel.Duration != null)
+            {
+                trainingProgram.EndDate = trainingProgramCreateModel.StartDate.Value
+                .AddDays(trainingProgramCreateModel.Duration.Value);
+            }
             _unitOfWork.TrainingProgramRepository.AddAsync(trainingProgram);
             if (await _unitOfWork.SaveChangeAsync() > 0)
             {
