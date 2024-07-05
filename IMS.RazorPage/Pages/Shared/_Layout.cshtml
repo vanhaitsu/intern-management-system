@@ -33,6 +33,15 @@
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                                 </li>
                             }
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Intern">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/TrainingProgram">Program</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Mentor"))
                             {
                                 <li class="nav-item">
