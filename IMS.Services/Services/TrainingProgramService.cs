@@ -31,6 +31,16 @@ namespace IMS.Services.Services
             return await _unitOfWork.TrainingProgramRepository.GetAsync(id);
         }
 
+        public async Task<bool> SoftDelete(TrainingProgram trainingProgram)
+        {
+            _unitOfWork.TrainingProgramRepository.SoftDelete(trainingProgram);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> Create(TrainingProgramCreateModel trainingProgramCreateModel)
         {
             TrainingProgram trainingProgram = _mapper.Map<TrainingProgram>(trainingProgramCreateModel);

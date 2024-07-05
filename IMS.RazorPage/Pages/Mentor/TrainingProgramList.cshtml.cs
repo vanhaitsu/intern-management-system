@@ -44,5 +44,25 @@ namespace IMS.RazorPage.Pages.Mentor
             }
             return null;
         }
+
+        public async Task<IActionResult> OnPostDeleteProgramAsync(Guid id)
+        {
+            var trainingProgram = await _trainingProgramService.Get(id);
+            if (trainingProgram == null)
+            {
+                ErrorMessage = "Training Program not found.";
+                return Page();
+            }
+            
+            if (await _trainingProgramService.SoftDelete(trainingProgram))
+            {
+                SuccessMessage = "Delete successfully!";
+            }
+            else
+            {
+                ErrorMessage = "Something went wrong!";
+            }
+            return RedirectToPage("./TrainingProgramList");
+        }
     }
 }

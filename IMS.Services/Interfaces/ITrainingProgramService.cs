@@ -13,5 +13,6 @@ namespace IMS.Services.Interfaces
         Task<List<TrainingProgram>> GetByAccount(Guid accountId);
         Task<TrainingProgram> Get(Guid id);
         Task<bool> Create(TrainingProgramCreateModel trainingProgramCreateModel);
+        Task<bool> SoftDelete(TrainingProgram trainingProgram);
     }
 }
