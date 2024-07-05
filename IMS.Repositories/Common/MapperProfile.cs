@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
+using IMS.Repositories.Models.CampaignModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Repositories.Models.InternModel;
 
@@ -18,6 +19,8 @@ namespace IMS.Repositories.Common
             CreateMap<Intern, InternUpdateModel>().ReverseMap();
             CreateMap<InternRegisterModel, Intern>().ReverseMap();
             CreateMap<InternGetModel, Intern>().ReverseMap();
+            CreateMap<CampaignAddModel,Campaign>().ReverseMap();
+            CreateMap<Campaign, CampaignUpdateModel>().ReverseMap();
             //CreateMap<TrainingProgramCreateModel, TrainingProgram>();
         }
         private Guid? NormalizeProgramId(Guid? programId)

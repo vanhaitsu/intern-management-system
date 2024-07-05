@@ -9,6 +9,9 @@ namespace IMS.Repositories.Interfaces
         IRoleRepository RoleRepository {  get; }
         ITrainingProgramRepository TrainingProgramRepository { get; }
         IInternRepository InternRepository { get; }
+        ICampaignRepository CampaignRepository { get; }
+        IApplicationrepository ApplicationRepository { get; }
+
         public Task<int> SaveChangeAsync();
     }
 }
