@@ -45,18 +45,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-//builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 builder.Services.AddScoped<IInternRepository, InternRepository>();
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-//builder.Services.AddScoped<ITraineeService, TraneeService>();
 builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
-//builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IInternService, InternService>();
+builder.Services.AddScoped<IAssignmentService, AssignmentService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

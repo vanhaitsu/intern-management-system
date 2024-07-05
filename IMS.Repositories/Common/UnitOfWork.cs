@@ -4,6 +4,8 @@ namespace IMS.Models.Common;
 
 using IMS.Repositories;
 using IMS.Repositories.Interfaces;
+using IMS.Repositories.Repositories;
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _dbContext;
@@ -11,16 +13,18 @@ public class UnitOfWork : IUnitOfWork
     private readonly IRoleRepository _roleRepository;
     private readonly ITrainingProgramRepository _trainingProgramRepository;
     private readonly IInternRepository _internRepository;
+    private readonly IAssignmentRepository _assignmentRepository;
 
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository,
                         IRoleRepository roleRepository, IInternRepository internRepository,
-                        ITrainingProgramRepository trainingProgramRepository)
+                        ITrainingProgramRepository trainingProgramRepository, IAssignmentRepository assignmentRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
         _roleRepository = roleRepository;
         _trainingProgramRepository = trainingProgramRepository;
         _internRepository = internRepository;
+        _assignmentRepository = assignmentRepository;
     }
 
     public AppDbContext DbContext => _dbContext;
@@ -30,6 +34,7 @@ public class UnitOfWork : IUnitOfWork
     public ITrainingProgramRepository TrainingProgramRepository => _trainingProgramRepository;
 
     public IInternRepository InternRepository => _internRepository;
+    public IAssignmentRepository AssignmentRepository => _assignmentRepository;
 
 
 

@@ -19,7 +19,7 @@ namespace IMS.Repositories.Entities
 
 
         //Relationship
-        public Guid InternId { get; set; }
+        public Guid? InternId { get; set; }
         public Guid TrainingProgramId { get; set; }
         public virtual Intern? Intern { get; set; }
         public virtual TrainingProgram? TrainingProgram { get; set; }

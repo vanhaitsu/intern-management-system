@@ -3,12 +3,13 @@ using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Repositories.Models.InternModel;
+using IMS.Repositories.Models.AssignmentModels;
 
 namespace IMS.Repositories.Common
 {
     public class MapperProfile : Profile
     {
-        public MapperProfile() 
+        public MapperProfile()
         {
             CreateMap<AccountRegisterModel, Account>();
             CreateMap<AccountGetModel, Account>().ReverseMap();
@@ -19,6 +20,8 @@ namespace IMS.Repositories.Common
             CreateMap<InternRegisterModel, Intern>().ReverseMap();
             CreateMap<InternGetModel, Intern>().ReverseMap();
             //CreateMap<TrainingProgramCreateModel, TrainingProgram>();
+
+            CreateMap<AssignmentCreateModel, Assignment>();
         }
         private Guid? NormalizeProgramId(Guid? programId)
         {
