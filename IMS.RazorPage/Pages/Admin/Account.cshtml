@@ -26,23 +26,20 @@
         int pageSize = Model.PageSize;
         int totalPages = (int)Math.Ceiling((decimal)totalAccountsCount / pageSize);
     }
-    @* <div class="d-flex vh-100">
-    <div class="col-2 vh-100 border-end p-3">
-    <nav class="nav flex-column nav-pills">
-    <li class="nav-item">
-    <a class="nav-link active fs-5" aria-current="page" href="#">
-    <i class="bi bi-person"></i>
-    User
-    </a>
-    </li>
-    <li>
-    <a class="nav-link mt-2 .text-danger fs-5" href="#">
-    <i class="bi bi-box-arrow-right"></i>
-    @email
-    </a>
-    </li>
-    </nav>
-    </div> *@
+
+    <!-- Toast notification for displaying errors -->
+    <div class="toast align-items-center bg-danger text-light fs-6 border-0" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast" data-bs-delay="5000"
+         style="position: fixed;
+                top: 1rem;
+                right: 1rem;
+                z-index: 1100;">
+        <div class="d-flex">
+            <div class="toast-body">
+                @ViewData["Error"]
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
     <div class="col-10 vh-100" style="background-color: #f8f9fa;">
         <div class="container mt-3">
             <div class="row justify-content-center">
@@ -328,6 +325,15 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const errorMessage = '@ViewData["Error"]';
+            if (errorMessage) {
+                const toastLiveExample = document.getElementById('liveToast');
+                const toast = new bootstrap.Toast(toastLiveExample);
+                toast.show();
+            }
+        });
+    </script>
 </body>
 </html>

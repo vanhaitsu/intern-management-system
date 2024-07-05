@@ -3,6 +3,9 @@ using IMS.Repositories.Models.AccountModel;
 using IMS.Repositories.Models.InternModel;
 using IMS.Services.Interfaces;
 using IMS.Services.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -13,6 +16,7 @@ using System.Text;
 
 namespace IMS.RazorPage.Pages.Common
 {
+    [Authorize]
     public class InternManagementModel : PageModel
     {
         private readonly IInternService _internService;
@@ -58,6 +62,11 @@ namespace IMS.RazorPage.Pages.Common
             return Page();
         }
 
+        public async Task<IActionResult> OnPostLogoutAsync()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToPage("/Index");
+        }
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
             InternUpdateModel updateModel = internUpdate;
@@ -187,6 +196,8 @@ namespace IMS.RazorPage.Pages.Common
                             PhoneNumber = worksheet.Cells[row, 5].GetValue<string>(),
                             DOB = dob,
                             Gender = worksheet.Cells[row, 7].GetValue<string>(),
+                            Skill = worksheet.Cells[row, 8].GetValue<string>(),
+                            WorkHistory = worksheet.Cells[row, 9].GetValue<string>(),
                         });
                     }
                 }

@@ -15,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(5); 
@@ -33,8 +32,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(o =>
     {
-        o.LoginPath = "/Login";
+        o.LoginPath = "/Index";
     });
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews();
@@ -45,14 +45,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+//builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
+builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 builder.Services.AddScoped<IInternRepository, InternRepository>();
 builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 builder.Services.AddScoped<IApplicationrepository, ApplicationRepository>();
 
-
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+//builder.Services.AddScoped<ITraineeService, TraneeService>();
+builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
+//builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IInternService, InternService>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 
@@ -77,7 +81,3 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
-//private static async Task InitializeRolesAsync(IServiceProvider serviceProvider)
-//{
-//    await InitialSeeding.Initialize(serviceProvider);
-//}

@@ -9,17 +9,21 @@ public class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _dbContext;
     private readonly IAccountRepository _accountRepository;
     private readonly IRoleRepository _roleRepository;
+    private readonly ITrainingProgramRepository _trainingProgramRepository;
     private readonly IInternRepository _internRepository;
     private readonly ICampaignRepository _campaignRepository;
     private readonly IApplicationrepository _applicationRepository;
 
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository,
                         IRoleRepository roleRepository, IInternRepository internRepository,
-                        ICampaignRepository campaignRepository, IApplicationrepository applicationRepository)
+                        ITrainingProgramRepository trainingProgramRepository,
+                        ICampaignRepository campaignRepository,
+                        IApplicationrepository applicationRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
         _roleRepository = roleRepository;
+        _trainingProgramRepository = trainingProgramRepository;
         _internRepository = internRepository;
         _campaignRepository = campaignRepository;
         _applicationRepository = applicationRepository;
@@ -29,6 +33,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IAccountRepository AccountRepository => _accountRepository;
     public IRoleRepository RoleRepository => _roleRepository;
+    public ITrainingProgramRepository TrainingProgramRepository => _trainingProgramRepository;
 
     public IInternRepository InternRepository => _internRepository;
 

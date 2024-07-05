@@ -21,28 +21,32 @@ namespace IMS.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<LoginModel> CheckLogin(string email, string password)
+        public async Task<LoginResult> CheckLogin(string email, string password)
         {
-            Account account = new Account();
-            LoginModel loginModel = new LoginModel();
-            if (!string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email))
             {
-                account = await _unitOfWork.AccountRepository.GetAccountByMail(email);
-                if (account == null || !password.Equals(account.Password))
-                {
-                    return null;
-                }
-                else
-                {
-                    Role role = await _unitOfWork.RoleRepository.GetAsync(account.RoleId.Value);
-                    loginModel.Email = account.Email;
-                    loginModel.Password = account.Password;
-                    loginModel.Id = account.Id;
-                    loginModel.FullName = account.FullName;
-                    loginModel.Role = role.Name;
-                }
+                return new LoginResult { ErrorMessage = "Email is required." };
             }
-            return loginModel;
+            var account = await _unitOfWork.AccountRepository.GetAccountByMail(email);
+            if (account == null || !password.Equals(account.Password))
+            {
+                return new LoginResult { ErrorMessage = "Email or password is not correct." };
+            }
+            if (account.IsDeleted)
+            {
+                return new LoginResult { ErrorMessage = "Your account was blocked." };
+            }
+            var role = await _unitOfWork.RoleRepository.GetAsync(account.RoleId.Value);
+            var loginModel = new LoginModel
+            {
+                Id = account.Id,
+                Email = account.Email,
+                Password = account.Password,
+                FullName = account.FullName,
+                Role = role.Name
+            };
+
+            return new LoginResult { LoginModel = loginModel };
         }
 
 
@@ -55,19 +59,6 @@ namespace IMS.Services.Services
                 return false;
             }
             return true;
-        }
-
-        public async Task<bool> SignUp(AccountRegisterModel accountRegisterModel)
-        {
-            Account user = _mapper.Map<Account>(accountRegisterModel);
-            Role role = await _unitOfWork.RoleRepository.GetByName("Admin");
-            user.RoleId = role.Id;
-            _unitOfWork.AccountRepository.AddAsync(user);
-            if (await _unitOfWork.SaveChangeAsync() > 0)
-            {
-                return true;
-            }
-            return false;
         }
 
         public async Task<bool> Create(AccountRegisterModel accountRegisterModel)
