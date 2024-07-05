@@ -6,11 +6,22 @@ using IMS.Repositories.Interfaces;
 using IMS.Repositories.Repositories;
 using IMS.Services.Interfaces;
 using IMS.Services.Services;
+using IMS.Models.Common;
+using IMS_View.Services.Services;
+using IMS.Models.Interfaces;
+using IMS.Models.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5); 
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -34,15 +45,25 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+<<<<<<< HEAD
 //builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
+=======
+builder.Services.AddScoped<IInternRepository, InternRepository>();
+
+
+>>>>>>> origin/main
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+<<<<<<< HEAD
 //builder.Services.AddScoped<ITraineeService, TraneeService>();
 builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 //builder.Services.AddScoped<IEmailService, EmailService>();
+=======
+builder.Services.AddScoped<IInternService, InternService>();
+>>>>>>> origin/main
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);
@@ -59,7 +80,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapRazorPages();

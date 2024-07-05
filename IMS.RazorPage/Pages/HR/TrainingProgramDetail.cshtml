@@ -1,0 +1,87 @@
+﻿@* @page
+@model IMS.RazorPage.Pages.Mentor.TrainingProgramDetailModel
+@{
+}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-3">
+            <form method="post" asp-page-handler="Upload" enctype="multipart/form-data" class="mb-3">
+                <div class="input-group">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <input type="file" name="file" class="form-control" accept=".xlsx">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal upload file -->
+<div class="modal fade" id="uploadedTraineesModal" tabindex="-1" aria-labelledby="uploadedTraineesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadedTraineesModalLabel">Confirm Uploaded Trainees</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>FullName</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>University</th>
+                            <th>Phone Number</th>
+                            <th>DOB</th>
+                            <th>Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.UploadedTrainees != null)
+                        {
+                            @foreach (var trainee in Model.UploadedTrainees)
+                            {
+                                <tr>
+                                    <td>@trainee.Code</td>
+                                    <td>@trainee.FullName</td>
+                                    <td>@trainee.Email</td>
+                                    <td>@trainee.Address</td>
+                                    <td>@trainee.University</td>
+                                    <td>@trainee.PhoneNumber</td>
+                                    <td>@trainee.DOB.ToString("dd-MM-yyyy")</td>
+                                    <td>@trainee.Gender</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8">No trainees uploaded.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <form method="post" asp-page-handler="Confirm">
+                    <button type="submit"  class="btn btn-primary">Confirm</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var shouldShowModal = @(Model.UploadedTrainees != null && Model.UploadedTrainees.Count > 0 ? "true" : "false");
+
+            if (shouldShowModal) {
+                var uploadedTraineesModal = new bootstrap.Modal(document.getElementById('uploadedTraineesModal'));
+                uploadedTraineesModal.show();
+            }
+        });
+    </script>
+} *@
