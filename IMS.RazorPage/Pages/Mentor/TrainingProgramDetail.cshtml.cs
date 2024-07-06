@@ -18,6 +18,18 @@ namespace IMS.RazorPage.Pages.Mentor
         public string SuccessMessage { set; get; }
         [BindProperty]
         public AssignmentCreateModel AssignmentCreateModel { set; get; }
+
+        // Pagination
+        public int TotalAccounts { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 10;
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
+        public AssignmentFilterModel AssignmentFilterModel { get; set; }
+        public List<Assignment> Assignments { get; set; }
+
         public TrainingProgramDetailModel(ITrainingProgramService trainingProgramService, IAssignmentService assignmentService)
         {
             _trainingProgramService = trainingProgramService;
@@ -30,6 +42,16 @@ namespace IMS.RazorPage.Pages.Mentor
             {
                 TrainingProgram = await _trainingProgramService.Get(Guid.Parse(name));
             }
+
+            var queryResult = await _assignmentService.GetAssignments(new AssignmentFilterModel()
+            {
+                Search = SearchTerm,
+                PageNumber = PageNumber,
+                PageSize = PageSize,
+            });
+
+            Assignments = queryResult.Data;
+
             return Page();
         }
 

@@ -2,6 +2,7 @@
 using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
 using IMS.Repositories.Models.AssignmentModels;
+using IMS.Repositories.QueryModels;
 using IMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,27 @@ namespace IMS.Services.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<QueryResultModel<List<Assignment>>> GetAssignments(AssignmentFilterModel assignmentFilterModel)
+        {
+            var assignmentList = await _unitOfWork.AssignmentRepository.GetAllAsync(
+                filter: x =>
+                    (string.IsNullOrEmpty(assignmentFilterModel.Search)
+                    || x.Name.ToLower().Contains(assignmentFilterModel.Search.ToLower())
+                    || x.Material.ToLower().Contains(assignmentFilterModel.Search.ToLower())
+                    || x.Comment.ToLower().Contains(assignmentFilterModel.Search.ToLower())
+                    || x.Intern.FullName.ToLower().Contains(assignmentFilterModel.Search.ToLower())
+                    || x.Description.ToLower().Contains(assignmentFilterModel.Search.ToLower())),
+                orderBy: x => assignmentFilterModel.OrderByDescending
+                    ? x.OrderByDescending(x => x.CreationDate)
+                    : x.OrderBy(x => x.CreationDate),
+                pageIndex: assignmentFilterModel.PageNumber,
+                pageSize: assignmentFilterModel.PageSize,
+                includeProperties: "Intern"
+            );
+
+            return assignmentList;
         }
     }
 }
