@@ -230,5 +230,10 @@ namespace IMS_View.Services.Services
 
             return await query.CountAsync();
         }
+
+        public async Task<Intern> GetByEmail(string email)
+        {
+            return await _unitOfWork.InternRepository.GetInternByMail(email);
+        }
     }
 }

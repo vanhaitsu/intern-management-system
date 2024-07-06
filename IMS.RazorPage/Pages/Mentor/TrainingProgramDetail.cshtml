@@ -7,8 +7,160 @@
 
 @if (Model.TrainingProgram != null)
 {
-    <span>Program's name:</span> <h6 class="mb-1">@Model.TrainingProgram.Name</h6>
+    <span>Program's name:</span>
+    <h6 class="mb-1">@Model.TrainingProgram.Name</h6>
 }
 
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateAssignment">
+        Create new Assignment
+    </button>
+</div>
 
+<form method="get">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+               aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
 
+        @if (Model.TrainingProgram != null)
+        {
+            <input name="name" value=@Model.TrainingProgram.Id hidden />
+        }
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+            Search
+        </button>
+    </div>
+</form>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="modal fade" id="modalCreateAssignment" tabindex="-1" aria-labelledby="modalCreateAssignmentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create new Assignment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="CreateAssignment" class="d-flex flex-column gap-4">
+                    <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Name" type="tel" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.Name" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Type" type="tel" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.Type" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Type" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <textarea asp-for="AssignmentCreateModel.Description" type="tel" class="form-control" id="floatingInput" placeholder="" style="height: 100px">></textarea>
+                        <label asp-for="AssignmentCreateModel.Description" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Duration" type="number" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.Duration" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Duration" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.StartDate" type="date" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.StartDate" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <textarea asp-for="AssignmentCreateModel.Material" type="tel" class="form-control" id="floatingInput" placeholder="" style="height: 100px"></textarea>
+                        <label asp-for="AssignmentCreateModel.Material" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Material" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.InternEmail" type="tel" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.InternEmail" for="floatingInput">Intern email</label>
+                        <span asp-validation-for="AssignmentCreateModel.InternEmail" class="text-danger"></span>
+                    </div>
+
+                    @if (Model.TrainingProgram != null)
+                    {
+                        <input asp-for="AssignmentCreateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
+                    }
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="m-4">
+    @if (Model.Assignments != null && Model.Assignments.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Assign to</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in Model.Assignments)
+                {
+                    <tr>
+                        <td>@assignment.Name</td>
+                        <td>@assignment.Type</td>
+                        <td>@(assignment.Intern != null ? assignment.Intern?.FullName : "Empty")</td>
+                        <td>@assignment.Duration</td>
+                        <td>@assignment.StartDate?.ToShortDateString()</td>
+                        <td>@assignment.EndDate?.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        @if (Model.TotalAccounts > Model.PageSize)
+        {
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    @for (var i = 1; i <= Math.Ceiling((double)Model.TotalAccounts / Model.PageSize); i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="?PageNumber=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <p>No assignments found.</p>
+    }
+</div>

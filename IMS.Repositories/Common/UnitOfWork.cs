@@ -4,6 +4,8 @@ namespace IMS.Models.Common;
 
 using IMS.Repositories;
 using IMS.Repositories.Interfaces;
+using IMS.Repositories.Repositories;
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _dbContext;
@@ -11,6 +13,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly IRoleRepository _roleRepository;
     private readonly ITrainingProgramRepository _trainingProgramRepository;
     private readonly IInternRepository _internRepository;
+    private readonly IAssignmentRepository _assignmentRepository;
     private readonly ICampaignRepository _campaignRepository;
     private readonly IApplicationrepository _applicationRepository;
 
@@ -18,13 +21,14 @@ public class UnitOfWork : IUnitOfWork
                         IRoleRepository roleRepository, IInternRepository internRepository,
                         ITrainingProgramRepository trainingProgramRepository,
                         ICampaignRepository campaignRepository,
-                        IApplicationrepository applicationRepository)
+                        IApplicationrepository applicationRepository, IAssignmentRepository assignmentRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
         _roleRepository = roleRepository;
         _trainingProgramRepository = trainingProgramRepository;
         _internRepository = internRepository;
+        _assignmentRepository = assignmentRepository;
         _campaignRepository = campaignRepository;
         _applicationRepository = applicationRepository;
     }
@@ -36,6 +40,7 @@ public class UnitOfWork : IUnitOfWork
     public ITrainingProgramRepository TrainingProgramRepository => _trainingProgramRepository;
 
     public IInternRepository InternRepository => _internRepository;
+    public IAssignmentRepository AssignmentRepository => _assignmentRepository;
 
     public ICampaignRepository CampaignRepository => _campaignRepository;
     public IApplicationrepository ApplicationRepository => _applicationRepository;
