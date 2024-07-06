@@ -15,8 +15,6 @@ namespace IMS.RazorPage.Pages.Mentor
         private readonly IInternService _internService;
         //public string TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { set; get; }
-        public string ErrorMessage { set; get; }
-        public string SuccessMessage { set; get; }
         [BindProperty]
         public AssignmentCreateModel AssignmentCreateModel { set; get; }
 
@@ -70,7 +68,7 @@ namespace IMS.RazorPage.Pages.Mentor
                     var intern = await _internService.GetByEmail(AssignmentCreateModel.InternEmail);
                     if (intern == null)
                     {
-                        SuccessMessage = "Intern does not exist!";
+                        TempData["ErrorMessage"] = "Intern does not exist!";
                         return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
                     }
 
@@ -79,15 +77,17 @@ namespace IMS.RazorPage.Pages.Mentor
 
                 if (await _assignmentService.Create(AssignmentCreateModel))
                 {
-                    SuccessMessage = "Add successfully!";
+                    TempData["SuccessMessage"] = "Add successfully!";
                     return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
                 }
                 else
                 {
-                    ErrorMessage = "Something went wrong!";
+                    TempData["ErrorMessage"] = "Something went wrong!";
                 }
             }
+            TempData["ErrorMessage"] = "Invalid input";
             return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
         }
+
     }
 }

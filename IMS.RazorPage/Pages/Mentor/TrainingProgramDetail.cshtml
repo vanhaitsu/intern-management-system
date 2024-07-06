@@ -32,6 +32,20 @@
     </div>
 </form>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-warning" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <div class="modal fade" id="modalCreateAssignment" tabindex="-1" aria-labelledby="modalCreateAssignmentLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

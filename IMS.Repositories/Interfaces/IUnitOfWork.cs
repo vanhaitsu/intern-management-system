@@ -10,6 +10,9 @@ namespace IMS.Repositories.Interfaces
         ITrainingProgramRepository TrainingProgramRepository { get; }
         IInternRepository InternRepository { get; }
         IAssignmentRepository AssignmentRepository { get; }
+        ICampaignRepository CampaignRepository { get; }
+        IApplicationrepository ApplicationRepository { get; }
+
         public Task<int> SaveChangeAsync();
     }
 }

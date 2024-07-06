@@ -16,14 +16,15 @@
     @{
         var account = Model.account;
     }
+    <!-- Toast notification for displaying errors -->
     <div class="toast align-items-center bg-danger text-light fs-6 border-0" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast" data-bs-delay="5000"
          style="position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1100;">
+                top: 1rem;
+                right: 1rem;
+                z-index: 1100;">
         <div class="d-flex">
             <div class="toast-body">
-                @ViewBag.Error
+                @ViewData["Error"] 
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
@@ -46,13 +47,13 @@
                     <form method="post">
                         <!-- Role select -->
                         <div class="form-group form-floating mb-3">
-                            <select class="form-select" asp-for="role" id="roleSelect">
+                            <select class="form-select" asp-for="account.RoleCheck" id="roleSelect">
                                 <option value="">Select role</option>
                                 <option value="Staff">Staff</option>
                                 <option value="Intern">Intern</option>
                             </select>
-                            <label for="roleSelect">Role</label>
-                            <span asp-validation-for="role" class="text-danger"></span>
+                            <label asp-for="account.RoleCheck" for="roleSelect">Role</label>
+                            <span asp-validation-for="account.RoleCheck" class="text-danger"></span>
                         </div>
 
                         <!-- Email input -->
@@ -101,18 +102,8 @@
     </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        // const toastTrigger = document.getElementById('loginBtn')
-        // const toastLiveExample = document.getElementById('liveToast')
-        // if (toastTrigger) {
-        //     toastTrigger.addEventListener('click', () => {
-        //         const toast = new bootstrap.Toast(toastLiveExample)
-
-        //         toast.show()
-        //     })
-        // }
-
         window.addEventListener('DOMContentLoaded', (event) => {
-            const errorMessage = '@ViewBag.Error';
+            const errorMessage = '@ViewData["Error"]';
             if (errorMessage) {
                 const toastLiveExample = document.getElementById('liveToast');
                 const toast = new bootstrap.Toast(toastLiveExample);

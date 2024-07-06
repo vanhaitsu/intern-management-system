@@ -1,4 +1,5 @@
 using IMS.Repositories.AccountModel;
+using IMS.Repositories.Models.InternModel;
 using IMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,15 +9,15 @@ namespace IMS.RazorPage.Pages
     public class SignUpModel : PageModel
     {
         private readonly ILogger<SignUpModel> _logger;
-        private readonly IAccountService _accountService;
+        private readonly IInternService _internService;
         public string Message { set; get; }
 
         [BindProperty]
-        public AccountRegisterModel account { set; get; }
+        public InternRegisterModel intern { set; get; }
 
-        public SignUpModel(IAccountService accountService, ILogger<SignUpModel> logger)
+        public SignUpModel(IInternService internService, ILogger<SignUpModel> logger)
         {
-            _accountService = accountService;
+            _internService = internService;
             _logger = logger;
         }
 
@@ -27,7 +28,7 @@ namespace IMS.RazorPage.Pages
         {
             if (ModelState.IsValid)
             {
-                if (await _accountService.SignUp(account))
+                if (await _internService.SignUp(intern))
                 {
                     Message = "Register successfully!";
                     return RedirectToPage("/Index");

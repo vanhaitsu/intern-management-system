@@ -12,8 +12,7 @@ namespace IMS.Repositories.AccountModel
         [Required(ErrorMessage = "Gender is required")]
         public string Gender { get; set; }
 
-        [Required(ErrorMessage = "Role is required")]
-        public string RoleName { get; set; }
+        public string? RoleName { get; set; }
 
         public Guid RoleId { get; set; }
 

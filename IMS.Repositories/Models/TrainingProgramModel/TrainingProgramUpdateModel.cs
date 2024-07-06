@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace IMS.Repositories.Models.TrainingProgramModel
 {
-    public class TrainingProgramCreateModel
+    public class TrainingProgramUpdateModel
     {
-        [Required(ErrorMessage = "Name is required")]
-        public string? Name { get; set; }
+        public Guid? Id { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
-        public Guid? CreatedBy { get; set; }
         public int? Duration { get; set; } // Optional
         public DateTime? StartDate { get; set; } // Optional
-        public DateTime? EndDate { get; set; } // Optional
+        public DateTime? EndDate { get; set; }
     }
 }

@@ -11,8 +11,9 @@ namespace IMS.Services.Interfaces
 {
     public interface IInternService
     {
-        Task<LoginModel> CheckLogin(string email, string password);
+        Task<LoginResult> CheckLogin(string email, string password);
         Task<bool> CheckExistedIntern(string email);
+        Task<bool> SignUp(InternRegisterModel internRegisterModel);
         Task<List<string>> GetAllInternEmails();
         Task<bool> Create(InternRegisterModel internRegisterModel);
         Task<bool> CreateRange(List<InternRegisterModel> internRegisterModels);

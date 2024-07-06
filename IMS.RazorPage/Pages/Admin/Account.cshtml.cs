@@ -2,12 +2,17 @@ using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Models.AccountModel;
 using IMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IMS.RazorPage.Pages.Admin
 {
+    [Authorize]
     public class AccountManagementModel : PageModel
     {
         private readonly IAccountService _accountService;
@@ -26,6 +31,7 @@ namespace IMS.RazorPage.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public AccountFilterModel filterModel { get; set; } = new AccountFilterModel();
         public int TotalAccounts { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 10;
 
@@ -40,6 +46,7 @@ namespace IMS.RazorPage.Pages.Admin
             _accountService = accountService;
             _roleService = roleService;
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             filterModel.PageSize = PageSize;
@@ -56,103 +63,159 @@ namespace IMS.RazorPage.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
             var updateModel = accountUpdate;
             var existedAccount = await _accountService.GetAccountAsync(id);
 
             if (existedAccount == null)
-            {
-                Message = "Account not found.";
-                return Page();
-            }
+                return NotFoundRedirect("Account not found.");
+
             if (updateModel.Email != existedAccount.Email)
             {
                 var emailExists = await _accountService.CheckExistedAccount(updateModel.Email);
                 if (emailExists)
-                {
-                    Message = "Email is already existed!";
-                    return Page();
-                }
+                    return EmailExistsRedirect("Email is already existed!");
             }
-            if (await _accountService.Update(id, updateModel))
-            {
-                Message = "Update successfully!";
-                return RedirectToPage("./Account");
-            }
-            else
-            {
-                Message = "Failed to update!";
-                return Page();
-            }
+
+            return await UpdateAccountAsync(id, updateModel);
         }
-
-
 
         public async Task<IActionResult> OnPostAddAsync()
         {
+            RemoveModelStateErrors();
             if (!ModelState.IsValid)
-            {
-                var existedAccount = await _accountService.CheckExistedAccount(newAccount.Email);
-                if (existedAccount)
-                {
-                    Message = "Email is already existed!";
-                    return Page();
-                }
-                if (await _accountService.Create(newAccount))
-                {
-                    Message = "Add successfully!";
-                    return RedirectToPage("./Account");
-                }
-                else
-                {
-                    Message = "Something went wrong!";
-                }
-            }
-            return Page();
+                return ValidationFailedRedirect();
+
+            var existedAccount = await _accountService.CheckExistedAccount(newAccount.Email);
+            if (existedAccount)
+                return EmailExistsRedirect("Email is already existed!");
+
+            return await CreateAccountAsync(newAccount);
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(Guid id)
         {
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
             var accountToDelete = await _accountService.GetAccountAsync(id);
             if (accountToDelete == null)
-            {
-                Message = "Account not found.";
-                return Page();
-            }
+                return NotFoundRedirect("Account is not found!");
 
             var deleteResult = await _accountService.Delete(id);
-            if (!deleteResult)
-            {
-                Message = "Failed to block account. Please try again.";
-                return Page();
-            }
-            else
-            {
-                TempData["SuccessMessage"] = "Account block successfully.";
-            }
-            return RedirectToPage("./Account");
+            return deleteResult ? SuccessRedirect("Account block successfully.") : ErrorRedirect("Failed to block account. Please try again.");
         }
 
         public async Task<IActionResult> OnPostRestoreAsync(Guid id)
         {
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
             var accountToDelete = await _accountService.GetAccountAsync(id);
             if (accountToDelete == null)
-            {
-                Message = "Account not found.";
-                return Page();
-            }
+                return NotFoundRedirect("Account is not found!");
 
             var restoreResult = await _accountService.Restore(id);
-            if (!restoreResult)
+            return restoreResult ? SuccessRedirect("Account restore successfully.") : ErrorRedirect("Failed to restore account. Please try again.");
+        }
+
+        private void RemoveModelStateErrors()
+        {
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("SearchTerm");
+            ModelState.Remove("Email");
+            ModelState.Remove("Gender");
+            ModelState.Remove("Address");
+            ModelState.Remove("FullName");
+            ModelState.Remove("PhoneNumber");
+        }
+
+        private IActionResult ValidationFailedRedirect()
+        {
+            foreach (var modelStateEntry in ModelState.Values)
             {
-                Message = "Failed to Restore account. Please try again.";
-                return Page();
+                foreach (var error in modelStateEntry.Errors)
+                {
+                    TempData["ModelStateError"] = error.ErrorMessage;
+                }
             }
-            else
-            {
-                TempData["SuccessMessage"] = "Account restore successfully.";
-            }
+            TempData["ToastMessage"] = "Validation errors occurred.";
+            TempData["ToastType"] = "error";
             return RedirectToPage("./Account");
         }
 
+        private IActionResult NotFoundRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Account");
+        }
+
+        private IActionResult EmailExistsRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Account");
+        }
+
+        private async Task<IActionResult> UpdateAccountAsync(Guid id, AccountUpdateModel updateModel)
+        {
+            if (await _accountService.Update(id, updateModel))
+            {
+                TempData["Message"] = "Update successfully!";
+                TempData["ToastMessage"] = "Update successfully!";
+                TempData["ToastType"] = "success";
+                return RedirectToPage("./Account");
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update!";
+                TempData["ToastMessage"] = "Failed to update!";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Account");
+            }
+        }
+
+        private async Task<IActionResult> CreateAccountAsync(AccountRegisterModel newAccount)
+        {
+            if (await _accountService.Create(newAccount))
+            {
+                TempData["Message"] = "Add successfully!";
+                TempData["ToastMessage"] = "Add successfully!";
+                TempData["ToastType"] = "success";
+                return RedirectToPage("./Account");
+            }
+            else
+            {
+                TempData["Error"] = "Failed to add!";
+                TempData["ToastMessage"] = "Failed to add!";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Account");
+            }
+        }
+
+        private IActionResult SuccessRedirect(string successMessage)
+        {
+            TempData["Message"] = successMessage;
+            TempData["ToastMessage"] = successMessage;
+            TempData["ToastType"] = "success";
+            return RedirectToPage("./Account");
+        }
+
+        private IActionResult ErrorRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Account");
+        }
     }
 }

@@ -20,26 +20,35 @@ namespace IMS_View.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<LoginModel> CheckLogin(string email, string password)
+        public async Task<LoginResult> CheckLogin(string email, string password)
         {
-            Intern intern = new Intern();
-            LoginModel loginModel = new LoginModel();
-            if (!string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email))
             {
-                intern = await _unitOfWork.InternRepository.GetInternByMail(email);
-                if (intern == null || !password.Equals(intern.Password))
-                {
-                    return null;
-                }
-                else
-                {
-                    loginModel.Id = intern.Id;
-                    loginModel.Email = intern.Email;
-                    loginModel.Password = intern.Password;
-                    loginModel.FullName = intern.FullName;
-                }
+                return new LoginResult { ErrorMessage = "Email is required." };
             }
-            return loginModel;
+
+            var intern = await _unitOfWork.InternRepository.GetInternByMail(email);
+            if (intern == null)
+            {
+                return new LoginResult { ErrorMessage = "Email or password is not correct." };
+            }
+            if (!password.Equals(intern.Password))
+            {
+                return new LoginResult { ErrorMessage = "Email or password is not correct." };
+            }
+            if (intern.IsDeleted)
+            {
+                return new LoginResult { ErrorMessage = "Your account was blocked." };
+            }
+
+            var loginModel = new LoginModel
+            {
+                Id = intern.Id,
+                Email = intern.Email,
+                Password = intern.Password,
+                FullName = intern.FullName,
+            };
+            return new LoginResult { LoginModel = loginModel };
         }
 
         public async Task<bool> CheckExistedIntern(string email)
@@ -51,6 +60,18 @@ namespace IMS_View.Services.Services
                 return false;
             }
             return true;
+        }
+
+
+        public async Task<bool> SignUp(InternRegisterModel internRegisterModel)
+        {
+            Intern user = _mapper.Map<Intern>(internRegisterModel);
+            _unitOfWork.InternRepository.AddAsync(user);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task<List<string>> GetAllInternEmails()

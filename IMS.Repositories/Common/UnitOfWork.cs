@@ -14,10 +14,14 @@ public class UnitOfWork : IUnitOfWork
     private readonly ITrainingProgramRepository _trainingProgramRepository;
     private readonly IInternRepository _internRepository;
     private readonly IAssignmentRepository _assignmentRepository;
+    private readonly ICampaignRepository _campaignRepository;
+    private readonly IApplicationrepository _applicationRepository;
 
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository,
                         IRoleRepository roleRepository, IInternRepository internRepository,
-                        ITrainingProgramRepository trainingProgramRepository, IAssignmentRepository assignmentRepository)
+                        ITrainingProgramRepository trainingProgramRepository,
+                        ICampaignRepository campaignRepository,
+                        IApplicationrepository applicationRepository, IAssignmentRepository assignmentRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
@@ -25,6 +29,8 @@ public class UnitOfWork : IUnitOfWork
         _trainingProgramRepository = trainingProgramRepository;
         _internRepository = internRepository;
         _assignmentRepository = assignmentRepository;
+        _campaignRepository = campaignRepository;
+        _applicationRepository = applicationRepository;
     }
 
     public AppDbContext DbContext => _dbContext;
@@ -36,7 +42,8 @@ public class UnitOfWork : IUnitOfWork
     public IInternRepository InternRepository => _internRepository;
     public IAssignmentRepository AssignmentRepository => _assignmentRepository;
 
-
+    public ICampaignRepository CampaignRepository => _campaignRepository;
+    public IApplicationrepository ApplicationRepository => _applicationRepository;
 
     public async Task<int> SaveChangeAsync()
     {
