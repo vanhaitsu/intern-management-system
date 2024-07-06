@@ -16,6 +16,7 @@ namespace IMS.Repositories.Common
             CreateMap<Account, AccountUpdateModel>().ForMember(dest => dest.RoleName, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<TrainingProgramCreateModel, TrainingProgram>();
+            CreateMap<TrainingProgramUpdateModel, TrainingProgram>();
             CreateMap<Intern, InternUpdateModel>().ReverseMap();
             CreateMap<InternRegisterModel, Intern>().ReverseMap();
             CreateMap<InternGetModel, Intern>().ReverseMap();
