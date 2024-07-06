@@ -51,6 +51,7 @@ namespace IMS.RazorPage.Pages.Mentor
             });
 
             Assignments = queryResult.Data;
+            TotalAccounts = queryResult.TotalCount;
 
             return Page();
         }
