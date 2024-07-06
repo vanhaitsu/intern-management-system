@@ -12,6 +12,7 @@ namespace IMS.RazorPage.Pages.Mentor
     {
         private readonly ITrainingProgramService _trainingProgramService;
         private readonly IAssignmentService _assignmentService;
+        private readonly IInternService _internService;
         //public string TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { set; get; }
         public string ErrorMessage { set; get; }
@@ -24,16 +25,18 @@ namespace IMS.RazorPage.Pages.Mentor
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 10;
         [BindProperty(SupportsGet = true)]
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
         public AssignmentFilterModel AssignmentFilterModel { get; set; }
         public List<Assignment> Assignments { get; set; }
 
-        public TrainingProgramDetailModel(ITrainingProgramService trainingProgramService, IAssignmentService assignmentService)
+        public TrainingProgramDetailModel(ITrainingProgramService trainingProgramService, IAssignmentService assignmentService,
+            IInternService internService)
         {
             _trainingProgramService = trainingProgramService;
             _assignmentService = assignmentService;
+            _internService = internService;
         }
 
         public async Task<IActionResult> OnGet(string name)
@@ -61,6 +64,19 @@ namespace IMS.RazorPage.Pages.Mentor
             if (ModelState.IsValid)
             {
                 AssignmentCreateModel.CreatedBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                if (AssignmentCreateModel.InternEmail != null)
+                {
+                    var intern = await _internService.GetByEmail(AssignmentCreateModel.InternEmail);
+                    if (intern == null)
+                    {
+                        SuccessMessage = "Intern does not exist!";
+                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
+                    }
+
+                    AssignmentCreateModel.InternId = intern.Id;
+                }
+
                 if (await _assignmentService.Create(AssignmentCreateModel))
                 {
                     SuccessMessage = "Add successfully!";
@@ -71,7 +87,7 @@ namespace IMS.RazorPage.Pages.Mentor
                     ErrorMessage = "Something went wrong!";
                 }
             }
-            return null;
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
         }
     }
 }

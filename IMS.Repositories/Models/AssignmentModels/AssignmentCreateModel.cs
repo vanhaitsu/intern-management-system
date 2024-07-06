@@ -24,6 +24,10 @@ namespace IMS.Repositories.Models.AssignmentModels
         public DateTime? StartDate { get; set; } // Optional
         public DateTime? AssignedDate { get; set; }
         public Guid? CreatedBy { get; set; }
+        public Guid? InternId { get; set; }
         public Guid? TrainingProgramId { get; set; }
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [StringLength(256, ErrorMessage = "Email must be no more than 256 characters")]
+        public string? InternEmail { get; set; }
     }
 }
