@@ -21,29 +21,29 @@ namespace IMS.RazorPage.Pages.Common
     {
         private readonly IInternService _internService;
 
-        public string Message { set; get; }
+        public string Message { get; set; }
         [BindProperty]
-        public InternRegisterModel intern { set; get; }
+        public InternRegisterModel intern { get; set; }
         [BindProperty]
-        public InternRegisterModel newIntern { set; get; }
+        public InternRegisterModel newIntern { get; set; }
         [BindProperty]
-        public InternUpdateModel internUpdate { set; get; }
+        public InternUpdateModel internUpdate { get; set; }
+        public List<Role> Roles { get; set; }
+        public List<InternGetModel> interns { get; set; }
+        public List<InternRegisterModel> UploadedInterns { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public InternFilterModel filterModel { get; set; } = new InternFilterModel();
+        public int TotalInterns { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 10;
 
         [BindProperty(SupportsGet = true)]
         public string SearchTerm { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
-
-        [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 10;
-
-        public int TotalInterns { get; set; }
-        public List<InternGetModel> interns { get; set; }
-        public List<InternRegisterModel> UploadedInterns { get; set; }
-
-        [BindProperty(SupportsGet = true)]
-        public InternFilterModel filterModel { get; set; } = new InternFilterModel();
 
         public InternManagementModel(IInternService internService)
         {
@@ -62,113 +62,74 @@ namespace IMS.RazorPage.Pages.Common
             return Page();
         }
 
-        public async Task<IActionResult> OnPostLogoutAsync()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToPage("/Index");
-        }
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
-            InternUpdateModel updateModel = internUpdate;
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
+            var updateModel = internUpdate;
             var existedIntern = await _internService.GetInternAsync(id);
+
             if (existedIntern == null)
-            {
-                Message = "Intern not found.";
-                return Page();
-            }
+                return NotFoundRedirect("Intern not found.");
+
             if (updateModel.Email != existedIntern.Email)
             {
                 var emailExists = await _internService.CheckExistedIntern(updateModel.Email);
                 if (emailExists)
-                {
-                    Message = "Email is already existed!";
-                    return Page();
-                }
+                    return EmailExistsRedirect("Email is already existed!");
             }
-            if (await _internService.Update(id, updateModel))
-            {
-                Message = "Update successfully!";
-                return RedirectToPage("./Intern");
-            }
-            else
-            {
-                Message = "Failed to update!";
-                return Page();
-            }
+
+            return await UpdateInternAsync(id, updateModel);
         }
 
         public async Task<IActionResult> OnPostAddAsync()
         {
+            RemoveModelStateErrors();
             if (!ModelState.IsValid)
-            {
-                var existedIntern = await _internService.CheckExistedIntern(newIntern.Email);
-                if (existedIntern)
-                {
-                    Message = "Email is already existed!";
-                    return Page();
-                }
-                if (await _internService.Create(newIntern))
-                {
-                    Message = "Add successfully!";
-                    return RedirectToPage("./Intern");
-                }
-                else
-                {
-                    Message = "Something went wrong!";
-                }
-            }
-            return Page();
+                return ValidationFailedRedirect();
+
+            var existedIntern = await _internService.CheckExistedIntern(newIntern.Email);
+            if (existedIntern)
+                return EmailExistsRedirect("Email is already existed!");
+
+            return await CreateInternAsync(newIntern);
         }
 
         public async Task<IActionResult> OnPostBlockAsync(Guid id)
         {
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
             var internToDelete = await _internService.GetInternAsync(id);
             if (internToDelete == null)
-            {
-                Message = "intern not found.";
-                return Page();
-            }
+                return NotFoundRedirect("Intern not found.");
 
             var deleteResult = await _internService.Delete(id);
-            if (!deleteResult)
-            {
-                Message = "Failed to delete intern. Please try again.";
-                return Page();
-            }
-            else
-            {
-                TempData["SuccessMessage"] = "Intern deleted successfully.";
-            }
-            return RedirectToPage("./Intern");
+            return deleteResult ? SuccessRedirect("Intern block successfully.") : ErrorRedirect("Failed to block intern. Please try again.");
         }
 
         public async Task<IActionResult> OnPostRestoreAsync(Guid id)
         {
-            var internToRestore = await _internService.GetInternAsync(id);
-            if (internToRestore == null)
-            {
-                Message = "intern not found.";
-                return Page();
-            }
+            RemoveModelStateErrors();
+            if (!ModelState.IsValid)
+                return ValidationFailedRedirect();
+
+            var internToDelete = await _internService.GetInternAsync(id);
+            if (internToDelete == null)
+                return NotFoundRedirect("Intern not found.");
 
             var restoreResult = await _internService.Restore(id);
-            if (!restoreResult)
-            {
-                Message = "Failed to Restore intern. Please try again.";
-                return Page();
-            }
-            else
-            {
-                TempData["SuccessMessage"] = "intern restore successfully.";
-            }
-            return RedirectToPage("./Intern");
+            return restoreResult ? SuccessRedirect("Intern restore successfully.") : ErrorRedirect("Failed to restore intern. Please try again.");
         }
 
         public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
         {
             if (file == null || file.Length <= 0)
             {
-                return BadRequest("File not selected or empty.");
+                return ErrorRedirect("File not selected or empty.");
             }
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             using (var stream = new MemoryStream())
@@ -185,7 +146,7 @@ namespace IMS.RazorPage.Pages.Common
                         DateTime dob;
                         if (!DateTime.TryParseExact(dobString, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dob))
                         {
-                            return BadRequest($"Invalid date format in row {row}. Expected format is dd-MM-yyyy.");
+                            return ErrorRedirect($"Invalid date format in row {row}. Expected format is dd-MM-yyyy.");
                         }
                         UploadedInterns.Add(new InternRegisterModel
                         {
@@ -211,39 +172,132 @@ namespace IMS.RazorPage.Pages.Common
 
         public async Task<IActionResult> OnPostConfirmAsync()
         {
-            if (!ModelState.IsValid)
+            var bytes = HttpContext.Session.Get("Uploadedinterns");
+            if (bytes != null)
             {
-                var bytes = HttpContext.Session.Get("Uploadedinterns");
-                if (bytes != null)
-                {
-                    var json = Encoding.UTF8.GetString(bytes);
-                    UploadedInterns = JsonConvert.DeserializeObject<List<InternRegisterModel>>(json);
-                    var existingEmails = await _internService.GetAllInternEmails();
-                    var emailSet = new HashSet<string>(existingEmails);
+                var json = Encoding.UTF8.GetString(bytes);
+                UploadedInterns = JsonConvert.DeserializeObject<List<InternRegisterModel>>(json);
+                var existingEmails = await _internService.GetAllInternEmails();
+                var emailSet = new HashSet<string>(existingEmails);
 
-                    foreach (var intern in UploadedInterns)
+                foreach (var intern in UploadedInterns)
+                {
+                    if (emailSet.Contains(intern.Email))
                     {
-                        if (emailSet.Contains(intern.Email))
-                        {
-                            Message = $"Email {intern.Email} is already existed!";
-                            return Page();
-                        }
+                       return ErrorRedirect($"Email {intern.Email} is already existed!");
+                       
                     }
-                    if (await _internService.CreateRange(UploadedInterns))
-                    {
-                        Message = "Add successfully!";
-                        return RedirectToPage("./Intern");
-                    }
-                    else
-                    {
-                        Message = "Something went wrong!";
-                    }
+                }
+                if (await _internService.CreateRange(UploadedInterns))
+                {
+                   return SuccessRedirect("Add successfully!");
                 }
                 else
                 {
-                    Message = "Uploaded interns data not found in session.";
+                    ErrorRedirect("Something went wrong!");
                 }
             }
+            else
+            {
+                ErrorRedirect("Uploaded interns data not found in session.");
+            }
+            return RedirectToPage("./Intern");
+        }
+
+        private void RemoveModelStateErrors()
+        {
+            ModelState.Remove("Education");
+            ModelState.Remove("Skill");
+            ModelState.Remove("DOB");
+            ModelState.Remove("Email");
+            ModelState.Remove("Gender");
+            ModelState.Remove("PhoneNumber");
+            ModelState.Remove("FullName");
+            ModelState.Remove("Address");
+            ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("SearchTerm");
+            ModelState.Remove("Password");
+        }
+
+        private IActionResult ValidationFailedRedirect()
+        {
+            foreach (var modelStateEntry in ModelState.Values)
+            {
+                foreach (var error in modelStateEntry.Errors)
+                {
+                    TempData["ModelStateError"] = error.ErrorMessage;
+                }
+            }
+            TempData["ToastMessage"] = "Validation errors occurred.";
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Intern");
+        }
+
+        private IActionResult NotFoundRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Intern");
+        }
+
+        private IActionResult EmailExistsRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
+            return RedirectToPage("./Intern");
+        }
+
+        private async Task<IActionResult> UpdateInternAsync(Guid id, InternUpdateModel updateModel)
+        {
+            if (await _internService.Update(id, updateModel))
+            {
+                TempData["Message"] = "Update successfully!";
+                TempData["ToastMessage"] = "Update successfully!";
+                TempData["ToastType"] = "success";
+                return RedirectToPage("./Intern");
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update!";
+                TempData["ToastMessage"] = "Failed to update!";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Intern");
+            }
+        }
+
+        private async Task<IActionResult> CreateInternAsync(InternRegisterModel newIntern)
+        {
+            if (await _internService.Create(newIntern))
+            {
+                TempData["Message"] = "Add successfully!";
+                TempData["ToastMessage"] = "Add successfully!";
+                TempData["ToastType"] = "success";
+                return RedirectToPage("./Intern");
+            }
+            else
+            {
+                TempData["Error"] = "Failed to add!";
+                TempData["ToastMessage"] = "Failed to add!";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Intern");
+            }
+        }
+
+        private IActionResult SuccessRedirect(string successMessage)
+        {
+            TempData["Message"] = successMessage;
+            TempData["ToastMessage"] = successMessage;
+            TempData["ToastType"] = "success";
+            return RedirectToPage("./Intern");
+        }
+
+        private IActionResult ErrorRedirect(string errorMessage)
+        {
+            TempData["Error"] = errorMessage;
+            TempData["ToastMessage"] = errorMessage;
+            TempData["ToastType"] = "error";
             return RedirectToPage("./Intern");
         }
     }
