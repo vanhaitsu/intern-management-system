@@ -24,7 +24,36 @@
         int totalInternsCount = ViewData["TotalInternsCount"] as int? ?? 0;
         int pageSize = Model.PageSize;
         int totalPages = (int)Math.Ceiling((decimal)totalInternsCount / pageSize);
+        string GetToastClass(string toastType)
+        {
+            switch (toastType)
+            {
+                case "success":
+                    return "bg-success text-light";
+                case "info":
+                    return "bg-info text-light";
+                case "warning":
+                    return "bg-warning text-dark";
+                default:
+                    return "bg-danger text-light";
+            }
+        }
     }
+    <!-- Toast notification for displaying errors -->
+    <div class="toast align-items-center @((TempData["ToastType"] != null) ? GetToastClass(TempData["ToastType"].ToString()) : "") fs-6 border-0" role="alert" aria-live="assertive" aria-atomic="true" id="liveToast" data-bs-delay="5000"
+         style="position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1100;">
+        <div class="d-flex">
+            <div class="toast-body">
+                @TempData["ToastMessage"]
+                <br />
+                @TempData["ModelStateError"]
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
 
     <div class="container mt-3">
         <div class="row justify-content-center">
@@ -48,12 +77,24 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddIntern">
                     <i class="bi bi-plus-circle"></i> Add Intern
                 </button>
-                <form method="post" asp-page-handler="Upload" enctype="multipart/form-data" class="d-flex align-items-center">
+                <form method="post" asp-page-handler="Upload" enctype="multipart/form-data" class="d-flex align-items-center" id="uploadForm">
                     <button type="submit" class="btn btn-primary">Upload</button>
-                    <div class="input-group me-3">
-                        <input type="file" name="file" class="form-control" accept=".xlsx">
+                    <div class="input-group ms-3">
+                        <input type="file" name="file" class="form-control" accept=".xlsx" id="fileInput">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for upload-->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Please select a file before uploading.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -117,30 +158,6 @@
             </div>
         </div>
     </div>
-
-    @section Scripts {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var shouldShowModal = @(Model.UploadedInterns != null && Model.UploadedInterns.Count > 0 ? "true" : "false");
-                if (shouldShowModal) {
-                    var uploadedInternsModal = new bootstrap.Modal(document.getElementById('uploadedInternsModal'));
-                    uploadedInternsModal.show();
-                }
-            });
-        </script>
-        <style>
-            .modal-dialog-scrollable {
-                max-width: 100%;
-                width: auto;
-                margin: 1.75rem auto;
-            }
-
-            .modal-content {
-                width: auto;
-            }
-        </style>
-    }
-
 
     <div class="m-4">
         @if (internList != null)
@@ -394,6 +411,63 @@
     </div>
 
 
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var shouldShowModal = @(Model.UploadedInterns != null && Model.UploadedInterns.Count > 0 ? "true" : "false");
+                if (shouldShowModal) {
+                    var uploadedInternsModal = new bootstrap.Modal(document.getElementById('uploadedInternsModal'));
+                    uploadedInternsModal.show();
+                }
+            });
+            document.getElementById('uploadedInternsModal').addEventListener('hidden.bs.modal', function () {
+                window.location.href = '/Admin/Intern';
+            });
+            document.getElementById('uploadForm').addEventListener('submit', function (event) {
+                var fileInput = document.getElementById('fileInput');
+                var errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+
+                if (!fileInput.value) {
+                    event.preventDefault();
+                    errorToast.show();
+                }
+            });
+        </script>
+        <style>
+            .modal-dialog-scrollable {
+                max-width: 100%;
+                width: auto;
+                margin: 1.75rem auto;
+            }
+
+            .modal-content {
+                width: auto;
+            }
+        </style>
+    }
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const toastMessage = '@TempData["ToastMessage"]';
+            const toastType = '@TempData["ToastType"]';
+            if (toastMessage) {
+                const toastLiveExample = document.getElementById('liveToast');
+                toastLiveExample.classList.add(toastType);
+                const toast = new bootstrap.Toast(toastLiveExample);
+                toast.show();
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            var fileInput = document.getElementById('fileInput');
+            var errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+
+            if (!fileInput.value) {
+                event.preventDefault();
+                errorToast.show();
+            }
+        });
+    </script>
 </body>
 </html>
