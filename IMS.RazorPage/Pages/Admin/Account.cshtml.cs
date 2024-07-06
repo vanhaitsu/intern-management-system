@@ -29,6 +29,7 @@ namespace IMS.RazorPage.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public AccountFilterModel filterModel { get; set; } = new AccountFilterModel();
         public int TotalAccounts { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 10;
 
@@ -59,36 +60,67 @@ namespace IMS.RazorPage.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync(Guid id)
         {
+            ModelState.Remove("Password");
+            ModelState.Remove("ConfirmPassword");
+            ModelState.Remove("SearchTerm");
+            ModelState.Remove("Email");
+            ModelState.Remove("Gender");
+            ModelState.Remove("Address");
+            ModelState.Remove("FullName");
+            ModelState.Remove("PhoneNumber");
+
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelStateEntry in ModelState.Values)
+                {
+                    foreach (var error in modelStateEntry.Errors)
+                    {
+                        TempData["ModelStateError"] = error.ErrorMessage;
+                    }
+                }
+                TempData["ToastMessage"] = "Validation errors occurred.";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Account");
+            }
+
             var updateModel = accountUpdate;
             var existedAccount = await _accountService.GetAccountAsync(id);
 
             if (existedAccount == null)
             {
-                ViewData["Error"] = "Account not found.";
-                return Page();
+                TempData["Error"] = "Account not found.";
+                TempData["ToastMessage"] = "Account not found.";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Account");
             }
+
             if (updateModel.Email != existedAccount.Email)
             {
                 var emailExists = await _accountService.CheckExistedAccount(updateModel.Email);
                 if (emailExists)
                 {
-                    ViewData["Error"] = "Email is already existed!";
-                    return Page();
+                    TempData["Error"] = "Email is already existed!";
+                    TempData["ToastMessage"] = "Email is already existed!";
+                    TempData["ToastType"] = "error";
+                    return RedirectToPage("./Account");
                 }
             }
+
             if (await _accountService.Update(id, updateModel))
             {
-                Message = "Update successfully!";
+                TempData["Message"] = "Update successfully!";
+                TempData["ToastMessage"] = "Update successfully!";
+                TempData["ToastType"] = "success";
                 return RedirectToPage("./Account");
             }
             else
             {
-                ViewData["Error"] = "Failed to update!";
-                return Page();
+                TempData["Error"] = "Failed to update!";
+                TempData["ToastMessage"] = "Failed to update!";
+                TempData["ToastType"] = "error";
+                return RedirectToPage("./Account");
             }
         }
-
-
 
         public async Task<IActionResult> OnPostAddAsync()
         {

@@ -15,7 +15,6 @@ namespace IMS.Repositories.Interfaces
             int? pageIndex = null,
             int? pageSize = null
         );
-
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(List<TEntity> entities);
         void Update(TEntity entity);
