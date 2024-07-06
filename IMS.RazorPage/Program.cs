@@ -48,7 +48,8 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 //builder.Services.AddScoped<ITraineeRepository, TraineeRepository>();
 builder.Services.AddScoped<ITrainingProgramRepository, TrainingProgramRepository>();
 builder.Services.AddScoped<IInternRepository, InternRepository>();
-
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<IApplicationrepository, ApplicationRepository>();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 //builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IInternService, InternService>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

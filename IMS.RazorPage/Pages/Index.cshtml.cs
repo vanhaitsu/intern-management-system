@@ -91,7 +91,7 @@ namespace IMS.RazorPage.Pages
             }
             else
             {
-                return RedirectToPage("/Intern/Intern");
+                return RedirectToPage("/Intern/Campaign");
             }
         }
 

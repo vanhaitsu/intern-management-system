@@ -41,6 +41,29 @@ namespace IMS.Services.Services
             return false;
         }
 
+        public async Task<bool> Update(TrainingProgramUpdateModel trainingProgramUpdateModel)
+        {
+            TrainingProgram trainingProgram = await _unitOfWork.TrainingProgramRepository
+                .GetAsync((Guid)trainingProgramUpdateModel.Id);
+            if (trainingProgramUpdateModel.StartDate != trainingProgram.StartDate || 
+                trainingProgramUpdateModel.Duration != trainingProgram.Duration)
+            {
+                trainingProgramUpdateModel.EndDate = trainingProgramUpdateModel.StartDate.Value
+                .AddDays(trainingProgramUpdateModel.Duration.Value);
+            }
+            else
+            {
+                trainingProgramUpdateModel.EndDate = trainingProgram.EndDate;
+            }
+            _mapper.Map(trainingProgramUpdateModel, trainingProgram);
+            _unitOfWork.TrainingProgramRepository.Update(trainingProgram);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> Create(TrainingProgramCreateModel trainingProgramCreateModel)
         {
             TrainingProgram trainingProgram = _mapper.Map<TrainingProgram>(trainingProgramCreateModel);
