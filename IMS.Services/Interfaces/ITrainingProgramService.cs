@@ -1,4 +1,5 @@
 ﻿using IMS.Repositories.Entities;
+using IMS.Repositories.Models.AccountModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,7 @@ namespace IMS.Services.Interfaces
         Task<bool> Create(TrainingProgramCreateModel trainingProgramCreateModel);
         Task<bool> SoftDelete(TrainingProgram trainingProgram);
         Task<bool> Update(TrainingProgramUpdateModel trainingProgramUpdateModel);
+        Task<List<TrainingProgramGetModel>> GetAllTrainingPrograms(AccountFilterModel filterModel, Guid accountId);
+        Task<int> GetTotalTrainingProgramsCount(AccountFilterModel filterModel, Guid accountId);
     }
 }
