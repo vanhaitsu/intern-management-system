@@ -13,6 +13,7 @@ namespace IMS.Services.Interfaces
     {
         Task<bool> Create(AssignmentCreateModel assignmentCreateModel);
         Task<bool> Update(AssignmentUpdateModel assignmentUpdateModel);
+        Task<bool> Delete(Guid id);
         Task<QueryResultModel<List<Assignment>>> GetAssignments(AssignmentFilterModel assignmentFilterModel);
     }
 }

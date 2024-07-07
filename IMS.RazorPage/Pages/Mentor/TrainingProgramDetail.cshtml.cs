@@ -128,5 +128,23 @@ namespace IMS.RazorPage.Pages.Mentor
             TempData["ErrorMessage"] = "Invalid input";
             return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
         }
+
+        public async Task<IActionResult> OnPostDeleteAssignmentAsync(Guid id, string name)
+        {
+            //if (ModelState.IsValid)
+            //{
+                if (await _assignmentService.Delete(id))
+                {
+                    TempData["SuccessMessage"] = "Delete successfully!";
+                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { name });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Something went wrong!";
+                }
+            //}
+            //TempData["ErrorMessage"] = "Invalid input";
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name });
+        }
     }
 }

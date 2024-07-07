@@ -140,6 +140,7 @@
                 @foreach (var assignment in Model.Assignments)
                 {
                     var modalId = $"modal-{assignment.Id}";
+                    var deleteModalId = $"modal-{assignment.Id}-delete";
                     <tr>
                         <td>@assignment.Name</td>
                         <td>@assignment.Type</td>
@@ -151,6 +152,37 @@
                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@modalId">
                                 Edit
                             </button>
+
+                            <!-- Delete Button with Confirm Modal -->
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#@deleteModalId">
+                                Delete
+                            </button>
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="@deleteModalId" tabindex="-1" aria-labelledby="@deleteModalId-Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="@deleteModalId-Label">Confirm Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete assignment <strong>@assignment.Name</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form method="post" asp-page-handler="DeleteAssignment" asp-route-id="@assignment.Id" asp-route-name="@Model.TrainingProgram.Id">
+                                                <input type="hidden" name="id" value="@assignment.Id" />
+                                                @if (Model.TrainingProgram != null)
+                                                {
+                                                    <input asp-for="AssignmentUpdateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
+                                                }
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
                                 <div class="modal-dialog">

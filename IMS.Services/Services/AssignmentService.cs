@@ -52,6 +52,8 @@ namespace IMS.Services.Services
             assignment.KPI = assignmentUpdateModel.KPI;
             assignment.Duration = assignmentUpdateModel.Duration;
             assignment.InternId = assignmentUpdateModel.InternId;
+            assignment.Comment = assignmentUpdateModel.Comment;
+            assignment.PerformanceRating = assignmentUpdateModel.PerformanceRating;
             assignment.CreationDate = DateTime.UtcNow;
             assignment.EndDate = assignment.StartDate.Value.AddDays(assignmentUpdateModel.Duration);
             _unitOfWork.AssignmentRepository.Update(assignment);
@@ -66,6 +68,7 @@ namespace IMS.Services.Services
         {
             var assignmentList = await _unitOfWork.AssignmentRepository.GetAllAsync(
                 filter: x =>
+                x.IsDeleted == assignmentFilterModel.IsDeleted &&
                     (string.IsNullOrEmpty(assignmentFilterModel.Search)
                     || x.Name.ToLower().Contains(assignmentFilterModel.Search.ToLower())
                     || x.Material.ToLower().Contains(assignmentFilterModel.Search.ToLower())
@@ -83,6 +86,16 @@ namespace IMS.Services.Services
             return assignmentList;
         }
 
+        public async Task<bool> Delete(Guid id)
+        {
+            var assignment = await _unitOfWork.AssignmentRepository.GetAsync(id);
+            if (assignment == null)
+            {
+                return false;
+            }
 
+            _unitOfWork.AssignmentRepository.SoftDelete(assignment);
+            return await _unitOfWork.SaveChangeAsync() > 0;
+        }
     }
 }
