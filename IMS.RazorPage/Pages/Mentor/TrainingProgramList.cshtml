@@ -88,6 +88,11 @@
                                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
                                             Delete
                                         </button>
+                                        <a href="/Mentor/Feedback?name=@trainingProgram.Id">
+                                            <button type="button" class="btn btn-outline-secondary">
+                                                Feedback
+                                            </button>
+                                        </a>
 
                                         <div class="modal fade" id="modalEditProgram-@trainingProgram.Id" tabindex="-1" aria-labelledby="editProgramLabel-@trainingProgram.Id" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -100,7 +105,7 @@
                                                         <form method="post" asp-page-handler="EditProgram">
                                                             <input asp-for="TrainingProgramUpdateModel.Id" type="text" value="@trainingProgram.Id" type="hidden" />
                                                             <div class="form-floating mb-3 d-flex">
-                                                                <input asp-for="TrainingProgramUpdateModel.Name" type="text" class="form-control" value="@trainingProgram.Name" id="floatingInput" placeholder="" required/>
+                                                                <input asp-for="TrainingProgramUpdateModel.Name" type="text" class="form-control" value="@trainingProgram.Name" id="floatingInput" placeholder="" required />
                                                                 <label asp-for="TrainingProgramUpdateModel.Name" for="floatingInput" required></label>
                                                                 <span asp-validation-for="TrainingProgramUpdateModel.Name" class="text-danger"></span>
                                                             </div>
@@ -119,7 +124,7 @@
                                                                 <label asp-for="TrainingProgramUpdateModel.StartDate" for="floatingInput"></label>
                                                                 <span asp-validation-for="TrainingProgramUpdateModel.StartDate" class="text-danger"></span>
                                                             </div>
-                                                            
+
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                                 <button type="submit" class="btn btn-primary">Save changes</button>
@@ -160,9 +165,9 @@
             </div>
         </div>
     </div>
-                    </div>
-
                         </div>
+
+                            </div>
 }
 </div>
 @section Scripts {

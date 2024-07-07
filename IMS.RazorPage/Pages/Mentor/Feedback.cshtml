@@ -1,0 +1,65 @@
+﻿@page
+@model IMS.RazorPage.Pages.Mentor.FeedbackModel
+@{
+}
+
+<form method="get">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+               aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
+
+        @if (Model.TrainingProgram != null)
+        {
+            <input name="name" value=@Model.TrainingProgram.Id hidden />
+        }
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+            Search
+        </button>
+    </div>
+</form>
+
+<div class="m-4">
+    @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="w-50" scope="col">Comment</th>
+                    <th scope="col">Intern</th>
+                    <th scope="col">Training Program</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in Model.Feedbacks)
+                {
+                    var modalId = $"modal-{assignment.Id}";
+                    var deleteModalId = $"modal-{assignment.Id}-delete";
+                    <tr>
+                        <td style="white-space: break-spaces;">@assignment.Comment</td>
+                        <td>@(assignment.Intern != null ? assignment.Intern?.FullName : "Empty")</td>
+                        <td>@(assignment.TrainingProgram != null ? assignment.TrainingProgram?.Name : "Empty")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        @if (Model.TotalFeedbacks > Model.PageSize)
+        {
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    @for (var i = 1; i <= Math.Ceiling((double)Model.TotalFeedbacks / Model.PageSize); i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="?PageNumber=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <p>No assignments found.</p>
+    }
+</div>

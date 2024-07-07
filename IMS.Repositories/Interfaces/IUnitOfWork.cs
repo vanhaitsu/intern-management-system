@@ -12,6 +12,7 @@ namespace IMS.Repositories.Interfaces
         IAssignmentRepository AssignmentRepository { get; }
         ICampaignRepository CampaignRepository { get; }
         IApplicationrepository ApplicationRepository { get; }
+        IFeedbackRepository FeedbackRepository { get; }
 
         public Task<int> SaveChangeAsync();
     }
