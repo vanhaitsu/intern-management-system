@@ -7,8 +7,293 @@
 
 @if (Model.TrainingProgram != null)
 {
-    <span>Program's name:</span> <h6 class="mb-1">@Model.TrainingProgram.Name</h6>
+    <span>Program's name:</span>
+    <h6 class="mb-1">@Model.TrainingProgram.Name</h6>
 }
 
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateAssignment">
+        Create new Assignment
+    </button>
+</div>
 
+<form method="get">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+               aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
 
+        @if (Model.TrainingProgram != null)
+        {
+            <input name="name" value=@Model.TrainingProgram.Id hidden />
+        }
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+            Search
+        </button>
+    </div>
+</form>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="modal fade" id="modalCreateAssignment" tabindex="-1" aria-labelledby="modalCreateAssignmentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create new Assignment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="CreateAssignment" class="d-flex flex-column gap-4">
+                    <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Name" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.Name" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Type" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.Type" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Type" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Description" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.Description" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.KPI" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.KPI" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.KPI" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Duration" type="number" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.Duration" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Duration" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.StartDate" type="date" class="form-control" id="floatingInput" placeholder="" required />
+                        <label asp-for="AssignmentCreateModel.StartDate" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.Material" type="text" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.Material" for="floatingInput"></label>
+                        <span asp-validation-for="AssignmentCreateModel.Material" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating">
+                        <input asp-for="AssignmentCreateModel.InternEmail" type="email" class="form-control" id="floatingInput" placeholder="" />
+                        <label asp-for="AssignmentCreateModel.InternEmail" for="floatingInput">Intern email</label>
+                        <span asp-validation-for="AssignmentCreateModel.InternEmail" class="text-danger"></span>
+                    </div>
+
+                    @if (Model.TrainingProgram != null)
+                    {
+                        <input asp-for="AssignmentCreateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
+                    }
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="m-4">
+    @if (Model.Assignments != null && Model.Assignments.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Assign to</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in Model.Assignments)
+                {
+                    var modalId = $"modal-{assignment.Id}";
+                    var deleteModalId = $"modal-{assignment.Id}-delete";
+                    <tr>
+                        <td>@assignment.Name</td>
+                        <td>@assignment.Type</td>
+                        <td>@(assignment.Intern != null ? assignment.Intern?.FullName : "Empty")</td>
+                        <td>@assignment.Duration</td>
+                        <td>@assignment.StartDate?.ToShortDateString()</td>
+                        <td>@assignment.EndDate?.ToShortDateString()</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@modalId">
+                                Edit
+                            </button>
+
+                            <!-- Delete Button with Confirm Modal -->
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#@deleteModalId">
+                                Delete
+                            </button>
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="@deleteModalId" tabindex="-1" aria-labelledby="@deleteModalId-Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="@deleteModalId-Label">Confirm Delete</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete assignment <strong>@assignment.Name</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form method="post" asp-page-handler="DeleteAssignment" asp-route-id="@assignment.Id" asp-route-name="@Model.TrainingProgram.Id">
+                                                <input type="hidden" name="id" value="@assignment.Id" />
+                                                @if (Model.TrainingProgram != null)
+                                                {
+                                                    <input asp-for="AssignmentUpdateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
+                                                }
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="@modalId-Label">Edit Assignment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" asp-page-handler="EditAssignment" class="d-flex flex-column gap-4">
+                                                <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
+
+                                                <!-- Include assignment ID for identification -->
+                                                <input type="hidden" asp-for="AssignmentUpdateModel.Id" value="@assignment.Id" />
+                                                @if (Model.TrainingProgram != null)
+                                                {
+                                                    <input asp-for="AssignmentUpdateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
+                                                }
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Name" value="@assignment.Name" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.Name" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Name" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Type" value="@assignment.Type" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.Type" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Type" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Description" value="@assignment.Description" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.Description" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Description" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.KPI" value="@assignment.KPI" type="text" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.KPI" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.KPI" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Duration" value="@assignment.Duration" type="number" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.Duration" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Duration" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.StartDate" value="@assignment.StartDate?.ToString("yyyy-MM-dd")" type="date" class="form-control" id="floatingInput" placeholder="" required />
+                                                    <label asp-for="AssignmentUpdateModel.StartDate" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.StartDate" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Material" value="@assignment.Material" type="text" class="form-control" id="floatingInput" placeholder="" />
+                                                    <label asp-for="AssignmentUpdateModel.Material" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Material" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.InternEmail" value="@(assignment.Intern != null ? assignment.Intern?.Email : "")" type="email" class="form-control" id="floatingInput" placeholder="" />
+                                                    <label asp-for="AssignmentUpdateModel.InternEmail" for="floatingInput">Intern email</label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.InternEmail" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.PerformanceRating" value="@assignment.PerformanceRating" type="number" class="form-control" id="floatingInput" placeholder="" />
+                                                    <label asp-for="AssignmentUpdateModel.PerformanceRating" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.PerformanceRating" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <input asp-for="AssignmentUpdateModel.Comment" value="@assignment.Comment" type="text" class="form-control" id="floatingInput" placeholder="" />
+                                                    <label asp-for="AssignmentUpdateModel.Comment" for="floatingInput"></label>
+                                                    <span asp-validation-for="AssignmentUpdateModel.Comment" class="text-danger"></span>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        @if (Model.TotalAccounts > Model.PageSize)
+        {
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    @for (var i = 1; i <= Math.Ceiling((double)Model.TotalAccounts / Model.PageSize); i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="?PageNumber=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <p>No assignments found.</p>
+    }
+</div>
