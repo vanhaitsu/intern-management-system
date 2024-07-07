@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(5); 
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -50,6 +50,7 @@ builder.Services.AddScoped<IInternRepository, InternRepository>();
 builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 builder.Services.AddScoped<IApplicationrepository, ApplicationRepository>();
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -58,7 +59,7 @@ builder.Services.AddScoped<ITrainingProgramService, TrainingProgramService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IInternService, InternService>();
 builder.Services.AddScoped<IAssignmentService, AssignmentService>();
-builder.Services.AddScoped<ICampaignService, CampaignService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);
