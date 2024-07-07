@@ -16,7 +16,9 @@ namespace IMS.RazorPage.Pages.Mentor
         //public string TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { set; get; }
         [BindProperty]
-        public AssignmentCreateModel AssignmentCreateModel { set; get; }
+        public AssignmentCreateModel? AssignmentCreateModel { set; get; }
+        [BindProperty]
+        public AssignmentUpdateModel? AssignmentUpdateModel { set; get; }
 
         // Pagination
         public int TotalAccounts { get; set; }
@@ -89,5 +91,42 @@ namespace IMS.RazorPage.Pages.Mentor
             return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
         }
 
+        public async Task<IActionResult> OnPostEditAssignmentAsync()
+        {
+            // Remove AssignmentCreateModel from ModelState
+            ModelState.Remove("Name");
+            ModelState.Remove("Type");
+            ModelState.Remove("Duration");
+            ModelState.Remove("StartDate");
+            ModelState.Remove("EndDate");
+            ModelState.Remove("Description");
+            if (ModelState.IsValid)
+            {
+                //AssignmentUpdateModel.CreatedBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                if (AssignmentUpdateModel.InternEmail != null)
+                {
+                    var intern = await _internService.GetByEmail(AssignmentUpdateModel.InternEmail);
+                    if (intern == null)
+                    {
+                        TempData["ErrorMessage"] = "Intern does not exist!";
+                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+                    }
+
+                    AssignmentUpdateModel.InternId = intern.Id;
+                }
+
+                if (await _assignmentService.Update(AssignmentUpdateModel))
+                {
+                    TempData["SuccessMessage"] = "Edit successfully!";
+                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Something went wrong!";
+                }
+            }
+            TempData["ErrorMessage"] = "Invalid input";
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+        }
     }
 }

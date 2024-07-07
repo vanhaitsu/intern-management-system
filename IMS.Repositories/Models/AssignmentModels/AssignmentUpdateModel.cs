@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace IMS.Repositories.Models.AssignmentModels
 {
-    public class AssignmentCreateModel
+    public class AssignmentUpdateModel
     {
+        [Required]
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, ErrorMessage = "Name must be no more than 50 characters")]
         public string Name { get; set; }
@@ -29,6 +31,11 @@ namespace IMS.Repositories.Models.AssignmentModels
         [EmailAddress(ErrorMessage = "Invalid email format")]
         [StringLength(256, ErrorMessage = "Email must be no more than 256 characters")]
         public string? InternEmail { get; set; }
+
+
+        public string? Comment { get; set; } // This can be used as Feedback from Mentor
         public string? KPI { get; set; }
+        [Range(0, 100, ErrorMessage = "Performance rating must be between 0 and 100.")]
+        public double? PerformanceRating { get; set; }
     }
 }

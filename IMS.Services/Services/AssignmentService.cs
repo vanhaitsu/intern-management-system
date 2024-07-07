@@ -36,6 +36,32 @@ namespace IMS.Services.Services
             return false;
         }
 
+        public async Task<bool> Update(AssignmentUpdateModel assignmentUpdateModel)
+        {
+            var assignment = await _unitOfWork.AssignmentRepository.GetAsync(assignmentUpdateModel.Id);
+            if (assignment == null)
+            {
+                return false;
+            }
+            assignment.ModificationDate = DateTime.UtcNow;
+            assignment.Name = assignmentUpdateModel.Name;
+            assignment.Description = assignmentUpdateModel.Description;
+            assignment.Type = assignmentUpdateModel.Type;
+            assignment.StartDate = assignmentUpdateModel.StartDate;
+            assignment.Material = assignmentUpdateModel.Material;
+            assignment.KPI = assignmentUpdateModel.KPI;
+            assignment.Duration = assignmentUpdateModel.Duration;
+            assignment.InternId = assignmentUpdateModel.InternId;
+            assignment.CreationDate = DateTime.UtcNow;
+            assignment.EndDate = assignment.StartDate.Value.AddDays(assignmentUpdateModel.Duration);
+            _unitOfWork.AssignmentRepository.Update(assignment);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<QueryResultModel<List<Assignment>>> GetAssignments(AssignmentFilterModel assignmentFilterModel)
         {
             var assignmentList = await _unitOfWork.AssignmentRepository.GetAllAsync(
@@ -57,6 +83,6 @@ namespace IMS.Services.Services
             return assignmentList;
         }
 
-        
+
     }
 }
