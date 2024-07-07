@@ -12,6 +12,8 @@ namespace IMS.Services.Interfaces
     public interface IAssignmentService
     {
         Task<bool> Create(AssignmentCreateModel assignmentCreateModel);
+        Task<bool> Update(AssignmentUpdateModel assignmentUpdateModel);
+        Task<bool> Delete(Guid id);
         Task<QueryResultModel<List<Assignment>>> GetAssignments(AssignmentFilterModel assignmentFilterModel);
     }
 }
