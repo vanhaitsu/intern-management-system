@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
+using IMS.Repositories.Models.AccountModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +82,59 @@ namespace IMS.Services.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<TrainingProgramGetModel>> GetAllTrainingPrograms(AccountFilterModel filterModel, Guid accountId)
+        {
+            var trainingProgramList = await _unitOfWork.TrainingProgramRepository.GetAllAsync(
+                filter: x =>
+                    (x.CreatedBy == accountId) &&
+                    (x.IsDeleted == false) &&
+                    (string.IsNullOrEmpty(filterModel.Search) || x.Name.ToLower().Contains(filterModel.Search.ToLower())),
+                orderBy: x => filterModel.OrderByDescending
+                    ? x.OrderByDescending(x => x.CreationDate)
+                    : x.OrderBy(x => x.CreationDate),
+                pageIndex: filterModel.PageNumber,
+                pageSize: filterModel.PageSize
+            );
+
+            List<TrainingProgramGetModel> trainingProgramDetailList = null;
+
+            if (trainingProgramList != null)
+            {
+                trainingProgramDetailList = trainingProgramList.Data.Select(x => new TrainingProgramGetModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    Duration = x.Duration,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate
+                }).ToList();
+            }
+
+            return trainingProgramDetailList ?? new List<TrainingProgramGetModel>();
+        }
+
+
+        public async Task<int> GetTotalTrainingProgramsCount(AccountFilterModel filterModel, Guid accountId)
+        {
+            IQueryable<TrainingProgram> query = _unitOfWork.TrainingProgramRepository.GetAll().AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(filterModel.Search))
+            {
+                var search = filterModel.Search.ToLower();
+                query = query.Where(a =>
+                    a.Name.ToLower().Contains(search)
+                );
+            }
+            if (!string.IsNullOrEmpty(filterModel.Role))
+            {
+                query = query.Where(a => a.CreatedBy == accountId);
+            }
+
+            return await query.CountAsync();
         }
     }
 }

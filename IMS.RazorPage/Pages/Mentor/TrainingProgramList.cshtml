@@ -1,12 +1,38 @@
 ﻿@page
+@using IMS.Repositories.Models.TrainingProgramModel
 @model IMS.RazorPage.Pages.Mentor.TrainingProgramListModel
 @{
+    var trainingProgramList = ViewData["TrainingPrograms"] as List<TrainingProgramGetModel>;
+    var filterModel = Model.filterModel;
+    int totalAccountsCount = ViewData["TotalAccountsCount"] != null ? (int)ViewData["TotalAccountsCount"] : 0;
+    int pageSize = Model.PageSize;
+    int totalPages = (int)Math.Ceiling((decimal)totalAccountsCount / pageSize);
 }
-<div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateProgram">
-        Create new program
-    </button>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="container mt-4">
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-5">
+            <!-- Search form -->
+            <form id="filterForm" method="get" class="w-100">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" name="SearchTerm" asp-for="SearchTerm">
+                    <button class="btn btn-outline-secondary" type="submit" id="buttonSearch">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-auto">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateProgram">
+                Create new program
+            </button>
+        </div>
+    </div>
 </div>
+
 
 <div class="modal fade" id="modalCreateProgram" tabindex="-1" aria-labelledby="modalCreateProgramLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -20,19 +46,19 @@
                     <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
 
                     <div class="form-floating">
-                        <input asp-for="TrainingProgramCreateModel.Name" type="text" class="form-control" id="floatingInput" placeholder="" />
+                        <input asp-for="TrainingProgramCreateModel.Name" type="text" class="form-control" id="floatingInput" placeholder="" required />
                         <label asp-for="TrainingProgramCreateModel.Name" for="floatingInput"></label>
                         <span asp-validation-for="TrainingProgramCreateModel.Name" class="text-danger"></span>
                     </div>
 
                     <div class="form-floating">
-                        <input asp-for="TrainingProgramCreateModel.Duration" type="number" class="form-control" id="floatingInput" placeholder="" />
+                        <input asp-for="TrainingProgramCreateModel.Duration" type="number" class="form-control" id="floatingInput" placeholder="" required />
                         <label asp-for="TrainingProgramCreateModel.Duration" for="floatingInput"></label>
                         <span asp-validation-for="TrainingProgramCreateModel.Duration" class="text-danger"></span>
                     </div>
 
                     <div class="form-floating">
-                        <input asp-for="TrainingProgramCreateModel.StartDate" type="date" class="form-control" id="floatingInput" placeholder="" />
+                        <input asp-for="TrainingProgramCreateModel.StartDate" type="date" class="form-control" id="floatingInput" placeholder="" required />
                         <label asp-for="TrainingProgramCreateModel.StartDate" for="floatingInput"></label>
                         <span asp-validation-for="TrainingProgramCreateModel.StartDate" class="text-danger"></span>
                     </div>
@@ -62,110 +88,135 @@
                 <div class="">
                     <div class="">
                         <ul class="list-group list-group-flush">
-                            <div class="d-flex">
-                                @foreach (var trainingProgram in Model.TrainingPrograms)
-                                {
-                                    <div class="col-md-4 mb-3">
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between" onclick="redirectToProgramDetail('@trainingProgram.Id')">
-                                        <div>
-                                            <h6 class="mb-1"><strong>Name: </strong>@trainingProgram.Name</h6>
-                                                    @if (@trainingProgram.StartDate != null)
-                                                    {
-                                                <p class="mb-1"><strong>Start date:</strong> @trainingProgram.StartDate.Value.ToShortDateString()</p>
-                                                <p class="mb-1"><strong>End date:</strong> @trainingProgram.EndDate.Value.ToShortDateString()</p>
-                                                    }
 
-                                        </div>
-                                        <div class="align-self-center">
-                                                    @* Optional actions or buttons here *@
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-around align-items-center">
-                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditProgram-@trainingProgram.Id">
-                                            Edit
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
-                                            Delete
-                                        </button>
-
-                                        <div class="modal fade" id="modalEditProgram-@trainingProgram.Id" tabindex="-1" aria-labelledby="editProgramLabel-@trainingProgram.Id" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editProgramLabel-@trainingProgram.Id">Edit Training Program</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="container">
+                                <div class="row">
+                                    @foreach (var trainingProgram in Model.TrainingPrograms)
+                                    {
+                                        <div class="col-md-4 mb-4">
+                                            <div class="border rounded p-3">
+                                                <div class="d-flex" onclick="redirectToProgramDetail('@trainingProgram.Id')">
+                                                    <div>
+                                                        <h6 class="mb-1"><strong>Name: </strong>@trainingProgram.Name</h6>
+                                                        @if (@trainingProgram.StartDate != null)
+                                                        {
+                                                            <p class="mb-1"><strong>Start date:</strong> @trainingProgram.StartDate.Value.ToShortDateString()</p>
+                                                            <p class="mb-1"><strong>End date:</strong> @trainingProgram.EndDate.Value.ToShortDateString()</p>
+                                                        }
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <form method="post" asp-page-handler="EditProgram">
-                                                            <input asp-for="TrainingProgramUpdateModel.Id" type="text" value="@trainingProgram.Id" type="hidden" />
-                                                            <div class="form-floating mb-3 d-flex">
-                                                                <input asp-for="TrainingProgramUpdateModel.Name" type="text" class="form-control" value="@trainingProgram.Name" id="floatingInput" placeholder="" required/>
-                                                                <label asp-for="TrainingProgramUpdateModel.Name" for="floatingInput" required></label>
-                                                                <span asp-validation-for="TrainingProgramUpdateModel.Name" class="text-danger"></span>
+                                                </div>
+                                                <div class="d-flex justify-content-around align-items-center mt-2">
+                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditProgram-@trainingProgram.Id">
+                                                        Edit
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
+                                                        Delete
+                                                    </button>
+
+                                                    <div class="modal fade" id="modalEditProgram-@trainingProgram.Id" tabindex="-1" aria-labelledby="editProgramLabel-@trainingProgram.Id" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editProgramLabel-@trainingProgram.Id">Edit Training Program</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form method="post" asp-page-handler="EditProgram">
+                                                                        <input asp-for="TrainingProgramUpdateModel.Id" type="text" value="@trainingProgram.Id" type="hidden" />
+                                                                        <div class="form-floating mb-3 d-flex">
+                                                                            <input asp-for="TrainingProgramUpdateModel.Name" type="text" class="form-control" value="@trainingProgram.Name" id="floatingInput" placeholder="" required />
+                                                                            <label asp-for="TrainingProgramUpdateModel.Name" for="floatingInput" required></label>
+                                                                            <span asp-validation-for="TrainingProgramUpdateModel.Name" class="text-danger"></span>
+                                                                        </div>
+                                                                        <div class="form-floating mb-3 d-flex">
+                                                                            <input asp-for="TrainingProgramUpdateModel.Description" type="text" class="form-control" value="@trainingProgram.Description" id="floatingInput" placeholder="" />
+                                                                            <label asp-for="TrainingProgramUpdateModel.Description" for="floatingInput" required></label>
+                                                                            <span asp-validation-for="TrainingProgramUpdateModel.Description" class="text-danger"></span>
+                                                                        </div>
+                                                                        <div class="form-floating mb-3 d-flex">
+                                                                            <input asp-for="TrainingProgramUpdateModel.Duration" type="number" class="form-control" value="@trainingProgram.Duration" id="floatingInput" placeholder="" />
+                                                                            <label asp-for="TrainingProgramUpdateModel.Duration" for="floatingInput"></label>
+                                                                            <span asp-validation-for="TrainingProgramUpdateModel.Duration" class="text-danger"></span>
+                                                                        </div>
+                                                                        <div class="form-floating mb-3">
+                                                                            <input asp-for="TrainingProgramUpdateModel.StartDate" type="date" class="form-control" value="@trainingProgram.StartDate.Value.ToString("yyyy-MM-dd")" id="floatingInput" placeholder="" />
+                                                                            <label asp-for="TrainingProgramUpdateModel.StartDate" for="floatingInput"></label>
+                                                                            <span asp-validation-for="TrainingProgramUpdateModel.StartDate" class="text-danger"></span>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-floating mb-3 d-flex">
-                                                                <input asp-for="TrainingProgramUpdateModel.Description" type="text" class="form-control" value="@trainingProgram.Description" id="floatingInput" placeholder="" />
-                                                                <label asp-for="TrainingProgramUpdateModel.Description" for="floatingInput" required></label>
-                                                                <span asp-validation-for="TrainingProgramUpdateModel.Description" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal" id="modalDeleteProgram-@trainingProgram.Id" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Confirm</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form method="post" asp-page-handler="DeleteProgram" asp-route-id="@trainingProgram.Id" class="d-flex flex-column gap-4">
+                                                                    <div class="modal-body">
+                                                                        <p>Are you sure you want to delete this training program?</p>
+                                                                        <input value="@trainingProgram.Id" type="hidden" name="id" />
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                                                    </div>
+                                                                </form>
                                                             </div>
-                                                            <div class="form-floating mb-3 d-flex">
-                                                                <input asp-for="TrainingProgramUpdateModel.Duration" type="number" class="form-control" value="@trainingProgram.Duration" id="floatingInput" placeholder="" />
-                                                                <label asp-for="TrainingProgramUpdateModel.Duration" for="floatingInput"></label>
-                                                                <span asp-validation-for="TrainingProgramUpdateModel.Duration" class="text-danger"></span>
-                                                            </div>
-                                                            <div class="form-floating mb-3">
-                                                                <input asp-for="TrainingProgramUpdateModel.StartDate" type="date" class="form-control" value="@trainingProgram.StartDate.Value.ToString("yyyy-MM-dd")" id="floatingInput" placeholder="" />
-                                                                <label asp-for="TrainingProgramUpdateModel.StartDate" for="floatingInput"></label>
-                                                                <span asp-validation-for="TrainingProgramUpdateModel.StartDate" class="text-danger"></span>
-                                                            </div>
-                                                            
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                            </div>
-                                                        </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    }
+                                </div>
+                            </div>
 
-                                        <div class="modal" id="modalDeleteProgram-@trainingProgram.Id" tabindex="-1">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Confirm</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <form method="post" asp-page-handler="DeleteProgram" asp-route-id="@trainingProgram.Id" class="d-flex flex-column gap-4">
-                                                        <div class="modal-body">
-                                                            <p>Are you sure you want to delete this training program?</p>
-                                                            <input value="@trainingProgram.Id" type="hidden" name="id" />
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                        </div>
-                                }
+                        </ul>
+                    </div>
                 </div>
-                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Page("./TrainingProgramList", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
+                        </li>
+                        @for (var i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                <a class="page-link" href="@Url.Page("./TrainingProgramList", new { SearchTerm = Model.filterModel.Search, PageNumber = i, PageSize = Model.PageSize })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Page("./TrainingProgramList", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
-                    </div>
-
-                        </div>
+}
+else
+{
+    <h2 class="text-center">Training program not found.</h2>
 }
 </div>
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         function redirectToProgramDetail(trainingProgramId) {
             window.location.href = `/Mentor/TrainingProgramDetail?name=${encodeURIComponent(trainingProgramId)}`;

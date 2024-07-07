@@ -175,15 +175,15 @@
                                                                 <span asp-validation-for="@accountUpdate.Address" class="text-danger"></span>
                                                             </div>
 
-                                                            <div class="d-flex justify-content-between">
-                                                                <div class="form-floating mb-3 col-6">
+                                                            <div class="d-flex justify-content-between mb-3">
+                                                                <div class="form-floating mb-3 flex-fill me-md-3 mb-3 mb-md-0 w-50 ">
 
                                                                     <input type="text" value="@account.PhoneNumber" class="form-control" id="basic-url-phone-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.PhoneNumber" placeholder="">
                                                                     <label class="form-label" asp-for="@accountUpdate.PhoneNumber">Phone</label>
                                                                     <span asp-validation-for="@accountUpdate.PhoneNumber" class="text-danger"></span>
                                                                 </div>
 
-                                                                <div class="form-floating mb-3 col-6">
+                                                                <div class="form-floating mb-3 flex-fill me-md-3 mb-3 mb-md-0 w-50">
 
                                                                     <input type="text" value="@account.DOB?.ToString("dd-MM-yyyy")" class="form-control" id="basic-url-dob-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.DOB" placeholder="">
                                                                     <label class="form-label" asp-for="@accountUpdate.DOB">Birthday</label>
@@ -191,8 +191,8 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="d-flex justify-content-between">
-                                                                <div class="form-floating mb-3 col-6">
+                                                            <div class="d-flex justify-content-between mb-3">
+                                                                <div class="form-floating mb-3 flex-fill me-md-3 mb-3 mb-md-0 w-50">
                                                                     <select class="form-select" value="@account.Gender" aria-label="Default select example" asp-for="@accountUpdate.Gender" placeholder="">
                                                                         <option value="Male">Male</option>
                                                                         <option value="Female">Female</option>
@@ -201,7 +201,7 @@
                                                                     <span asp-validation-for="@accountUpdate.Gender" class="text-danger"></span>
                                                                 </div>
 
-                                                                <div class="form-floating mb-3 col-6">
+                                                                <div class="form-floating mb-3 flex-fill me-md-3 mb-3 mb-md-0 w-50">
                                                                     <select class="form-floating form-select" asp-for="accountUpdate.RoleId" placeholder="">
                                                                         @if (ViewData["Roles"] != null)
                                                                         {
@@ -263,12 +263,12 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 d-flex flex-column flex-md-row">
-                                            <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
+                                            <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0 w-50">
                                                 <input type="date" class="form-control" id="newAccount.DOB" asp-for="@newAccount.DOB" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.DOB">Date of Birth</label>
                                                 <span asp-validation-for="@newAccount.DOB" class="text-danger"></span>
                                             </div>
-                                            <div class="form-floating flex-fill">
+                                            <div class="form-floating w-50">
                                                 <input type="text" class="form-control" id="newAccount.PhoneNumber" asp-for="@newAccount.PhoneNumber" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.PhoneNumber">Phone Number</label>
                                                 <span asp-validation-for="@newAccount.PhoneNumber" class="text-danger"></span>
@@ -277,7 +277,7 @@
 
                                         <div class="mb-3 d-flex flex-column flex-md-row">
                                             
-                                            <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
+                                            <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0 ">
                                                 
                                                 <select class="form-select" asp-for="@newAccount.RoleId" placeholder="">
                                                     @if (ViewData["Roles"] != null)
@@ -319,7 +319,7 @@
                                             <span asp-validation-for="@newAccount.Address" class="text-danger"></span>
                                         </div>
                                         <div class="form-floating mb-3 d-flex flex-column flex-md-row">
-                                            <div class="flex-fill me-md-3 mb-3 mb-md-0">
+                                            <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
                                                 
                                                 <input type="password" class="form-control" id="newAccount.Password" asp-for="@newAccount.Password" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.Password">Password</label>

@@ -1,0 +1,42 @@
+﻿@* @page
+@model RazorPage.Pages.Common.VerifyMailModel
+@{
+    var email = Model.Verify.Email;
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    <form method="post">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold">Verify Email</h2>
+                            <p class="text-muted">A verification code has been sent to <strong>@email</strong>. Please check your mailbox.</p>
+                        </div>
+
+                        <input asp-for="Verify.Email" type="text" value="@email" hidden />
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Verify.VerifyCode" type="text" class="form-control" id="floatingVerifyCode" placeholder="Enter Verification Code" />
+                            <label for="floatingVerifyCode">Verification Code</label>
+                            <span asp-validation-for="Verify.VerifyCode" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mb-2">Verify</button>
+                        <a href="/Index" class="btn btn-outline-primary w-100">Login</a>
+
+                        <div class="alert alert-danger mt-3" role="alert" asp-validation-summary="ModelOnly"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ *@
