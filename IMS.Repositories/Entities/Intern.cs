@@ -13,6 +13,9 @@
         public string? WorkHistory { get; set; }
         public string? Skill { get; set; }
         public string? Education { get; set; }
+        public byte? Status { get; set; }
+        public int? EmailVerifyCode { get; set; }
+        public DateTime? ExpiredCode { get; set; }
 
         //Relationship
         public virtual ICollection<Mentorship>? Mentorships { get; set; } = new List<Mentorship>();

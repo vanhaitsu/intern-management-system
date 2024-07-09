@@ -22,7 +22,26 @@
         int pageSize = Model.PageSize;
         int totalPages = (int)Math.Ceiling((decimal)totalCampaignsCount / pageSize);
     }
-    @if (!string.IsNullOrEmpty(errorMessage))
+
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        <div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" id="errorMessage" data-bs-delay="5000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["ErrorMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="successMessage" data-bs-delay="5000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["SuccessMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+   @*  @if (!string.IsNullOrEmpty(errorMessage))
     {
         <div class="alert alert-danger" role="alert">
             @errorMessage
@@ -34,7 +53,7 @@
         <div class="alert alert-success" role="alert">
             @successMessage
         </div>
-    }
+    } *@
     
     <h1 style="text-align:center">Campaigns available</h1>
 
@@ -71,5 +90,17 @@
             </table>
         }
     </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var errorMessage = document.getElementById('errorMessage');
+            var successMessage = document.getElementById('successMessage');
+            if (errorMessage && errorMessage.querySelector('.toast-body').textContent.trim() !== '') {
+                new bootstrap.Toast(errorMessage).show();
+            }
+            if (successMessage && successMessage.querySelector('.toast-body').textContent.trim() !== '') {
+                new bootstrap.Toast(successMessage).show();
+            }
+        });
+    </script>
 </body>
 </html>

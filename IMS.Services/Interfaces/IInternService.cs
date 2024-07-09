@@ -24,5 +24,8 @@ namespace IMS.Services.Interfaces
         Task<bool> Delete(Guid id);
         Task<bool> Restore(Guid id);
         Task<Intern> GetByEmail(string email);
+        Task<List<Intern>> GetRegisterCustomer();
+        Task<bool> RegisterIntern(Intern intern);
+        Task<bool> Edit(Intern intern);
     }
 }

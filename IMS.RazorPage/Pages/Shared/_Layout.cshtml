@@ -32,7 +32,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Intern">Intern</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
                                 </li>
                             }
                             @if (User.IsInRole("HR"))
@@ -41,22 +41,31 @@
                                     <a class="nav-link text-dark" asp-area="" asp-page="/HR/Intern">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/TrainingProgram">Program</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Campaign">Campaign</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
                                 </li>
                             }
                             @if (User.IsInRole("Mentor"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/Intern">Home</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgramList">Program</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgram">Program</a>
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Intern"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Intern/Campaign">Campaign</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Intern/Intern">Intern</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
                                 </li>
                             }
 
