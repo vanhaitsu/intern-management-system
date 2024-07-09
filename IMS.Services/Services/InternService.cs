@@ -10,7 +10,7 @@ using IMS.Repositories.Models.AccountModel;
 
 namespace IMS_View.Services.Services
 {
-    public class InternService: IInternService
+    public class InternService : IInternService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -76,11 +76,11 @@ namespace IMS_View.Services.Services
 
         public async Task<List<string>> GetAllInternEmails()
         {
-            var interns = _unitOfWork.InternRepository.GetAll(); 
+            var interns = _unitOfWork.InternRepository.GetAll();
 
             if (interns == null)
             {
-                return new List<string>(); 
+                return new List<string>();
             }
 
             var emails = interns.Select(interns => interns.Email).ToList();
@@ -102,7 +102,7 @@ namespace IMS_View.Services.Services
         public async Task<bool> CreateRange(List<InternRegisterModel> internRegisterModels)
         {
             List<Intern> interns = _mapper.Map<List<Intern>>(internRegisterModels);
-            foreach(var intern in interns)
+            foreach (var intern in interns)
             {
                 intern.IsDeleted = false;
                 intern.Password = "123456789";
@@ -140,7 +140,6 @@ namespace IMS_View.Services.Services
             }
             return false;
         }
-
 
         public async Task<bool> Delete(Guid id)
         {
@@ -203,7 +202,7 @@ namespace IMS_View.Services.Services
                     Skill = x.Skill,
                     Education = x.Education,
                     WorkHistory = x.WorkHistory,
-                    feedbacks = x.Feedbacks.Where(f =>f.InternId == x.Id).Select(f => f.Comment).ToList(),
+                    feedbacks = x.Feedbacks.Where(f => f.InternId == x.Id).Select(f => f.Comment).ToList(),
                 }).ToList();
             }
 
@@ -234,6 +233,33 @@ namespace IMS_View.Services.Services
         public async Task<Intern> GetByEmail(string email)
         {
             return await _unitOfWork.InternRepository.GetInternByMail(email);
+        }
+
+        public async Task<List<Intern>> GetRegisterCustomer()
+        {
+            return await _unitOfWork.InternRepository.GetRegisterCustomer();
+        }
+
+        public async Task<bool> RegisterIntern(Intern intern)
+        {
+            await _unitOfWork.InternRepository.AddAsync(intern);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+            public async Task<bool> Edit(Intern intern)
+        {
+            _unitOfWork.InternRepository.Update(intern);
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

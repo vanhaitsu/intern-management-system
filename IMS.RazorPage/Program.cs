@@ -51,6 +51,7 @@ builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 builder.Services.AddScoped<IApplicationrepository, ApplicationRepository>();
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 
 //Service
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -60,6 +61,9 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IInternService, InternService>();
 builder.Services.AddScoped<IAssignmentService, AssignmentService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+builder.Services.AddScoped<ICampaignService, CampaignService>();
+
+builder.Services.AddHostedService<WorkerService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

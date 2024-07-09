@@ -22,6 +22,11 @@ namespace IMS.Models.Repositories
             return _dbContext.Interns.AsQueryable();
         }
 
+        public async Task<List<Intern>> GetRegisterCustomer()
+        {
+            return await _dbContext.Interns.Where(c => c.Status == 0).ToListAsync();
+        }
+
         //public async Task<List<InternGetModel>> GetAllTrainees(int pageSize, int pageNumber, string searchTerm)
         //{
         //    IQueryable<Intern> query = _dbContext.Interns.Include(a => a.Scores).Include(a => a.TrainingProgram);
