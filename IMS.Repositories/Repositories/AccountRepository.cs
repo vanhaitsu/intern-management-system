@@ -1,6 +1,7 @@
 ﻿using IMS.Models.Repositories;
 using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
+using IMS.Repositories.Enums;
 using IMS.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,5 +58,18 @@ namespace IMS.Repositories.Repositories
             return accountModels;
         }
 
+        public async Task<List<Account>> GetMentorAccount()
+        {
+            var Gasdasduid = Guid.Parse("8B239492-CD34-44F1-8C06-CB2CBEFF2508");
+
+            // Use mentorRoleId in your LINQ query
+            var mentorAccounts = await _dbContext.Accounts
+                .Where(a => a.RoleId == Gasdasduid)
+                .ToListAsync();
+            return mentorAccounts;
+
+
+
+        }
     }
 }

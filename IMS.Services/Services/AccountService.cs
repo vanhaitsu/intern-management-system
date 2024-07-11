@@ -196,5 +196,10 @@ namespace IMS.Services.Services
 
             return await query.CountAsync();
         }
+
+        public async Task<List<Account>> GetMentorAccount()
+        {
+            return await _unitOfWork.AccountRepository.GetMentorAccount();
+        }
     }
 }
