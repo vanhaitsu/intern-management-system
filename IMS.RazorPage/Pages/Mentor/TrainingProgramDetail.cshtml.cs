@@ -61,6 +61,12 @@ namespace IMS.RazorPage.Pages.Mentor
 
         public async Task<IActionResult> OnPostCreateAssignmentAsync()
         {
+            ModelState.Remove("Name");
+            ModelState.Remove("Style");
+            ModelState.Remove("Duration");
+            ModelState.Remove("StartDate");
+            ModelState.Remove("Description");
+            ModelState.Remove("Type");
             if (ModelState.IsValid)
             {
                 AssignmentCreateModel.CreatedBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);

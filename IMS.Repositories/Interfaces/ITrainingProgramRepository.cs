@@ -10,5 +10,6 @@ namespace IMS.Repositories.Interfaces
     public interface ITrainingProgramRepository : IGenericRepository<TrainingProgram>
     {
         Task<List<TrainingProgram>> GetByAccount(Guid accountId);
+        IQueryable<TrainingProgram> GetAll();
     }
 }

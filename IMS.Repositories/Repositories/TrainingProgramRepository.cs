@@ -19,5 +19,10 @@ namespace IMS.Repositories.Repositories
             return await _dbContext.TrainingPrograms.Where(tp => tp.CreatedBy == accountId &&
             tp.IsDeleted == false).ToListAsync();
         }
+
+        public IQueryable<TrainingProgram> GetAll()
+        {
+            return _dbContext.TrainingPrograms.Where(tp => tp.IsDeleted == false).AsQueryable();
+        }
     }
 }

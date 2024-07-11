@@ -11,5 +11,6 @@ namespace IMS.Models.Interfaces
         //Task<List<TraineeGetModel>> GetTraineesByMentor(int pageSize, int pageNumber, string searchTerm, Guid accountId);
         Task<Intern> GetInternByMail(string email);
         IQueryable<Intern> GetAll();
+        Task<List<Intern>> GetRegisterCustomer();
     }
 }

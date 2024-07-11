@@ -216,63 +216,63 @@
                                     <div class="modal-body">
                                         <form method="post">
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-@intern.Id" class="form-label" asp-for="@internUpdate.FullName">Full Name</label>
-                                                    <input type="text" value="@intern.FullName" class="form-control" id="basic-url-@intern.Id" aria-describedby="basic-addon3" asp-for="@internUpdate.FullName">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.FullName" class="form-control" id="floatingInput" aria-describedby="basic-addon3" asp-for="@internUpdate.FullName" placeholder="">
+                                                    <label for="floatingInput" class="form-label" asp-for="@internUpdate.FullName">Full Name</label>
                                                     <span asp-validation-for="@internUpdate.FullName" class="text-danger"></span>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.Email" class="form-control" id="basic-url-email-@intern.Id" asp-for="@internUpdate.Email" placeholder="">
                                                     <label for="basic-url-email-@intern.Id" class="form-label" asp-for="@internUpdate.Email">Email</label>
-                                                    <input type="text" value="@intern.Email" class="form-control" id="basic-url-email-@intern.Id" asp-for="@internUpdate.Email">
                                                     <span asp-validation-for="@internUpdate.Email" class="text-danger"></span>
                                                 </div>
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.PhoneNumber" class="form-control" id="basic-url-phone-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.PhoneNumber" placeholder="">
                                                     <label for="basic-url-phone-@intern.Id" class="form-label" asp-for="@internUpdate.PhoneNumber">Phone</label>
-                                                    <input type="text" value="@intern.PhoneNumber" class="form-control" id="basic-url-phone-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.PhoneNumber">
                                                     <span asp-validation-for="@internUpdate.PhoneNumber" class="text-danger"></span>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="date" value="@intern.DOB?.ToString("yyyy-MM-dd")" class="form-control" id="basic-url-dob-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.DOB" placeholder="">
                                                     <label for="basic-url-dob-@intern.Id" class="form-label" asp-for="@internUpdate.DOB">Birthday</label>
-                                                    <input type="date" value="@intern.DOB?.ToString("yyyy-MM-dd")" class="form-control" id="basic-url-dob-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.DOB">
                                                     <span asp-validation-for="@internUpdate.DOB" class="text-danger"></span>
                                                 </div>
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label class="form-label" asp-for="@internUpdate.Gender">Gender</label>
-                                                    <select class="form-select" aria-label="Default select example" asp-for="@internUpdate.Gender">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <select class="form-select" aria-label="Default select example" asp-for="@internUpdate.Gender" placeholder="">
                                                         <option value="Male" selected="@intern.Gender == " Male"">Male</option>
                                                         <option value="Female" selected="@intern.Gender == " Female"">Female</option>
                                                     </select>
+                                                    <label class="form-label" asp-for="@internUpdate.Gender">Gender</label>
                                                     <span asp-validation-for="@internUpdate.Gender" class="text-danger"></span>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.Address" class="form-control" id="basic-url-address-@intern.Id" asp-for="@internUpdate.Address" placeholder="">
                                                     <label for="basic-url-address-@intern.Id" class="form-label" asp-for="@internUpdate.Address">Address</label>
-                                                    <input type="text" value="@intern.Address" class="form-control" id="basic-url-address-@intern.Id" asp-for="@internUpdate.Address">
                                                     <span asp-validation-for="@internUpdate.Address" class="text-danger"></span>
                                                 </div>
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.Education" class="form-control" id="basic-url-university-@intern.Id" asp-for="@internUpdate.Education" placeholder="">
                                                     <label for="basic-url-university-@intern.Id" class="form-label" asp-for="@internUpdate.Education">University</label>
-                                                    <input type="text" value="@intern.Education" class="form-control" id="basic-url-university-@intern.Id" asp-for="@internUpdate.Education">
                                                     <span asp-validation-for="@internUpdate.Education" class="text-danger"></span>
                                                 </div>
-                                                <div class="col-md-6 mb-3">
+                                                <div class="form-floating col-md-6 mb-3">
+                                                    <input type="text" value="@intern.Skill" class="form-control" id="basic-url-skill-@intern.Id" asp-for="@internUpdate.Skill" placeholder="">
                                                     <label for="basic-url-skill-@intern.Id" class="form-label" asp-for="@internUpdate.Skill">Skill</label>
-                                                    <input type="text" value="@intern.Skill" class="form-control" id="basic-url-skill-@intern.Id" asp-for="@internUpdate.Skill">
                                                     <span asp-validation-for="@internUpdate.Skill" class="text-danger"></span>
                                                 </div>
                                             </div>
 
-                                            <div class="mb-3">
+                                            <div class="form-floating mb-3">
+                                                <input type="text" value="@intern.WorkHistory" class="form-control" id="basic-url-workhistory-@intern.Id" asp-for="@internUpdate.WorkHistory" placeholder="">
                                                 <label for="basic-url-workhistory-@intern.Id" class="form-label" asp-for="@internUpdate.WorkHistory">Work History</label>
-                                                <input type="text" value="@intern.WorkHistory" class="form-control" id="basic-url-workhistory-@intern.Id" asp-for="@internUpdate.WorkHistory">
                                                 <span asp-validation-for="@internUpdate.WorkHistory" class="text-danger"></span>
                                             </div>
 
