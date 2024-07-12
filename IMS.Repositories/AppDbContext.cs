@@ -20,6 +20,7 @@ namespace IMS.Repositories
         public DbSet<TrainingProgram> TrainingPrograms { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Interview> Interviews { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
