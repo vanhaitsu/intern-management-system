@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace IMS.Repositories.Interfaces
 {
-    public interface IAssignmentRepository : IGenericRepository<Assignment>
+    public interface IInterviewRepository : IGenericRepository<Interview>
     {
 
-        Task<List<Assignment>> GetAssignmentsByInternId(Guid internId);
+        Task<List<Interview>> GetInterviewsByInternId(Guid internId);
     }
 }

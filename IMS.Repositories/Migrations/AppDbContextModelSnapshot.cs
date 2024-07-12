@@ -300,7 +300,7 @@ namespace IMS.Repositories.Migrations
 
                     b.HasIndex("TrainingProgramId");
 
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("IMS.Repositories.Entities.Intern", b =>

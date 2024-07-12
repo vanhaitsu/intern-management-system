@@ -9,5 +9,7 @@ namespace IMS.Repositories.Interfaces
 {
     public interface IFeedbackRepository : IGenericRepository<Feedback>
     {
+
+       Task<List<Feedback>> GetFeedbacksByInternId(Guid internId);
     }
 }

@@ -11,5 +11,7 @@ namespace IMS.Repositories.Interfaces
     {
         Task<List<TrainingProgram>> GetByAccount(Guid accountId);
         IQueryable<TrainingProgram> GetAll();
+
+        Guid? GetCreateByGuid(Guid id);
     }
 }

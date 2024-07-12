@@ -97,5 +97,13 @@ namespace IMS.Services.Services
             _unitOfWork.AssignmentRepository.SoftDelete(assignment);
             return await _unitOfWork.SaveChangeAsync() > 0;
         }
+
+        public async Task<List<AssignmentViewModel>> GetAssignmentsByInternId(Guid internId)
+        {
+            var assignments = await _unitOfWork.AssignmentRepository.GetAssignmentsByInternId(internId);
+            var result = _mapper.Map<List<AssignmentViewModel>>(assignments);
+            if (result != null) return result;
+            return null;
+        }
     }
 }

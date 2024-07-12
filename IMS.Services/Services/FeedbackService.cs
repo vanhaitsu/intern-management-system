@@ -1,4 +1,5 @@
-﻿using IMS.Repositories.Entities;
+﻿using AutoMapper;
+using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
 using IMS.Repositories.Models.AssignmentModels;
 using IMS.Repositories.Models.FeedbackModel;
@@ -15,11 +16,15 @@ namespace IMS.Services.Services
     public class FeedbackService : IFeedbackService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public FeedbackService(IUnitOfWork unitOfWork)
+        public FeedbackService(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
+
+        
 
         public async Task<QueryResultModel<List<Feedback>>> GetFeedbacks(FeedbackFilterModel feedbackFilterModel)
         {
@@ -44,5 +49,33 @@ namespace IMS.Services.Services
                 );
             return feedbackList;
         }
+
+        public async Task<bool> Create(FeedbackCreateModel feedbackCreateModel)
+        {
+            var existedIntern = _unitOfWork.InternRepository.GetAsync(feedbackCreateModel.InternID);
+            var existedMentor = _unitOfWork.AccountRepository.GetAsync(feedbackCreateModel.MentorId);
+            var existedTrainingProgram = _unitOfWork.TrainingProgramRepository.GetAsync(feedbackCreateModel.TraningProgramId);
+            if(existedIntern != null && existedMentor != null)
+            {
+                var newFeedback = new Feedback()
+                {
+                    CreatedBy = feedbackCreateModel.CreatedBy,
+                    InternId = feedbackCreateModel.InternID,
+                    AccountId = feedbackCreateModel.MentorId,
+                    TrainingProgramId = feedbackCreateModel.TraningProgramId,
+                    CreationDate = DateTime.Now,
+                    Comment = feedbackCreateModel.commnent
+                    
+                };
+
+                   await _unitOfWork.FeedbackRepository.AddAsync(newFeedback);
+                   await _unitOfWork.SaveChangeAsync();
+                    return true;
+                
+            }
+            return false;
+        }
+
+      
     }
 }

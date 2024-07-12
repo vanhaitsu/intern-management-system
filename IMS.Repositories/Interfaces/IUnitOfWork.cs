@@ -15,6 +15,7 @@ namespace IMS.Repositories.Interfaces
         IFeedbackRepository FeedbackRepository { get; }
 
         IMentorshipRepository MentorshipRepository { get; }
+        IInterviewRepository InterviewRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

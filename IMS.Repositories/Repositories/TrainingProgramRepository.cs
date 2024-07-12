@@ -24,5 +24,15 @@ namespace IMS.Repositories.Repositories
         {
             return _dbContext.TrainingPrograms.Where(tp => tp.IsDeleted == false).AsQueryable();
         }
+
+        public  Guid? GetCreateByGuid(Guid id)
+        {
+            var tp = _dbContext.TrainingPrograms.Find(id);
+            if(tp != null)
+            {
+                return tp.CreatedBy;
+            }
+            return null;
+        }
     }
 }

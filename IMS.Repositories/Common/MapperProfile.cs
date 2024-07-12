@@ -7,6 +7,7 @@ using IMS.Repositories.Models.InternModel;
 using IMS.Repositories.Models.AssignmentModels;
 using IMS.Repositories.Models.ApplicationModel;
 using IMS.Repositories.Models.MentorshipModel;
+using IMS.Repositories.Models.FeedbackModel;
 
 namespace IMS.Repositories.Common
 {
@@ -26,6 +27,7 @@ namespace IMS.Repositories.Common
             CreateMap<CampaignAddModel,Campaign>().ReverseMap();
             CreateMap<Campaign, CampaignUpdateModel>().ReverseMap();
             //CreateMap<TrainingProgramCreateModel, TrainingProgram>();
+            CreateMap<AssignmentViewModel, Assignment>().ReverseMap();
             CreateMap<Mentorship, MentorshipCreateModel>().ReverseMap();
             CreateMap<AssignmentCreateModel, Assignment>();
             CreateMap<Application, ApplicationViewModel>()
@@ -35,6 +37,7 @@ namespace IMS.Repositories.Common
                 .ForMember(dest => dest.CampaignId, opt => opt.MapFrom(src => src.CampaignId))
                 .ForMember(dest => dest.Intern, opt => opt.MapFrom(src => src.Intern))
                 .ForMember(dest => dest.ApplyDate, opt => opt.MapFrom(src => src.AppliedDate)).ReverseMap(); ;
+            CreateMap<Feedback, FeedbackCreateModel>().ReverseMap();
         }
         private Guid? NormalizeProgramId(Guid? programId)
         {

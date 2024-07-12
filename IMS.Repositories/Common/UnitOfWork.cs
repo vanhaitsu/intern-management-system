@@ -18,13 +18,15 @@ public class UnitOfWork : IUnitOfWork
     private readonly IApplicationrepository _applicationRepository;
     private readonly IFeedbackRepository _feedbackRepository;
     private readonly IMentorshipRepository _mentorshipRepository;
+    private readonly IInterviewRepository _interviewRepository;
 
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository,
                         IRoleRepository roleRepository, IInternRepository internRepository,
                         ITrainingProgramRepository trainingProgramRepository,
                         ICampaignRepository campaignRepository,
                         IApplicationrepository applicationRepository, IAssignmentRepository assignmentRepository,
-                        IFeedbackRepository feedbackRepository, IMentorshipRepository mentorshipRepository)
+                        IFeedbackRepository feedbackRepository, IMentorshipRepository mentorshipRepository,
+                        IInterviewRepository interviewRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
@@ -36,6 +38,7 @@ public class UnitOfWork : IUnitOfWork
         _applicationRepository = applicationRepository;
         _feedbackRepository = feedbackRepository;
         _mentorshipRepository = mentorshipRepository;
+        _interviewRepository = interviewRepository;
     }
 
     public AppDbContext DbContext => _dbContext;
@@ -53,6 +56,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IMentorshipRepository MentorshipRepository => _mentorshipRepository;
 
+    public IInterviewRepository InterviewRepository => _interviewRepository;
 
     public async Task<int> SaveChangeAsync()
     {

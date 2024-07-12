@@ -15,5 +15,7 @@ namespace IMS.Services.Interfaces
         Task<bool> Update(AssignmentUpdateModel assignmentUpdateModel);
         Task<bool> Delete(Guid id);
         Task<QueryResultModel<List<Assignment>>> GetAssignments(AssignmentFilterModel assignmentFilterModel);
+
+        Task<List<AssignmentViewModel>> GetAssignmentsByInternId(Guid internId); 
     }
 }

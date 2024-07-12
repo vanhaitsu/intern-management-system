@@ -62,7 +62,7 @@ namespace IMS.Repositories.Repositories
         {
             var Gasdasduid = Guid.Parse("8B239492-CD34-44F1-8C06-CB2CBEFF2508");
 
-            // Use mentorRoleId in your LINQ query
+ 
             var mentorAccounts = await _dbContext.Accounts
                 .Where(a => a.RoleId == Gasdasduid)
                 .ToListAsync();
@@ -70,6 +70,13 @@ namespace IMS.Repositories.Repositories
 
 
 
+        }
+
+        public String getNamebyId(Guid? id)
+        {
+            var account =  _dbContext.Accounts.Find(id) ;
+            if(account != null) return account.FullName;
+            return null;
         }
     }
 }
