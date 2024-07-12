@@ -76,6 +76,16 @@ namespace IMS.Services.Services
             return false;
         }
 
-      
+        public async Task<bool> DeleteFeedback(Guid fbId)
+        {
+            var FeedbackToDelete = await _unitOfWork.FeedbackRepository.GetAsync(fbId);
+            if(FeedbackToDelete != null) {
+                _unitOfWork.FeedbackRepository.HardDelete(FeedbackToDelete);
+                _unitOfWork.SaveChangeAsync();
+                return true;
+
+            }
+            return false;
+        }
     }
 }

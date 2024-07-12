@@ -165,23 +165,31 @@
             </div>
         <div class="dashboard-section">
             <h2>Your Feedbacks</h2>
-            @if (Model.Interviews != null && Model.Interviews.Count > 0)
+            @if (Model.Feedbacks != null && Model.Feedbacks.Count > 0)
             {
                 <table class="table dashboard-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Date Time</th>
+                            <th>Training Program Name</th>
+                            <th>Comment</th>
+                            <th>Mentor Name</th>
+                            <th>Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var interview in Model.Interviews)
+                        @foreach (var fb in Model.Feedbacks)
                         {
                             <tr>
-                                <td>@interview.Name</td>
-                                <td>@interview.Location</td>
-                                <td>@interview.DateTime</td>
+                                <td>@fb.TrainingProgram.Name</td>
+                                <td>@fb.Comment</td>                           
+                                <td>@fb.Account.FullName</td>
+                                <td>
+                                    <form method="post" asp-page-handler="DeleteFeedback">
+                                        <input type="hidden" name="fbId" value="@fb.Id" />
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     </tbody>

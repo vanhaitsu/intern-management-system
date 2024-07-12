@@ -60,7 +60,7 @@ namespace IMS.Repositories.Repositories
 
         public async Task<List<Account>> GetMentorAccount()
         {
-            var Gasdasduid = Guid.Parse("8B239492-CD34-44F1-8C06-CB2CBEFF2508");
+            var Gasdasduid = Guid.Parse("9470D747-3A06-4939-9E58-A1166506FBB0");
 
  
             var mentorAccounts = await _dbContext.Accounts

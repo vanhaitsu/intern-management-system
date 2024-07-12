@@ -20,7 +20,7 @@ namespace IMS.RazorPage.Pages.Intern
         public Guid InternId { get; set; }
         public List<AssignmentViewModel> Assignments { get; set; }
         public List<TrainingProgram> TrainingPrograms { get; set; } = new List<TrainingProgram>();
-        public List<Interview> Interviews { get; set; } 
+        public List<Interview> Interviews { get; set; }
         public List<Feedback> Feedbacks { get; set; }
 
         public DashBoardModel(IAssignmentService assignmentService, IUnitOfWork unitOfWork, IFeedbackService feedbackService)
@@ -33,24 +33,24 @@ namespace IMS.RazorPage.Pages.Intern
         public async Task<IActionResult> OnGetAsync()
         {
             InternId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-          
+
 
             if (InternId == null)
             {
-                
+
                 TempData["ErrorMessage"] = "InternId not found in claims.";
                 return RedirectToPage("/Error");
             }
 
-            
+
 
             Interviews = await _unitOfWork.InterviewRepository.GetInterviewsByInternId(InternId);
             Assignments = await _assignmentService.GetAssignmentsByInternId(InternId);
             Feedbacks = await _unitOfWork.FeedbackRepository.GetFeedbacksByInternId(InternId);
             foreach (var assignment in Assignments)
             {
-                if(assignment.TrainingProgram != null)
-                TrainingPrograms.Add(assignment.TrainingProgram);
+                if (assignment.TrainingProgram != null)
+                    TrainingPrograms.Add(assignment.TrainingProgram);
             }
             return Page();
         }
@@ -79,6 +79,23 @@ namespace IMS.RazorPage.Pages.Intern
             }
 
             return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteFeedbackAsync(Guid fbId)
+        {
+             var result = await _feedbackService.DeleteFeedback(fbId);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Feedback deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete feedback.";
+            }
+            return RedirectToPage("/Intern/Dashboard");
+                
+        
+        
         }
 
         public string GetNameById(Guid? id)

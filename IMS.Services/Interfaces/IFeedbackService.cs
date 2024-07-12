@@ -14,7 +14,7 @@ namespace IMS.Services.Interfaces
     {
         Task<QueryResultModel<List<Feedback>>> GetFeedbacks(FeedbackFilterModel feedbackFilterModel);
         Task<bool> Create(FeedbackCreateModel feedbackCreateModel);
-       
+        Task<bool> DeleteFeedback(Guid fbId);
       
     }
 }

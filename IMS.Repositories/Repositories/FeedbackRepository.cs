@@ -20,10 +20,12 @@ namespace IMS.Repositories.Repositories
             _dbContext = dbContext;
         }
 
+       
+
         public async Task<List<Feedback>> GetFeedbacksByInternId(Guid internId)
         {
             var result = await _dbContext.Feedbacks.ToListAsync();
-            return await _dbContext.Feedbacks.Where(x => x.InternId == internId).ToListAsync();
+            return await _dbContext.Feedbacks.Where(x => x.InternId == internId).Include(fb=>fb.TrainingProgram).Include(fb=>fb.Intern).Include(fb=>fb.Account).ToListAsync();
         }
     }
 }
