@@ -19,6 +19,12 @@ namespace IMS.Repositories.Repositories
             return await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name.Equals(name));
         }
 
+        public async Task<List<Role>> GetMentorsRole()
+        {
+            return await _dbContext.Roles.Where(r=> r.Name == "Mentor")
+                                         .Include(r => r.Accounts).ToListAsync();
+        }
+
         public async Task<List<Role>> GetRoles()
         {
             return await _dbContext.Roles.ToListAsync();

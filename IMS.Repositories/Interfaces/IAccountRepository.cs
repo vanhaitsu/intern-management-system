@@ -8,5 +8,8 @@ namespace IMS.Repositories.Interfaces
         Task<Account> GetAccountByMail(string email);
         Task<List<AccountGetModel>> GetAllAccountsWithRole(int pageSize, int pageNumber, string searchTerm);
         IQueryable<Account> GetAll();
+        Task<List<Account>> GetMentorAccount();
+
+        String getNamebyId(Guid? id);
     }
 }

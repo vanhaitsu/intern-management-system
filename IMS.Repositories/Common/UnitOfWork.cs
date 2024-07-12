@@ -17,13 +17,16 @@ public class UnitOfWork : IUnitOfWork
     private readonly ICampaignRepository _campaignRepository;
     private readonly IApplicationrepository _applicationRepository;
     private readonly IFeedbackRepository _feedbackRepository;
+    private readonly IMentorshipRepository _mentorshipRepository;
+    private readonly IInterviewRepository _interviewRepository;
 
     public UnitOfWork(AppDbContext dbContext, IAccountRepository accountRepository,
                         IRoleRepository roleRepository, IInternRepository internRepository,
                         ITrainingProgramRepository trainingProgramRepository,
                         ICampaignRepository campaignRepository,
                         IApplicationrepository applicationRepository, IAssignmentRepository assignmentRepository,
-                        IFeedbackRepository feedbackRepository)
+                        IFeedbackRepository feedbackRepository, IMentorshipRepository mentorshipRepository,
+                        IInterviewRepository interviewRepository)
     {
         _dbContext = dbContext;
         _accountRepository = accountRepository;
@@ -34,6 +37,8 @@ public class UnitOfWork : IUnitOfWork
         _campaignRepository = campaignRepository;
         _applicationRepository = applicationRepository;
         _feedbackRepository = feedbackRepository;
+        _mentorshipRepository = mentorshipRepository;
+        _interviewRepository = interviewRepository;
     }
 
     public AppDbContext DbContext => _dbContext;
@@ -48,6 +53,10 @@ public class UnitOfWork : IUnitOfWork
     public ICampaignRepository CampaignRepository => _campaignRepository;
     public IApplicationrepository ApplicationRepository => _applicationRepository;
     public IFeedbackRepository FeedbackRepository => _feedbackRepository;
+
+    public IMentorshipRepository MentorshipRepository => _mentorshipRepository;
+
+    public IInterviewRepository InterviewRepository => _interviewRepository;
 
     public async Task<int> SaveChangeAsync()
     {

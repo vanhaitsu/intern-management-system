@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace IMS.Repositories.Interfaces
 {
-    public interface IFeedbackRepository : IGenericRepository<Feedback>
+    public interface IMentorshipRepository : IGenericRepository<Mentorship>
     {
-
-        Task<List<Feedback>> GetFeedbacksByInternId(Guid internId);
-        
+       
     }
 }

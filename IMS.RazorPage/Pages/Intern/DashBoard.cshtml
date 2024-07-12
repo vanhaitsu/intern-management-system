@@ -1,0 +1,240 @@
+﻿@page
+@model IMS.RazorPage.Pages.Intern.DashBoardModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Personal Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .dashboard-container {
+            margin-top: 50px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-section {
+            background-color: #ffffff;
+            border: 1px solid #e3e6f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+            .dashboard-section h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #4e73df;
+            }
+
+        .dashboard-table th, .dashboard-table td {
+            vertical-align: middle;
+        }
+
+        .dashboard-table th {
+            background-color: #f8f9fc;
+            color: #858796;
+        }
+
+        .dashboard-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-data {
+            color: #858796;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container dashboard-container">
+        <div class="dashboard-header">
+            <h1>Personal Dashboard</h1>
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Training Program</h2>
+            @if (Model.TrainingPrograms != null && Model.TrainingPrograms.Count > 0)
+            {
+                <table class="table dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Created By</th>
+                            <th>Feedback</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var tp in Model.TrainingPrograms)
+                        {
+                            <tr>
+                                <td>@tp.Name</td>
+                                <td>@tp.Description</td>
+                                <td>@tp.StartDate</td>
+                                <td>@tp.EndDate</td>
+                                <td>@Model.GetNameById(tp.CreatedBy)</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick="openFeedbackPopup('@tp.Id')">Add Feedback</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No Training Program found.</p>
+            }
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Assignments</h2>
+            @if (Model.Assignments != null && Model.Assignments.Count > 0)
+            {
+                <table class="table dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var assignment in Model.Assignments)
+                        {
+                            <tr>
+                                <td>@assignment.Name</td>
+                                <td>@assignment.Description</td>
+                                <td>@assignment.StartDate</td>
+                                <td>@assignment.EndDate</td>
+                               
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No assignments found.</p>
+            }
+        </div>
+
+        <div class="dashboard-section">
+            <h2>Interviews</h2>
+            @if (Model.Interviews != null && Model.Interviews.Count > 0)
+            {
+                <table class="table dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Date Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var interview in Model.Interviews)
+                        {
+                            <tr>
+                                <td>@interview.Name</td>
+                                <td>@interview.Location</td>
+                                <td>@interview.DateTime</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No interviews found.</p>
+            }
+            </div>
+        <div class="dashboard-section">
+            <h2>Your Feedbacks</h2>
+            @if (Model.Feedbacks != null && Model.Feedbacks.Count > 0)
+            {
+                <table class="table dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Training Program Name</th>
+                            <th>Comment</th>
+                            <th>Mentor Name</th>
+                            <th>Action</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var fb in Model.Feedbacks)
+                        {
+                            <tr>
+                                <td>@fb.TrainingProgram.Name</td>
+                                <td>@fb.Comment</td>                           
+                                <td>@fb.Account.FullName</td>
+                                <td>
+                                    <form method="post" asp-page-handler="DeleteFeedback">
+                                        <input type="hidden" name="fbId" value="@fb.Id" />
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="no-data">No interviews found.</p>
+            }
+        </div>
+
+            <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackModalLabel">Add Feedback</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="feedbackForm" method="post" asp-page-handler="AddFeedback">
+                                <input type="hidden" name="trainingProgramId" id="trainingProgramId" />
+                                <div class="mb-3">
+                                    <label for="feedback" class="form-label">Feedback</label>
+                                    <textarea class="form-control" id="feedback" name="feedback" rows="4"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="submitFeedbackForm()">Submit Feedback</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                function openFeedbackPopup(trainingProgramId) {
+                    $('#trainingProgramId').val(trainingProgramId);
+                    $('#feedbackModal').modal('show');
+                }
+
+                function submitFeedbackForm() {
+                    $('#feedbackForm').submit();
+                }
+            </script>
+</body>
+</html>

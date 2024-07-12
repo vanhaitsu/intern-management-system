@@ -17,5 +17,6 @@ namespace IMS.Services.Interfaces
         Task<bool> Create(AccountRegisterModel accountRegisterModel);
         Task<int> GetTotalAccountsCount(AccountFilterModel filterModel);
         Task<bool> Restore(Guid id);
+        Task<List<Account>> GetMentorAccount();
     }
 }

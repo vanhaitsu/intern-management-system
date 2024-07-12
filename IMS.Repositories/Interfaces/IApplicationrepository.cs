@@ -12,5 +12,6 @@ namespace IMS.Repositories.Interfaces
         IQueryable<Application> GetAll();
         public Task<Application> GetByInternIdAndCampaignId(Guid internId, Guid campaignId);
 
+        public Task<List<Application>> GetApplications(Guid campaignId);
     }
 }

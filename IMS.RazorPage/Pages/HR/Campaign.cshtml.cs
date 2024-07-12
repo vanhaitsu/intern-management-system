@@ -11,6 +11,7 @@ namespace IMS.RazorPage.Pages.HR
     public class CampaignModel : PageModel
     {
         private readonly ICampaignService _campaignService;
+        private readonly IApplicationService _applicationService;
 
         public string Message { set; get; }
 
@@ -37,9 +38,10 @@ namespace IMS.RazorPage.Pages.HR
         [BindProperty(SupportsGet = true)]
         public CampaignFilterModel filterModel { get; set; } = new CampaignFilterModel();
 
-        public CampaignModel(ICampaignService campaignService)
+        public CampaignModel(ICampaignService campaignService, IApplicationService applicationService)
         {
             _campaignService = campaignService;
+            _applicationService = applicationService;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -75,7 +77,7 @@ namespace IMS.RazorPage.Pages.HR
             {
                 Message = "Failed to update!";
                 TempData["ErrorMessage"] = Message;
-                return Page();
+                return Page(); 
             }
         }
         public async Task<IActionResult> OnPostAddAsync()
@@ -154,6 +156,15 @@ namespace IMS.RazorPage.Pages.HR
             }
             return RedirectToPage("/HR/Campaign");
         }
+        public IActionResult OnGetViewApplications(Guid campaignId)
+        {
+           
+
+            ViewData["Applications"] = _applicationService.GetApplicationsByCampaignID(campaignId);
+
+            return RedirectToPage("/HR/Application", new { campaignId });
+        }
+
 
     }
 }
