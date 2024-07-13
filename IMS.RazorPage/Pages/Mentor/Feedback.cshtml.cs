@@ -50,7 +50,7 @@ namespace IMS.RazorPage.Pages.Mentor
 
             Feedbacks = queryResult.Data;
             TotalFeedbacks = queryResult.TotalCount;
-
+            //fix
             return Page();
         }
     }
