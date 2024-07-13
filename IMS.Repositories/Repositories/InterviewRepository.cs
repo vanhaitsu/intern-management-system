@@ -23,5 +23,10 @@ namespace IMS.Repositories.Repositories
         {
             return await _dbContext.Interviews.Where(x => x.InternId == internId).ToListAsync();
         }
+
+        public IQueryable<Interview> GetAll()
+        {
+            return _dbContext.Interviews.Where(tp => tp.IsDeleted == false).AsQueryable();
+        }
     }
 }

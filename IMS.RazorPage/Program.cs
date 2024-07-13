@@ -65,7 +65,9 @@ builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IMentorshipService, MentorshipService>();
-//builder.Services.AddHostedService<WorkerService>();
+builder.Services.AddScoped<IInterviewService, InterviewService>();
+
+builder.Services.AddHostedService<WorkerService>();
 
 var app = builder.Build();
 await InitialSeeding.Initialize(app.Services);

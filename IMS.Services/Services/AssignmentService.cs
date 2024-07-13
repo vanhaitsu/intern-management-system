@@ -69,6 +69,7 @@ namespace IMS.Services.Services
             var assignmentList = await _unitOfWork.AssignmentRepository.GetAllAsync(
                 filter: x =>
                 x.IsDeleted == assignmentFilterModel.IsDeleted &&
+                x.TrainingProgramId == assignmentFilterModel.TrainingProgramId &&
                     (string.IsNullOrEmpty(assignmentFilterModel.Search)
                     || x.Name.ToLower().Contains(assignmentFilterModel.Search.ToLower())
                     || x.Material.ToLower().Contains(assignmentFilterModel.Search.ToLower())

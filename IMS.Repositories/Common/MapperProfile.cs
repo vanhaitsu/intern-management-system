@@ -8,6 +8,7 @@ using IMS.Repositories.Models.AssignmentModels;
 using IMS.Repositories.Models.ApplicationModel;
 using IMS.Repositories.Models.MentorshipModel;
 using IMS.Repositories.Models.FeedbackModel;
+using IMS.Repositories.Models.NewFolder;
 
 namespace IMS.Repositories.Common
 {
@@ -21,6 +22,7 @@ namespace IMS.Repositories.Common
 
             CreateMap<TrainingProgramCreateModel, TrainingProgram>();
             CreateMap<TrainingProgramUpdateModel, TrainingProgram>();
+            CreateMap<InterviewCreateModel, Interview>();
             CreateMap<Intern, InternUpdateModel>().ReverseMap();
             CreateMap<InternRegisterModel, Intern>().ReverseMap();
             CreateMap<InternGetModel, Intern>().ReverseMap();

@@ -1,4 +1,5 @@
 ﻿using IMS.Repositories.Entities;
+using IMS.Repositories.Models.InterviewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace IMS.Repositories.Interfaces
     {
 
         Task<List<Interview>> GetInterviewsByInternId(Guid internId);
+        IQueryable<Interview> GetAll();
     }
 }
