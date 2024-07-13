@@ -167,7 +167,7 @@
                                                                 </div>
                                                                 <form method="post" asp-page-handler="DeleteProgram" asp-route-id="@trainingProgram.Id" class="d-flex flex-column gap-4">
                                                                     <div class="modal-body">
-                                                                        <p>Are you sure you want to delete this training program?</p>
+                                                                        <p>Are you sure you want to delete training program: <strong>@trainingProgram.Name</strong>?</p>
                                                                         <input value="@trainingProgram.Id" type="hidden" name="id" />
                                                                     </div>
                                                                     <div class="modal-footer">

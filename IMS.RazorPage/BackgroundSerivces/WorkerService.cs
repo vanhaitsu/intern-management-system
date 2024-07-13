@@ -22,29 +22,28 @@ public class WorkerService : BackgroundService
     {
         _logger.LogInformation("ExecuteAsync started.");
 
-        string MailServer = _configuration["EmailSettings:MailServer"];
-        string FromEmail = _configuration["EmailSettings:FromEmail"];
-        string Password = _configuration["EmailSettings:Password"];
-        int Port = int.Parse(_configuration["EmailSettings:MailPort"]);
-        string Subject = "Verify mail";
+        string mailServer = _configuration["EmailSettings:MailServer"];
+        string fromEmail = _configuration["EmailSettings:FromEmail"];
+        string password = _configuration["EmailSettings:Password"];
+        int port = int.Parse(_configuration["EmailSettings:MailPort"]);
+        string subject = "Verify mail";
 
         _logger.LogInformation("Email configuration loaded. MailServer: {MailServer}, FromEmail: {FromEmail}, Port: {Port}",
-            MailServer, FromEmail, Port);
+            mailServer, fromEmail, port);
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            await Task.Delay(TimeSpan.FromMinutes(0.3), stoppingToken);  // Periodic delay
+
             using (var scope = _scopeFactory.CreateScope())
             {
                 var internService = scope.ServiceProvider.GetRequiredService<IInternService>();
                 var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
+                _logger.LogInformation("Checking for registered users and emails to send.");
+
                 try
                 {
-                    _logger.LogInformation("Checking for registered users and emails to send.");
-
-                    // Simulating a delay for the periodic task
-                    await Task.Delay(TimeSpan.FromMinutes(0.3), stoppingToken);
-
                     List<Intern> registerIntern = await internService.GetRegisterCustomer();
                     _logger.LogInformation("Retrieved {UserCount} registered users.", registerIntern.Count);
 
@@ -54,13 +53,13 @@ public class WorkerService : BackgroundService
                         {
                             try
                             {
-                                using var client = new SmtpClient(MailServer, Port)
+                                using var client = new SmtpClient(mailServer, port)
                                 {
-                                    Credentials = new NetworkCredential(FromEmail, Password),
+                                    Credentials = new NetworkCredential(fromEmail, password),
                                     EnableSsl = true,
                                 };
 
-                                var mailMessage = new MailMessage(FromEmail, intern.Email, Subject, intern.EmailVerifyCode.ToString())
+                                var mailMessage = new MailMessage(fromEmail, intern.Email, subject, intern.EmailVerifyCode.ToString())
                                 {
                                     IsBodyHtml = true
                                 };
@@ -75,6 +74,7 @@ public class WorkerService : BackgroundService
                             {
                                 _logger.LogError(ex, "General error occurred while sending email to: {Email}", intern.Email);
                             }
+
                             intern.ExpiredCode = DateTime.Now.AddMinutes(3);
                             InternUpdateModel internUpdateModel = mapper.Map<InternUpdateModel>(intern);
                             await internService.Update(intern.Id, internUpdateModel);
@@ -82,7 +82,7 @@ public class WorkerService : BackgroundService
 
                         if (intern.ExpiredCode < DateTime.Now)
                         {
-                            internService.Delete(intern.Id);
+                            await internService.HardDelete(intern.Id);
                             _logger.LogInformation("Deleted user: {Email}", intern.Email);
                         }
                     }
@@ -93,6 +93,7 @@ public class WorkerService : BackgroundService
                 }
             }
         }
+
         _logger.LogInformation("ExecuteAsync stopping.");
     }
 }

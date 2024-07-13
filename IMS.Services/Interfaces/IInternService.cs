@@ -1,11 +1,6 @@
 ﻿using IMS.Repositories.Entities;
 using IMS.Repositories.Models.CommonModel;
 using IMS.Repositories.Models.InternModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Services.Interfaces
 {
@@ -27,5 +22,6 @@ namespace IMS.Services.Interfaces
         Task<List<Intern>> GetRegisterCustomer();
         Task<bool> RegisterIntern(Intern intern);
         Task<bool> Edit(Intern intern);
+        Task<bool> HardDelete(Guid id);
     }
 }
