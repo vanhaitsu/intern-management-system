@@ -141,18 +141,22 @@
                 <table class="table dashboard-table">
                     <thead>
                         <tr>
+                            <th>Mail</th>
                             <th>Name</th>
                             <th>Location</th>
-                            <th>Date Time</th>
+                            <th>Date</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var interview in Model.Interviews)
                         {
                             <tr>
-                                <td>@interview.Name</td>
+                                <td>@interview.InternEmail</td>
+                                <td>@interview.InternName</td>
                                 <td>@interview.Location</td>
-                                <td>@interview.DateTime</td>
+                                <td>@interview.Date</td>
+                                <td>@interview.Time</td>
                             </tr>
                         }
                     </tbody>

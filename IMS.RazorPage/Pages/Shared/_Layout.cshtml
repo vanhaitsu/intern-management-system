@@ -37,11 +37,11 @@
                             }
                             @if (User.IsInRole("HR"))
                             {
-                                @* <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Application">Application</a>
-                                </li> *@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-page="/HR/Campaign">Campaign</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Interview">Interview</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>

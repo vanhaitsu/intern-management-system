@@ -251,7 +251,7 @@ namespace IMS_View.Services.Services
             return false;
         }
 
-            public async Task<bool> Edit(Intern intern)
+        public async Task<bool> Edit(Intern intern)
         {
             _unitOfWork.InternRepository.Update(intern);
             if (await _unitOfWork.SaveChangeAsync() > 0)
@@ -259,6 +259,20 @@ namespace IMS_View.Services.Services
                 return true;
             }
 
+            return false;
+        }
+
+        public async Task<bool> HardDelete(Guid id)
+        {
+            var existedIntern = await _unitOfWork.InternRepository.GetAsync(id);
+            if (existedIntern != null)
+            {
+                _unitOfWork.InternRepository.HardDelete(existedIntern);
+            }
+            if (await _unitOfWork.SaveChangeAsync() > 0)
+            {
+                return true;
+            }
             return false;
         }
     }

@@ -30,35 +30,35 @@
     </div>
 </div>
 
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-body p-4">
-                    <form method="post">
-                        <div class="text-center mb-4">
-                            <h2 class="fw-bold text-primary">Verify Email</h2>
-                            <p class="text-muted">A verification code has been sent to <strong>@email</strong>. Please check your mailbox.</p>
-                        </div>
-
-                        <input asp-for="Verify.Email" type="text" value="@email" hidden />
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Verify.VerifyCode" type="text" class="form-control" id="floatingVerifyCode" placeholder="Enter Verification Code" />
-                            <label for="floatingVerifyCode">Verification Code</label>
-                            <span asp-validation-for="Verify.VerifyCode" class="text-danger"></span>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 mb-2">Verify</button>
-                        <a href="/Index" class="btn btn-outline-primary w-100">Login</a>
-
-                        <div class="alert alert-danger mt-3" role="alert" asp-validation-summary="ModelOnly"></div>
-                    </form>
+<section class="vh-100 d-flex align-items-center">
+    <div class="container h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="text-center mb-4">
+                    <p class="fw-bold mt-2 mb-0" style="font-size: 1.5rem;">Verify Email</p>
+                    <p class="small fw-bold mt-2 mb-0">A verification code has been sent to <strong>@email</strong>. Please check your mailbox.</p>
                 </div>
+                <form method="post">
+                    <input asp-for="Verify.Email" type="text" value="@email" hidden />
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Verify.VerifyCode" type="text" class="form-control" id="floatingVerifyCode" placeholder="Enter Verification Code" />
+                        <label for="floatingVerifyCode">Verification Code</label>
+                        <span asp-validation-for="Verify.VerifyCode" class="text-danger"></span>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Verify</button>
+                        <a href="/Index" class="btn btn-outline-primary btn-lg w-100 mt-3">Login</a>
+                    </div>
+
+                    <div class="alert alert-danger mt-3" role="alert" asp-validation-summary="ModelOnly"></div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+</section>
+
 
 
 @section Scripts {
