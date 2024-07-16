@@ -24,7 +24,7 @@ namespace IMS.Repositories.Repositories
             return await _dbContext.Applications
                                    .Include(a => a.Intern)
                                    .Include(a => a.Campaign)
-                                   .Where(a => a.CampaignId == campaignId && a.Status == 0).ToListAsync(); ;
+                                   .Where(a => a.CampaignId == campaignId && a.Status == 0 && a.IsDeleted == false).ToListAsync(); ;
         }
 
         public async Task<Application> GetByInternIdAndCampaignId(Guid internId,Guid campaignId)

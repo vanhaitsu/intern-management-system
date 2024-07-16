@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-auto">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateProgram">
-                 Create new program
+                Create
             </button>
         </div>
     </div>
@@ -38,11 +38,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create new program</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" asp-page-handler="CreateProgram" class="d-flex flex-column gap-4">
+                <form method="post" id="submit" asp-page-handler="CreateProgram" class="d-flex flex-column gap-4">
                     <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
 
                     <div class="form-floating">
@@ -64,13 +64,13 @@
                     </div>
 
                     @* <button type="submit" class="btn btn-primary w-100">Create Customer</button> *@
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
+
                 </form>
             </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="submit" class="btn btn-primary">Save</button>
+            </div>
         </div>
     </div>
 </div>
@@ -94,7 +94,7 @@
                                     @foreach (var trainingProgram in Model.TrainingPrograms)
                                     {
                                         <div class="col-md-4 mb-4">
-                                            <div class="border rounded p-3">
+                                            <div class="border rounded p-3" role="button">
                                                 <div class="d-flex" onclick="redirectToProgramDetail('@trainingProgram.Id')">
                                                     <div>
                                                         <h6 class="mb-1"><strong>Name: </strong>@trainingProgram.Name</h6>
@@ -105,17 +105,15 @@
                                                         }
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-around align-items-center mt-2">
-                                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditProgram-@trainingProgram.Id">
+                                                <div class="d-flex justify-content-around align-items-center mt-4 gap-2">
+                                                    <button type="button" class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#modalEditProgram-@trainingProgram.Id">
                                                         Edit
                                                     </button>
-                                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
+                                                    <button type="button" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
                                                         Delete
                                                     </button>
-                                                    <a href="/Mentor/Feedback?name=@trainingProgram.Id">
-                                                        <button type="button" class="btn btn-outline-secondary">
-                                                            Feedback
-                                                        </button>
+                                                    <a role="button" href="/Mentor/Feedback?name=@trainingProgram.Id" class="btn btn-outline-secondary w-100">
+                                                        Feedback
                                                     </a>
 
                                                     <div class="modal fade" id="modalEditProgram-@trainingProgram.Id" tabindex="-1" aria-labelledby="editProgramLabel-@trainingProgram.Id" aria-hidden="true">
@@ -126,7 +124,7 @@
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <form method="post" asp-page-handler="EditProgram">
+                                                                    <form id="submit1" method="post" asp-page-handler="EditProgram">
                                                                         <input asp-for="TrainingProgramUpdateModel.Id" type="text" value="@trainingProgram.Id" type="hidden" />
                                                                         <div class="form-floating mb-3 d-flex">
                                                                             <input asp-for="TrainingProgramUpdateModel.Name" type="text" class="form-control" value="@trainingProgram.Name" id="floatingInput" placeholder="" required />
@@ -148,11 +146,12 @@
                                                                             <label asp-for="TrainingProgramUpdateModel.StartDate" for="floatingInput"></label>
                                                                             <span asp-validation-for="TrainingProgramUpdateModel.StartDate" class="text-danger"></span>
                                                                         </div>
-                                                                        <div class="modal-footer">
-                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                        </div>
+
                                                                     </form>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" form="submit1" class="btn btn-primary">Save</button>
                                                                 </div>
                                                             </div>
                                                         </div>

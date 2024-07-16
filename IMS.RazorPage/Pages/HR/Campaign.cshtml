@@ -75,7 +75,7 @@
 
     <div class="text-center mb-4">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddCampaign">
-            <i class="bi bi-plus-circle"></i> Add Campaign
+             Add
         </button>
     </div>
 
@@ -90,7 +90,7 @@
                         <th scope="col">Description</th>
                         <th scope="col">Status</th>
                         <th scope="col">Actions</th>
-                        <th></th>
+                        @* <th></th> *@
                     </tr>
                 </thead>
                 <tbody>
@@ -102,9 +102,9 @@
                             <td>@campaign.Name</td>
                             <td>@campaign.Description</td>
                             <td>@(campaign.IsDelete.HasValue ? (campaign.IsDelete.Value ? "Unavailable" : "Available") : "Unknown")</td>
-                            <td>
+                            <td class="d-flex gap-2">
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-@campaign.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-secondary" type="button" id="dropdownMenuButton-@campaign.Id" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@campaign.Id">
@@ -117,8 +117,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </td>
-                            <td>
+
                                 @if (campaign.IsDelete.HasValue)
                                 {
                                     if (campaign.IsDelete.Value)
@@ -135,6 +134,23 @@
                                     }
                                 }
                             </td>
+                            @* <td>
+                                @if (campaign.IsDelete.HasValue)
+                                {
+                                    if (campaign.IsDelete.Value)
+                                    {
+                                        <form method="post" asp-page-handler="Active" asp-route-id="@campaign.Id">
+                                            <button type="submit" class="btn btn-success">Active</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="Unactive" asp-route-id="@campaign.Id">
+                                            <button type="submit" class="btn btn-danger">Unactive</button>
+                                        </form>
+                                    }
+                                }
+                            </td> *@
                         </tr>
 
                         <!-- Modal Edit -->
@@ -146,7 +162,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form method="post" asp-page-handler="Update" asp-route-id="@campaign.Id">
+                                        <form id="submit1" method="post" asp-page-handler="Update" asp-route-id="@campaign.Id">
                                             <div class="mb-3">
                                                 <label for="name-@campaign.Id" class="form-label">Name of campaign</label>
                                                 <input type="text" class="form-control" id="name-@campaign.Id" asp-for="@Model.updateCampaign.Name" value="@campaign.Name">
@@ -157,11 +173,12 @@
                                                 <textarea class="form-control" id="description-@campaign.Id" name="@Html.NameFor(m => m.updateCampaign.Description)" rows="3">@campaign.Description</textarea>
                                                 <span asp-validation-for="@Model.updateCampaign.Description" class="text-danger"></span>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                            </div>
+                                            
                                         </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" form="submit1" class="btn btn-primary">Save changes</button>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +198,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" asp-page-handler="Add">
+                    <form id="submit" method="post" asp-page-handler="Add">
                         <div class="mb-3">
                             <label for="newCampaignName" class="form-label">Name of Campaign</label>
                             <input type="text" class="form-control" id="newCampaignName" asp-for="@newCampaign.Name">
@@ -192,11 +209,12 @@
                             <textarea class="form-control" id="newCampaignDescription" asp-for="@newCampaign.Description" rows="4"></textarea>
                             <span asp-validation-for="@newCampaign.Description" class="text-danger"></span>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Create Campaign</button>
-                        </div>
+                        
                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button form="submit" type="submit" class="btn btn-primary">Create</button>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
 
 <div class="d-flex justify-content-center mb-4">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateAssignment">
-        Create New Assignment
+        Create
     </button>
 </div>
 
@@ -62,7 +62,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" asp-page-handler="CreateAssignment" class="d-flex flex-column gap-3">
+                <form id="submit1" method="post" asp-page-handler="CreateAssignment" class="d-flex flex-column gap-3">
                     <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
                     <div class="form-floating">
                         <input asp-for="AssignmentCreateModel.Name" type="text" class="form-control" id="assignmentName" placeholder="Assignment Name" required />
@@ -114,11 +114,12 @@
                     {
                         <input type="hidden" asp-for="AssignmentCreateModel.TrainingProgramId" value="@Model.TrainingProgram.Id" />
                     }
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
+                    
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="submit1" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -190,7 +191,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="post" asp-page-handler="EditAssignment" class="d-flex flex-column gap-4">
+                                    <form id="submit" method="post" asp-page-handler="EditAssignment" class="d-flex flex-column gap-4">
                                         <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
 
                                         <!-- Include assignment ID for identification -->
@@ -269,11 +270,12 @@
                                             <span asp-validation-for="AssignmentUpdateModel.Comment" class="text-danger"></span>
                                         </div>
 
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
+                                        
                                     </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" form="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </div>
                         </div>
