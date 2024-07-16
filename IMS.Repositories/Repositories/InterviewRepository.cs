@@ -21,7 +21,7 @@ namespace IMS.Repositories.Repositories
 
         public async Task<List<Interview>> GetInterviewsByInternId(Guid internId)
         {
-            return await _dbContext.Interviews.Where(x => x.InternId == internId).ToListAsync();
+            return await _dbContext.Interviews.Where(x => x.InternId == internId && x.IsDeleted == false).ToListAsync();
         }
 
         public IQueryable<Interview> GetAll()

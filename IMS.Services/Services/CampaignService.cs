@@ -164,7 +164,7 @@ namespace IMS.Services.Services
         }
         public async Task<bool> ApplyCampaign(ApplicationAddModel addModel)
         {
-            var existedApplication = await _unitOfWork.ApplicationRepository.GetByInternIdAndCampaignId(addModel.InternId,addModel.CampaignId);
+            var existedApplication = await _unitOfWork.ApplicationRepository.GetByInternIdAndCampaignId(addModel.InternId, addModel.CampaignId);
             if (existedApplication == null)
             {
                 Application application = new Application
@@ -183,6 +183,6 @@ namespace IMS.Services.Services
             }
             return false;
         }
-       
+
     }
 }

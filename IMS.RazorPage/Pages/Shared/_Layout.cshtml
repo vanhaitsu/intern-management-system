@@ -12,9 +12,9 @@
     @if (User.Identity.IsAuthenticated)
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-page="#">IMS.RazorPage</a>
+                    <a class="navbar-brand" asp-area="" asp-page="#">Intern Management System</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -26,10 +26,10 @@
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Account">Account</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Admin/Account">Account</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Intern">Intern</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Admin/Intern">Intern</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
@@ -38,10 +38,10 @@
                             @if (User.IsInRole("HR"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Campaign">Campaign</a>
+                                    <a class="nav-link" asp-area="" asp-page="/HR/Campaign">Campaign</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Interview">Interview</a>
+                                    <a class="nav-link" asp-area="" asp-page="/HR/Interview">Interview</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
@@ -50,7 +50,7 @@
                             @if (User.IsInRole("Mentor"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgramList">Program</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Mentor/TrainingProgramList">Program</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
@@ -59,10 +59,10 @@
                             @if (User.IsInRole("Intern"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Intern/Campaign">Campaign</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Intern/Campaign">Campaign</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Intern/DashBoard">Dashboard</a>
+                                    <a class="nav-link" asp-area="" asp-page="/Intern/DashBoard">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
@@ -70,6 +70,68 @@
                             }
 
                         </ul>
+                    </div>
+                </div>
+            </nav> *@
+
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Fourth navbar example">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Intern Management System</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarsExample04">
+                        <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Admin/Account">Account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Admin/Intern">Intern</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/HR/Campaign">Campaign</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/HR/Interview">Interview</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Mentor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Mentor/TrainingProgramList">Program</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Intern"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Intern/Campaign">Campaign</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Intern/DashBoard">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+                                </li>
+                            }
+                        </ul>
+                        @* <form>
+                            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                        </form> *@
                     </div>
                 </div>
             </nav>
@@ -89,6 +151,17 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <style>
+        body {
+            padding-bottom: 20px;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+    </style>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
