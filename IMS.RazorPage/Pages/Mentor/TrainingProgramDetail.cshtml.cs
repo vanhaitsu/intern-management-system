@@ -1,7 +1,9 @@
 using IMS.Repositories.Entities;
 using IMS.Repositories.Models.AssignmentModels;
+using IMS.Repositories.Models.FeedbackModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Services.Interfaces;
+using IMS.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
@@ -13,6 +15,7 @@ namespace IMS.RazorPage.Pages.Mentor
         private readonly ITrainingProgramService _trainingProgramService;
         private readonly IAssignmentService _assignmentService;
         private readonly IInternService _internService;
+        private readonly IFeedbackService _feedbackService;
         //public string TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { set; get; }
         [BindProperty]
@@ -21,6 +24,7 @@ namespace IMS.RazorPage.Pages.Mentor
         public AssignmentUpdateModel? AssignmentUpdateModel { set; get; }
 
         // Pagination
+        public int TotalFeedbacks { get; set; }
         public int TotalAccounts { get; set; }
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 10;
@@ -30,13 +34,16 @@ namespace IMS.RazorPage.Pages.Mentor
         public int PageNumber { get; set; } = 1;
         public AssignmentFilterModel AssignmentFilterModel { get; set; }
         public List<Assignment> Assignments { get; set; }
+        public FeedbackFilterModel FeedbackFilterModel { get; set; }
+        public List<Feedback> Feedbacks { get; set; }
 
         public TrainingProgramDetailModel(ITrainingProgramService trainingProgramService, IAssignmentService assignmentService,
-            IInternService internService)
+            IInternService internService, IFeedbackService feedbackService)
         {
             _trainingProgramService = trainingProgramService;
             _assignmentService = assignmentService;
             _internService = internService;
+            _feedbackService = feedbackService;
         }
 
         public async Task<IActionResult> OnGet(string name)
@@ -57,6 +64,23 @@ namespace IMS.RazorPage.Pages.Mentor
             Assignments = queryResult.Data;
             TotalAccounts = queryResult.TotalCount;
 
+            if (name != null)
+            {
+                TrainingProgram = await _trainingProgramService.Get(Guid.Parse(name));
+            }
+
+            var feedBackQueryResult = await _feedbackService.GetFeedbacks(new FeedbackFilterModel()
+            {
+                Search = SearchTerm,
+                PageNumber = PageNumber,
+                PageSize = PageSize,
+                AccountId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
+                TrainingProgramId = Guid.Parse(name),
+            });
+
+            Feedbacks = feedBackQueryResult.Data;
+            TotalFeedbacks = feedBackQueryResult.TotalCount;
+            //fix
             return Page();
         }
 
