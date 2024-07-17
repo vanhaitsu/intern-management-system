@@ -9,5 +9,7 @@ namespace IMS.Repositories.Interfaces
 {
     public interface IAssignmentRepository : IGenericRepository<Assignment>
     {
+
+        Task<List<Assignment>> GetAssignmentsByInternId(Guid internId);
     }
 }

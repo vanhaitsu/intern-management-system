@@ -69,6 +69,7 @@ namespace IMS.Services.Services
             var assignmentList = await _unitOfWork.AssignmentRepository.GetAllAsync(
                 filter: x =>
                 x.IsDeleted == assignmentFilterModel.IsDeleted &&
+                x.TrainingProgramId == assignmentFilterModel.TrainingProgramId &&
                     (string.IsNullOrEmpty(assignmentFilterModel.Search)
                     || x.Name.ToLower().Contains(assignmentFilterModel.Search.ToLower())
                     || x.Material.ToLower().Contains(assignmentFilterModel.Search.ToLower())
@@ -96,6 +97,14 @@ namespace IMS.Services.Services
 
             _unitOfWork.AssignmentRepository.SoftDelete(assignment);
             return await _unitOfWork.SaveChangeAsync() > 0;
+        }
+
+        public async Task<List<AssignmentViewModel>> GetAssignmentsByInternId(Guid internId)
+        {
+            var assignments = await _unitOfWork.AssignmentRepository.GetAssignmentsByInternId(internId);
+            var result = _mapper.Map<List<AssignmentViewModel>>(assignments);
+            if (result != null) return result;
+            return null;
         }
     }
 }

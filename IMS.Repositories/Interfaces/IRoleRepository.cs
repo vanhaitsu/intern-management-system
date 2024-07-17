@@ -6,5 +6,7 @@ namespace IMS.Repositories.Interfaces
     {
         Task<Role> GetByName(string name);
         Task<List<Role>> GetRoles();
+
+        Task<List<Role>> GetMentorsRole();
     }
 }

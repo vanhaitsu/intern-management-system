@@ -5,6 +5,10 @@ using IMS.Repositories.Models.CampaignModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Repositories.Models.InternModel;
 using IMS.Repositories.Models.AssignmentModels;
+using IMS.Repositories.Models.ApplicationModel;
+using IMS.Repositories.Models.MentorshipModel;
+using IMS.Repositories.Models.FeedbackModel;
+using IMS.Repositories.Models.NewFolder;
 
 namespace IMS.Repositories.Common
 {
@@ -18,14 +22,24 @@ namespace IMS.Repositories.Common
 
             CreateMap<TrainingProgramCreateModel, TrainingProgram>();
             CreateMap<TrainingProgramUpdateModel, TrainingProgram>();
+            CreateMap<InterviewCreateModel, Interview>();
             CreateMap<Intern, InternUpdateModel>().ReverseMap();
             CreateMap<InternRegisterModel, Intern>().ReverseMap();
             CreateMap<InternGetModel, Intern>().ReverseMap();
             CreateMap<CampaignAddModel,Campaign>().ReverseMap();
             CreateMap<Campaign, CampaignUpdateModel>().ReverseMap();
             //CreateMap<TrainingProgramCreateModel, TrainingProgram>();
-
+            CreateMap<AssignmentViewModel, Assignment>().ReverseMap();
+            CreateMap<Mentorship, MentorshipCreateModel>().ReverseMap();
             CreateMap<AssignmentCreateModel, Assignment>();
+            CreateMap<Application, ApplicationViewModel>()
+                .ForMember(dest => dest.ApplicationId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ApplicationName, opt => opt.MapFrom(src => src.Campaign.Name))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.CampaignId, opt => opt.MapFrom(src => src.CampaignId))
+                .ForMember(dest => dest.Intern, opt => opt.MapFrom(src => src.Intern))
+                .ForMember(dest => dest.ApplyDate, opt => opt.MapFrom(src => src.AppliedDate)).ReverseMap(); ;
+            CreateMap<Feedback, FeedbackCreateModel>().ReverseMap();
         }
         private Guid? NormalizeProgramId(Guid? programId)
         {

@@ -55,357 +55,365 @@
         </div>
     </div>
 
-    <div class="container mt-3">
+    <div class="container-fluid h-auto">
         <div class="row justify-content-center">
-            <div class="col-6">
-                <form action="./Intern" method="get">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
-                               aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
-                            <i class="bi bi-search"></i>
-                        </button>
+            <div class="col-lg-10">
+                <div class="container mt-3">
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <form action="./Intern" method="get">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username"
+                                           aria-describedby="button-addon2" name="SearchTerm" asp-for="SearchTerm">
+                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
 
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddIntern">
-                    <i class="bi bi-plus-circle"></i> Add Intern
-                </button>
-                <form method="post" asp-page-handler="Upload" enctype="multipart/form-data" class="d-flex align-items-center" id="uploadForm">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                    <div class="input-group ms-3">
-                        <input type="file" name="file" class="form-control" accept=".xlsx" id="fileInput">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddIntern">
+                                Add
+                            </button>
+                            <form method="post" asp-page-handler="Upload" enctype="multipart/form-data" class="d-flex align-items-center" id="uploadForm">
+                                <button type="submit" class="btn btn-primary">Upload</button>
+                                <div class="input-group ms-3">
+                                    <input type="file" name="file" class="form-control" accept=".xlsx" id="fileInput">
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast for upload-->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    Please select a file before uploading.
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal upload file -->
-    <div class="modal fade" id="uploadedInternsModal" tabindex="-1" aria-labelledby="uploadedInternsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadedInternsModalLabel">Confirm Uploaded Interns</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- Toast for upload-->
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+                    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                Please select a file before uploading.
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                                <th>Education</th>
-                                <th>Phone Number</th>
-                                <th>DOB</th>
-                                <th>Gender</th>
-                                <th>Skill</th>
-                                <th>Work History</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.UploadedInterns != null)
-                            {
-                                @foreach (var intern in Model.UploadedInterns)
+
+                <!-- Modal upload file -->
+                <div class="modal fade" id="uploadedInternsModal" tabindex="-1" aria-labelledby="uploadedInternsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadedInternsModalLabel">Confirm Uploaded Interns</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Address</th>
+                                            <th>Education</th>
+                                            <th>Phone Number</th>
+                                            <th>DOB</th>
+                                            <th>Gender</th>
+                                            <th>Skill</th>
+                                            <th>Work History</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.UploadedInterns != null)
+                                        {
+                                            @foreach (var intern in Model.UploadedInterns)
+                                            {
+                                                <tr>
+                                                    <td>@intern.FullName</td>
+                                                    <td>@intern.Email</td>
+                                                    <td>@intern.Address</td>
+                                                    <td>@intern.Education</td>
+                                                    <td>@intern.PhoneNumber</td>
+                                                    <td>@intern.DOB</td>
+                                                    <td>@intern.Gender</td>
+                                                    <td>@intern.Skill</td>
+                                                    <td>@intern.WorkHistory</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="9">No interns uploaded.</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" asp-page-handler="Confirm">
+                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-4">
+                    @if (internList != null)
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Full name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var intern in internList)
                                 {
+                                    var modalId = $"modal-{intern.Id}";
                                     <tr>
+                                        <th scope="row">@(internList.IndexOf(intern) + 1)</th>
                                         <td>@intern.FullName</td>
                                         <td>@intern.Email</td>
-                                        <td>@intern.Address</td>
-                                        <td>@intern.Education</td>
-                                        <td>@intern.PhoneNumber</td>
-                                        <td>@intern.DOB</td>
-                                        <td>@intern.Gender</td>
-                                        <td>@intern.Skill</td>
-                                        <td>@intern.WorkHistory</td>
+                                        <td>@(intern.IsDelete.HasValue ? (intern.IsDelete.Value ? "Inactive" : "Active") : "Unknown")</td>
+                                        <td>
+                                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#@modalId">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            @if (intern.IsDelete.HasValue)
+                                            {
+                                                if (intern.IsDelete.Value)
+                                                {
+                                                    <form method="post" asp-page-handler="Restore" asp-route-id="@intern.Id">
+                                                        <button type="submit" class="btn btn-success">UnBlock</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form method="post" asp-page-handler="Block" asp-route-id="@intern.Id">
+                                                        <button type="submit" class="btn btn-danger">Block</button>
+                                                    </form>
+                                                }
+                                            }
+                                        </td>
                                     </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="9">No interns uploaded.</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <form method="post" asp-page-handler="Confirm">
-                        <button type="submit" class="btn btn-primary">Confirm</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                                    <!-- Modal Edit -->
+                                    <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="@modalId-Label">Edit Intern</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="submit1" method="post">
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-@intern.Id" class="form-label" asp-for="@internUpdate.FullName">Full Name</label>
+                                                                <input type="text" value="@intern.FullName" class="form-control" id="basic-url-@intern.Id" aria-describedby="basic-addon3" asp-for="@internUpdate.FullName">
+                                                                <span asp-validation-for="@internUpdate.FullName" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-email-@intern.Id" class="form-label" asp-for="@internUpdate.Email">Email</label>
+                                                                <input type="text" value="@intern.Email" class="form-control" id="basic-url-email-@intern.Id" asp-for="@internUpdate.Email">
+                                                                <span asp-validation-for="@internUpdate.Email" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
 
-    <div class="m-4">
-        @if (internList != null)
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Full name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var intern in internList)
-                    {
-                        var modalId = $"modal-{intern.Id}";
-                        <tr>
-                            <th scope="row">@(internList.IndexOf(intern) + 1)</th>
-                            <td>@intern.FullName</td>
-                            <td>@intern.Email</td>
-                            <td>@(intern.IsDelete.HasValue ? (intern.IsDelete.Value ? "Inactive" : "Active") : "Unknown")</td>
-                            <td>
-                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#@modalId">
-                                    <i class="bi bi-three-dots"></i>
-                                </button>
-                            </td>
-                            <td>
-                                @if (intern.IsDelete.HasValue)
-                                {
-                                    if (intern.IsDelete.Value)
-                                    {
-                                        <form method="post" asp-page-handler="Restore" asp-route-id="@intern.Id">
-                                            <button type="submit" class="btn btn-success">UnBlock</button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <form method="post" asp-page-handler="Block" asp-route-id="@intern.Id">
-                                            <button type="submit" class="btn btn-danger">Block</button>
-                                        </form>
-                                    }
-                                }
-                            </td>
-                        </tr>
-                        <!-- Modal Edit -->
-                        <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@modalId-Label" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="@modalId-Label">Edit Intern</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-phone-@intern.Id" class="form-label" asp-for="@internUpdate.PhoneNumber">Phone</label>
+                                                                <input type="text" value="@intern.PhoneNumber" class="form-control" id="basic-url-phone-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.PhoneNumber">
+                                                                <span asp-validation-for="@internUpdate.PhoneNumber" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-dob-@intern.Id" class="form-label" asp-for="@internUpdate.DOB">Birthday</label>
+                                                                <input type="date" value="@intern.DOB?.ToString("yyyy-MM-dd")" class="form-control" id="basic-url-dob-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.DOB">
+                                                                <span asp-validation-for="@internUpdate.DOB" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <label class="form-label" asp-for="@internUpdate.Gender">Gender</label>
+                                                                <select class="form-select" aria-label="Default select example" asp-for="@internUpdate.Gender">
+                                                                    <option value="Male" selected="@intern.Gender == " Male"">Male</option>
+                                                                    <option value="Female" selected="@intern.Gender == " Female"">Female</option>
+                                                                </select>
+                                                                <span asp-validation-for="@internUpdate.Gender" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-address-@intern.Id" class="form-label" asp-for="@internUpdate.Address">Address</label>
+                                                                <input type="text" value="@intern.Address" class="form-control" id="basic-url-address-@intern.Id" asp-for="@internUpdate.Address">
+                                                                <span asp-validation-for="@internUpdate.Address" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-university-@intern.Id" class="form-label" asp-for="@internUpdate.Education">University</label>
+                                                                <input type="text" value="@intern.Education" class="form-control" id="basic-url-university-@intern.Id" asp-for="@internUpdate.Education">
+                                                                <span asp-validation-for="@internUpdate.Education" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="basic-url-skill-@intern.Id" class="form-label" asp-for="@internUpdate.Skill">Skill</label>
+                                                                <input type="text" value="@intern.Skill" class="form-control" id="basic-url-skill-@intern.Id" asp-for="@internUpdate.Skill">
+                                                                <span asp-validation-for="@internUpdate.Skill" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="basic-url-workhistory-@intern.Id" class="form-label" asp-for="@internUpdate.WorkHistory">Work History</label>
+                                                            <input type="text" value="@intern.WorkHistory" class="form-control" id="basic-url-workhistory-@intern.Id" asp-for="@internUpdate.WorkHistory">
+                                                            <span asp-validation-for="@internUpdate.WorkHistory" class="text-danger"></span>
+                                                        </div>
+
+
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button form="submit1" type="submit" asp-route-id="@intern.Id" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        <form method="post">
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-@intern.Id" class="form-label" asp-for="@internUpdate.FullName">Full Name</label>
-                                                    <input type="text" value="@intern.FullName" class="form-control" id="basic-url-@intern.Id" aria-describedby="basic-addon3" asp-for="@internUpdate.FullName">
-                                                    <span asp-validation-for="@internUpdate.FullName" class="text-danger"></span>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-email-@intern.Id" class="form-label" asp-for="@internUpdate.Email">Email</label>
-                                                    <input type="text" value="@intern.Email" class="form-control" id="basic-url-email-@intern.Id" asp-for="@internUpdate.Email">
-                                                    <span asp-validation-for="@internUpdate.Email" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-phone-@intern.Id" class="form-label" asp-for="@internUpdate.PhoneNumber">Phone</label>
-                                                    <input type="text" value="@intern.PhoneNumber" class="form-control" id="basic-url-phone-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.PhoneNumber">
-                                                    <span asp-validation-for="@internUpdate.PhoneNumber" class="text-danger"></span>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-dob-@intern.Id" class="form-label" asp-for="@internUpdate.DOB">Birthday</label>
-                                                    <input type="date" value="@intern.DOB?.ToString("yyyy-MM-dd")" class="form-control" id="basic-url-dob-@intern.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@internUpdate.DOB">
-                                                    <span asp-validation-for="@internUpdate.DOB" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label class="form-label" asp-for="@internUpdate.Gender">Gender</label>
-                                                    <select class="form-select" aria-label="Default select example" asp-for="@internUpdate.Gender">
-                                                        <option value="Male" selected="@intern.Gender == " Male"">Male</option>
-                                                        <option value="Female" selected="@intern.Gender == " Female"">Female</option>
-                                                    </select>
-                                                    <span asp-validation-for="@internUpdate.Gender" class="text-danger"></span>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-address-@intern.Id" class="form-label" asp-for="@internUpdate.Address">Address</label>
-                                                    <input type="text" value="@intern.Address" class="form-control" id="basic-url-address-@intern.Id" asp-for="@internUpdate.Address">
-                                                    <span asp-validation-for="@internUpdate.Address" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-university-@intern.Id" class="form-label" asp-for="@internUpdate.Education">University</label>
-                                                    <input type="text" value="@intern.Education" class="form-control" id="basic-url-university-@intern.Id" asp-for="@internUpdate.Education">
-                                                    <span asp-validation-for="@internUpdate.Education" class="text-danger"></span>
-                                                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="basic-url-skill-@intern.Id" class="form-label" asp-for="@internUpdate.Skill">Skill</label>
-                                                    <input type="text" value="@intern.Skill" class="form-control" id="basic-url-skill-@intern.Id" asp-for="@internUpdate.Skill">
-                                                    <span asp-validation-for="@internUpdate.Skill" class="text-danger"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label for="basic-url-workhistory-@intern.Id" class="form-label" asp-for="@internUpdate.WorkHistory">Work History</label>
-                                                <input type="text" value="@intern.WorkHistory" class="form-control" id="basic-url-workhistory-@intern.Id" asp-for="@internUpdate.WorkHistory">
-                                                <span asp-validation-for="@internUpdate.WorkHistory" class="text-danger"></span>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" asp-route-id="@intern.Id" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                }
+                            </tbody>
+                        </table>
                     }
-                </tbody>
-            </table>
-        }
-    </div>
-
-    <!-- Modal Add -->
-    <div class="modal fade" id="modalAddIntern" tabindex="-1" aria-labelledby="modalAddInternLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAddInternLabel">Add Intern</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form method="post" asp-page-handler="Add">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.FullName">Full Name</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.FullName">
-                                <span asp-validation-for="@newIntern.FullName" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Email">Email</label>
-                                <input type="email" class="form-control" asp-for="@newIntern.Email">
-                                <span asp-validation-for="@newIntern.Email" class="text-danger"></span>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Password">Password</label>
-                                <input type="password" class="form-control" asp-for="@newIntern.Password">
-                                <span asp-validation-for="@newIntern.Password" class="text-danger"></span>
+                <!-- Modal Add -->
+                <div class="modal fade" id="modalAddIntern" tabindex="-1" aria-labelledby="modalAddInternLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalAddInternLabel">Add</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.ConfirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control" asp-for="@newIntern.ConfirmPassword">
-                                <span asp-validation-for="@newIntern.ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>
+                            <div class="modal-body">
+                                <form id="submit" method="post" asp-page-handler="Add">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.FullName">Full Name</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.FullName">
+                                            <span asp-validation-for="@newIntern.FullName" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Email">Email</label>
+                                            <input type="email" class="form-control" asp-for="@newIntern.Email">
+                                            <span asp-validation-for="@newIntern.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.PhoneNumber">Phone</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.PhoneNumber">
-                                <span asp-validation-for="@newIntern.PhoneNumber" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.DOB">Birthday</label>
-                                <input type="date" class="form-control" asp-for="@newIntern.DOB">
-                                <span asp-validation-for="@newIntern.DOB" class="text-danger"></span>
-                            </div>
-                        </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Password">Password</label>
+                                            <input type="password" class="form-control" asp-for="@newIntern.Password">
+                                            <span asp-validation-for="@newIntern.Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.ConfirmPassword">Confirm Password</label>
+                                            <input type="password" class="form-control" asp-for="@newIntern.ConfirmPassword">
+                                            <span asp-validation-for="@newIntern.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Gender">Gender</label>
-                                <select class="form-select" asp-for="@newIntern.Gender">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                                <span asp-validation-for="@newIntern.Gender" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Address">Address</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.Address">
-                                <span asp-validation-for="@newIntern.Address" class="text-danger"></span>
-                            </div>
-                        </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.PhoneNumber">Phone</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.PhoneNumber">
+                                            <span asp-validation-for="@newIntern.PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.DOB">Birthday</label>
+                                            <input type="date" class="form-control" asp-for="@newIntern.DOB">
+                                            <span asp-validation-for="@newIntern.DOB" class="text-danger"></span>
+                                        </div>
+                                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Education">Education</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.Education">
-                                <span asp-validation-for="@newIntern.Education" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" asp-for="@newIntern.WorkHistory">Work History</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.WorkHistory">
-                                <span asp-validation-for="@newIntern.WorkHistory" class="text-danger"></span>
-                            </div>
-                        </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Gender">Gender</label>
+                                            <select class="form-select" asp-for="@newIntern.Gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                            <span asp-validation-for="@newIntern.Gender" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Address">Address</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.Address">
+                                            <span asp-validation-for="@newIntern.Address" class="text-danger"></span>
+                                        </div>
+                                    </div>
 
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label" asp-for="@newIntern.Skill">Skill</label>
-                                <input type="text" class="form-control" asp-for="@newIntern.Skill">
-                                <span asp-validation-for="@newIntern.Skill" class="text-danger"></span>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Education">Education</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.Education">
+                                            <span asp-validation-for="@newIntern.Education" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.WorkHistory">Work History</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.WorkHistory">
+                                            <span asp-validation-for="@newIntern.WorkHistory" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label class="form-label" asp-for="@newIntern.Skill">Skill</label>
+                                            <input type="text" class="form-control" asp-for="@newIntern.Skill">
+                                            <span asp-validation-for="@newIntern.Skill" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
                             </div>
                         </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create Intern</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
-                        </li>
-                        @for (var i = 1; i <= totalPages; i++)
-                        {
-                            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
-                                <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = i, PageSize = Model.PageSize })">@i</a>
-                            </li>
-                        }
-                        <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-auto">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                                        <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber - 1, PageSize = Model.PageSize })">Previous</a>
+                                    </li>
+                                    @for (var i = 1; i <= totalPages; i++)
+                                    {
+                                        <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                                            <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = i, PageSize = Model.PageSize })">@i</a>
+                                        </li>
+                                    }
+                                    <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
+                                        <a class="page-link" href="@Url.Page("./Intern", new { SearchTerm = Model.filterModel.Search, PageNumber = Model.PageNumber + 1, PageSize = Model.PageSize })">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

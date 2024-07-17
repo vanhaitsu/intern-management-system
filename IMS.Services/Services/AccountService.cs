@@ -196,5 +196,20 @@ namespace IMS.Services.Services
 
             return await query.CountAsync();
         }
+
+        public async Task<List<Account>> GetMentorAccount()
+        {
+            var listRoleMentor = await _unitOfWork.RoleRepository.GetMentorsRole();
+            List<Account> accounts = new List<Account>();
+            foreach (var role in listRoleMentor)
+            {
+                if (role.Accounts != null)
+                {
+                    accounts.AddRange(role.Accounts);
+                }
+            }
+
+            return accounts;
+        }
     }
 }

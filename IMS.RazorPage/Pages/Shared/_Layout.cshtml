@@ -7,80 +7,106 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IMS.RazorPage.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            margin: 0;
+            background-color: #f8f9fa; /* Light background for the entire page */
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40; /* Dark background for the sidebar */
+            overflow-y: auto;
+            padding-top: 20px;
+            transition: width 0.3s ease; /* Smooth transition for sidebar width */
+            z-index: 1000; /* Ensure sidebar stays above content */
+        }
+
+            .sidebar a {
+                padding: 12px 15px;
+                text-decoration: none;
+                display: block;
+                color: #ffffff; /* White text */
+                transition: background-color 0.3s ease; /* Smooth transition for background color */
+            }
+
+                .sidebar a:hover {
+                    background-color: #495057; /* Darker background on hover */
+                }
+
+            .sidebar .navbar-brand {
+                font-weight: bold;
+                color: #ffffff;
+                padding: 20px 0;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #495057; /* Border under navbar brand */
+            }
+
+        .btn-primary {
+            background-color: blue !important; /* Override Bootstrap's default */
+            color: #ffffff !important; /* Ensure text is visible */
+        }
+
+        .content {
+            margin-left: 250px; /* Space for sidebar */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+            .content h1 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+    </style>
 </head>
 <body>
     @if (User.Identity.IsAuthenticated)
     {
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-page="#">IMS.RazorPage</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav flex-grow-1">
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Account">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Intern">Intern</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("HR"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Intern">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/HR/Campaign">Campaign</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Mentor"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/Intern">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Mentor/TrainingProgram">Program</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Common/Logout">Logout</a>
-                                </li>
-                            }
-
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
+        <div class="sidebar">
+            <a id="navbar-brand-link" class="navbar-brand" href="#">Intern Management System</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a class="" asp-area="" asp-page="/Admin/Account">Account</a>
+                <a class="" asp-area="" asp-page="/Admin/Intern">Intern</a>
+                <a class="text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+            }
+            @if (User.IsInRole("HR"))
+            {
+                <a class="" asp-area="" asp-page="/HR/Campaign">Campaign</a>
+                <a class="" asp-area="" asp-page="/HR/Interview">Interview</a>
+                <a class=" text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+            }
+            @if (User.IsInRole("Mentor"))
+            {
+                <a class="" asp-area="" asp-page="/Mentor/TrainingProgramList">Program</a>
+                <a class="text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+            }
+            @if (User.IsInRole("Intern"))
+            {
+                <a class="" asp-area="" asp-page="/Intern/Campaign">Campaign</a>
+                <a class="" asp-area="" asp-page="/Intern/DashBoard">Dashboard</a>
+                <a class="text-danger" asp-area="" asp-page="/Common/Logout">Logout</a>
+            }
+        </div>
     }
-    <div class="container">
+    <div class="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-   @*  <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - IMS.RazorPage - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -300,7 +300,7 @@ namespace IMS.Repositories.Migrations
 
                     b.HasIndex("TrainingProgramId");
 
-                    b.ToTable("Feedback");
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("IMS.Repositories.Entities.Intern", b =>
@@ -333,6 +333,12 @@ namespace IMS.Repositories.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EmailVerifyCode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpiredCode")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
@@ -360,6 +366,9 @@ namespace IMS.Repositories.Migrations
                     b.Property<string>("Skill")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte?>("Status")
+                        .HasColumnType("tinyint");
+
                     b.Property<string>("WorkHistory")
                         .HasColumnType("nvarchar(max)");
 
@@ -380,7 +389,7 @@ namespace IMS.Repositories.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateTime")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("DeletedBy")
@@ -389,8 +398,14 @@ namespace IMS.Repositories.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("InternEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("InternId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InternName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -404,11 +419,11 @@ namespace IMS.Repositories.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<TimeOnly?>("Time")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

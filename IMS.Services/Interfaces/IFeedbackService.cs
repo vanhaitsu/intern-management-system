@@ -13,5 +13,8 @@ namespace IMS.Services.Interfaces
     public interface IFeedbackService
     {
         Task<QueryResultModel<List<Feedback>>> GetFeedbacks(FeedbackFilterModel feedbackFilterModel);
+        Task<bool> Create(FeedbackCreateModel feedbackCreateModel);
+        Task<bool> DeleteFeedback(Guid fbId);
+      
     }
 }

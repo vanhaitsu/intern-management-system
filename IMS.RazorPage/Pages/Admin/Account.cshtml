@@ -93,7 +93,7 @@
 
                     <div class="text-center">
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#modalAddAccount">
-                            Add Account
+                            Add
                         </button>
                     </div>
 
@@ -153,7 +153,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form method="post">
+                                                        <form id="submit1" method="post">
                                                             <div class="form-floating mb-3">
 
                                                                 <input type="text" value="@account.FullName" class="form-control" id="basic-url-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.FullName" placeholder="">
@@ -223,13 +223,12 @@
                                                                     <span asp-validation-for="accountUpdate.RoleId" class="text-danger"></span>
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" asp-route-id="@account.Id" class="btn btn-primary">Save changes</button>
-                                                            </div>
                                                         </form>
                                                     </div>
-
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit1" form="sumbit" asp-route-id="@account.Id" class="btn btn-primary">Save</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +246,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="post" asp-page-handler="Create">
+                                    <form id="sumbit" method="post" asp-page-handler="Create">
                                         <div class="mb-3 d-flex flex-column flex-md-row">
                                             <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
                                                 
@@ -332,11 +331,12 @@
                                                 <span asp-validation-for="@newAccount.ConfirmPassword" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create Account</button>
-                                        </div>
+                                        
                                     </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" form="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
                                 </div>
                             </div>
                         </div>

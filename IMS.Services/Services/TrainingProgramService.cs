@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
-using IMS.Repositories.AccountModel;
 using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
 using IMS.Repositories.Models.AccountModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IMS.Services.Services
 {

@@ -2,6 +2,7 @@
 using IMS.Repositories.Entities;
 using IMS.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace IMS.Repositories.Repositories
 {
@@ -16,6 +17,14 @@ namespace IMS.Repositories.Repositories
         public IQueryable<Application> GetAll()
         {
             return _dbContext.Applications.AsQueryable();
+        }
+
+        public  async Task<List<Application>> GetApplications(Guid campaignId)
+        {
+            return await _dbContext.Applications
+                                   .Include(a => a.Intern)
+                                   .Include(a => a.Campaign)
+                                   .Where(a => a.CampaignId == campaignId && a.Status == 0 && a.IsDeleted == false).ToListAsync(); ;
         }
 
         public async Task<Application> GetByInternIdAndCampaignId(Guid internId,Guid campaignId)

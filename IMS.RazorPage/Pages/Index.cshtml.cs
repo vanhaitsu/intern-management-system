@@ -48,6 +48,10 @@ namespace IMS.RazorPage.Pages
             else
             {
                 loginResult = await _internService.CheckLogin(account.Email, account.Password);
+                if (loginResult.LoginModel != null)
+                {
+                    loginResult.LoginModel.Role = "Intern";
+                }
             }
 
             if (!string.IsNullOrEmpty(loginResult.ErrorMessage))
@@ -83,7 +87,7 @@ namespace IMS.RazorPage.Pages
             }
             else if (accountModel.Role == "HR")
             {
-                return RedirectToPage("/HR/Intern");
+                return RedirectToPage("/HR/Campaign");
             }
             else if (accountModel.Role == "Mentor")
             {

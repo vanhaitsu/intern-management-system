@@ -51,6 +51,7 @@ namespace IMS.RazorPage.Pages.Mentor
                 Search = SearchTerm,
                 PageNumber = PageNumber,
                 PageSize = PageSize,
+                TrainingProgramId = TrainingProgram.Id
             });
 
             Assignments = queryResult.Data;
