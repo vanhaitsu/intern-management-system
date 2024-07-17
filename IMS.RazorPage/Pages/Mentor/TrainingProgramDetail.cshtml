@@ -74,7 +74,7 @@
                         <label asp-for="AssignmentCreateModel.Description" for="assignmentDescription">Description</label>
                         <span asp-validation-for="AssignmentCreateModel.Description" class="text-danger"></span>
                     </div>
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between gap-3">
                         <div class="form-floating">
                             <input asp-for="AssignmentCreateModel.Type" type="text" class="form-control" id="assignmentType" placeholder="Assignment Type" required />
                             <label asp-for="AssignmentCreateModel.Type" for="assignmentType">Type</label>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between gap-3">
                         <div class="form-floating">
                             <input asp-for="AssignmentCreateModel.Duration" type="number" class="form-control" id="assignmentDuration" placeholder="Duration" required />
                             <label asp-for="AssignmentCreateModel.Duration" for="assignmentDuration">Duration (days)</label>
@@ -213,7 +213,7 @@
                                             <span asp-validation-for="AssignmentUpdateModel.Description" class="text-danger"></span>
                                         </div>
 
-                                        <div class="d-flex justify-content-between mb-3">
+                                        <div class="d-flex justify-content-between mb-3 gap-3">
                                             <div class="form-floating">
                                                 <input asp-for="AssignmentUpdateModel.Type" value="@assignment.Type" type="text" class="form-control" id="floatingInput" placeholder="" required />
                                                 <label asp-for="AssignmentUpdateModel.Type" for="floatingInput"></label>
@@ -227,7 +227,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between mb-3">
+                                        <div class="d-flex justify-content-between mb-3 gap-3">
                                             <div class="form-floating">
                                                 <input asp-for="AssignmentUpdateModel.Duration" value="@assignment.Duration" type="number" class="form-control" id="floatingInput" placeholder="" required />
                                                 <label asp-for="AssignmentUpdateModel.Duration" for="floatingInput"></label>
@@ -241,7 +241,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="d-flex justify-content-between mb-3">
+                                        <div class="d-flex justify-content-between mb-3 gap-3">
                                             <div class="form-floating">
                                                 <input asp-for="AssignmentUpdateModel.Material" value="@assignment.Material" type="text" class="form-control" id="floatingInput" placeholder="" />
                                                 <label asp-for="AssignmentUpdateModel.Material" for="floatingInput"></label>
