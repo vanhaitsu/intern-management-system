@@ -49,7 +49,7 @@ namespace IMS.RazorPage.Pages.Intern
             Feedbacks = await _unitOfWork.FeedbackRepository.GetFeedbacksByInternId(InternId);
             foreach (var assignment in Assignments)
             {
-                if (assignment.TrainingProgram != null)
+                if (assignment.TrainingProgram != null && !TrainingPrograms.Contains(assignment.TrainingProgram))
                     TrainingPrograms.Add(assignment.TrainingProgram);
             }
             return Page();
