@@ -113,7 +113,7 @@
                             <th>Description</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,11 +124,44 @@
                                 <td>@assignment.Description</td>
                                 <td>@assignment.StartDate.ToShortDateString()</td>
                                 <td>@assignment.EndDate.ToShortDateString()</td>
-                               
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#assignmentModal@assignment.Id">
+                                        ViewDetail
+                                    </button>
+                                </td> 
                             </tr>
                         }
                     </tbody>
                 </table>
+                @foreach (var assignment in Model.Assignments)
+                {
+                    <!-- Modal -->
+                    <div class="modal fade" id="assignmentModal@assignment.Id" tabindex="-1" aria-labelledby="assignmentModalLabel@assignment.Id" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="assignmentModalLabel@assignment.Id">@assignment.Name</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Description:</strong> @assignment.Description</p>
+                                    <p><strong>Start Date:</strong> @assignment.StartDate.ToShortDateString()</p>
+                                    <p><strong>End Date:</strong> @assignment.EndDate.ToShortDateString()</p>
+                                    <p><strong>Type:</strong> @assignment.Type</p>
+                                    <p><strong>KPI:</strong> @assignment.KPI</p>
+                                    <p><strong>Material:</strong> @assignment.Material</p>
+                                    <p><strong>Comment:</strong> @assignment.Comment</p>
+                                    <p><strong>PerformanceRating:</strong> @assignment.PerformanceRating</p>
+                                    <!-- Add more details as needed -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                }
             }
             else
             {
@@ -148,6 +181,7 @@
                             <th>Location</th>
                             <th>Date</th>
                             <th>Time</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,6 +193,7 @@
                                 <td>@interview.Location</td>
                                 <td>@interview.Date.Value.ToShortDateString()</td>
                                 <td>@interview.Time</td>
+                                <td>@interview.Status</td>
                             </tr>
                         }
                     </tbody>

@@ -14,6 +14,12 @@ namespace IMS.Repositories.Models.AssignmentModels
         public string? Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime AssignDate { get; set; }
+
+        public string? Type { get; set; }
+        public string? KPI { get; set; }
+        public string? Material { get; set; }
+        public string? Comment { get; set; }
+        public float? PerformanceRating { get; set; }
         public DateTime EndDate { get; set; }
         public Guid InternId { get; set; }
         public Guid TrainingProgramId { get; set; }
