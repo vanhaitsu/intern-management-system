@@ -67,6 +67,7 @@
             <div class="modal-body">
                 <form id="submit1" method="post" asp-page-handler="CreateAssignment" class="d-flex flex-column gap-3">
                     <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
+                    <input type="hidden" asp-for="TrainingProgramId" value="@Model.TrainingProgramId" />
                     <div class="form-floating">
                         <input asp-for="AssignmentCreateModel.Name" type="text" class="form-control" id="assignmentName" placeholder="Assignment Name" required />
                         <label asp-for="AssignmentCreateModel.Name" for="assignmentName">Name</label>
@@ -165,20 +166,7 @@
                                 Delete
                             </button>
                         </div>
-                        @if (Model.TotalAccounts > Model.PageSize)
-                        {
-                            <nav aria-label="Page navigation example" class="mt-3">
-                                <ul class="pagination justify-content-center">
-                                    @for (var i = 1; i <= Math.Ceiling((double)Model.TotalAccounts / Model.PageSize); i++)
-                                    {
-                                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
-                                            <a class="page-link" href="?PageNumber=@i&trainingProgramId=@Model.TrainingProgramId">@i</a>
-                                        </li>
-                                    }
-                                </ul>
-                            </nav>
-
-                        }
+                        
                     </div>
 
                     <div class="modal fade" id="@deleteModalId" tabindex="-1" aria-labelledby="@deleteModalId-Label" aria-hidden="true">
@@ -216,6 +204,7 @@
 
                                         <!-- Include assignment ID for identification -->
                                         <input type="hidden" asp-for="AssignmentUpdateModel.Id" value="@assignment.Id" />
+                                        <input type="hidden" asp-for="TrainingProgramId" value="@Model.TrainingProgramId" />
                                         @if (Model.TrainingProgram != null)
                                         {
                                             <input asp-for="AssignmentUpdateModel.TrainingProgramId" value=@Model.TrainingProgram.Id hidden />
@@ -295,6 +284,20 @@
                             </div>
                         </div>
                     </div>
+                }
+                @if (Model.TotalAccounts > Model.PageSize)
+                {
+                    <nav aria-label="Page navigation example" class="mt-3">
+                        <ul class="pagination justify-content-center">
+                            @for (var i = 1; i <= Math.Ceiling((double)Model.TotalAccounts / Model.PageSize); i++)
+                            {
+                                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                    <a class="page-link" href="?PageNumber=@i&trainingProgramId=@Model.TrainingProgramId">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+
                 }
             </div>
         }

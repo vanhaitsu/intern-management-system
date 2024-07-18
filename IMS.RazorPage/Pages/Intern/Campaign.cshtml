@@ -72,10 +72,16 @@
                         <td class="col-3">@campaign.Name</td>
                         <td class="col-5">@campaign.Description</td>
                         <td class="col-3">
-                            <form method="post" asp-page-handler="Apply" asp-route-id="@campaign.Id">
-                                <button type="submit" class="btn btn-success">Apply</button>
-                            </form>
-
+                            @if (!campaign.IsApplied.GetValueOrDefault())
+                            {
+                                <form method="post" asp-page-handler="Apply" asp-route-id="@campaign.Id">
+                                    <button type="submit" class="btn btn-success">Apply</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Already Applied</span>
+                            }
                         </td>
                     </tr>
                 }
