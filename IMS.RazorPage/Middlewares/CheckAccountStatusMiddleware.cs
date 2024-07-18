@@ -29,6 +29,7 @@ public class CheckAccountStatusMiddleware : IMiddleware
             if (account == null || account.IsDeleted)
             {
                 await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                context.Session.SetString("ErrorMessage", "Your account has been deleted. Please contact the administrator for more details.");
                 context.Response.Redirect("/Index");
                 return;
             }
