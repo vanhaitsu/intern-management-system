@@ -70,7 +70,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Description</th>
+                            @* <th>Description</th> *@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Created By</th>
@@ -82,9 +82,9 @@
                         {
                             <tr>
                                 <td>@tp.Name</td>
-                                <td>@tp.Description</td>
-                                <td>@tp.StartDate</td>
-                                <td>@tp.EndDate</td>
+                                @* <td>@tp.Description</td> *@
+                                <td>@tp.StartDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@tp.EndDate.Value.ToString("dd/MM/yyyy")</td>
                                 <td>@Model.GetNameById(tp.CreatedBy)</td>
                                 <td>
                                     <button type="button" class="btn btn-primary" onclick="openFeedbackPopup('@tp.Id')">Add Feedback</button>
@@ -120,8 +120,8 @@
                             <tr>
                                 <td>@assignment.Name</td>
                                 <td>@assignment.Description</td>
-                                <td>@assignment.StartDate</td>
-                                <td>@assignment.EndDate</td>
+                                <td>@assignment.StartDate.ToString("dd/MM/yyyy")</td>
+                                <td>@assignment.EndDate.ToString("dd/MM/yyyy")</td>
                                
                             </tr>
                         }
@@ -155,7 +155,7 @@
                                 <td>@interview.InternEmail</td>
                                 <td>@interview.InternName</td>
                                 <td>@interview.Location</td>
-                                <td>@interview.Date</td>
+                                <td>@interview.Date.Value.ToString("dd/MM/yyyy")</td>
                                 <td>@interview.Time</td>
                             </tr>
                         }

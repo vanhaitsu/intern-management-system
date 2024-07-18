@@ -52,10 +52,10 @@ namespace IMS.Services.Services
 
         public async Task<bool> Create(FeedbackCreateModel feedbackCreateModel)
         {
-            var existedIntern = _unitOfWork.InternRepository.GetAsync(feedbackCreateModel.InternID);
-            var existedMentor = _unitOfWork.AccountRepository.GetAsync(feedbackCreateModel.MentorId);
-            var existedTrainingProgram = _unitOfWork.TrainingProgramRepository.GetAsync(feedbackCreateModel.TraningProgramId);
-            if(existedIntern != null && existedMentor != null)
+            var existedIntern = await _unitOfWork.InternRepository.GetAsync(feedbackCreateModel.InternID);
+            var existedMentor = await _unitOfWork.AccountRepository.GetAsync(feedbackCreateModel.MentorId);
+            var existedTrainingProgram = await _unitOfWork.TrainingProgramRepository.GetAsync(feedbackCreateModel.TraningProgramId);
+            if(existedIntern != null && existedMentor != null && existedTrainingProgram != null)
             {
                 var newFeedback = new Feedback()
                 {
