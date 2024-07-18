@@ -16,7 +16,9 @@ namespace IMS.RazorPage.Pages.Mentor
         private readonly IAssignmentService _assignmentService;
         private readonly IInternService _internService;
         private readonly IFeedbackService _feedbackService;
-        //public string TrainingProgramId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string TrainingProgramId { get; set; }
         public TrainingProgram TrainingProgram { set; get; }
         [BindProperty]
         public AssignmentCreateModel? AssignmentCreateModel { set; get; }
@@ -27,7 +29,7 @@ namespace IMS.RazorPage.Pages.Mentor
         public int TotalFeedbacks { get; set; }
         public int TotalAccounts { get; set; }
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 5;
         [BindProperty(SupportsGet = true)]
         public string? SearchTerm { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -36,6 +38,8 @@ namespace IMS.RazorPage.Pages.Mentor
         public List<Assignment> Assignments { get; set; }
         public FeedbackFilterModel FeedbackFilterModel { get; set; }
         public List<Feedback> Feedbacks { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int FeedbackPageNumber { get; set; } = 1;
 
         public TrainingProgramDetailModel(ITrainingProgramService trainingProgramService, IAssignmentService assignmentService,
             IInternService internService, IFeedbackService feedbackService)
@@ -46,41 +50,36 @@ namespace IMS.RazorPage.Pages.Mentor
             _feedbackService = feedbackService;
         }
 
-        public async Task<IActionResult> OnGet(string name)
+        public async Task<IActionResult> OnGet()
         {
-            if (name != null)
+            if (!string.IsNullOrEmpty(TrainingProgramId))
             {
-                TrainingProgram = await _trainingProgramService.Get(Guid.Parse(name));
+                TrainingProgram = await _trainingProgramService.Get(Guid.Parse(TrainingProgramId));
+
+                var queryResult = await _assignmentService.GetAssignments(new AssignmentFilterModel()
+                {
+                    Search = SearchTerm,
+                    PageNumber = PageNumber,
+                    PageSize = PageSize,
+                    TrainingProgramId = TrainingProgram.Id
+                });
+
+                Assignments = queryResult.Data;
+                TotalAccounts = queryResult.TotalCount;
+
+                var feedBackQueryResult = await _feedbackService.GetFeedbacks(new FeedbackFilterModel()
+                {
+                    Search = SearchTerm,
+                    PageNumber = FeedbackPageNumber,
+                    PageSize = PageSize,
+                    AccountId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
+                    TrainingProgramId = TrainingProgram.Id,
+                });
+
+                Feedbacks = feedBackQueryResult.Data;
+                TotalFeedbacks = feedBackQueryResult.TotalCount;
             }
 
-            var queryResult = await _assignmentService.GetAssignments(new AssignmentFilterModel()
-            {
-                Search = SearchTerm,
-                PageNumber = PageNumber,
-                PageSize = PageSize,
-                TrainingProgramId = TrainingProgram.Id
-            });
-
-            Assignments = queryResult.Data;
-            TotalAccounts = queryResult.TotalCount;
-
-            if (name != null)
-            {
-                TrainingProgram = await _trainingProgramService.Get(Guid.Parse(name));
-            }
-
-            var feedBackQueryResult = await _feedbackService.GetFeedbacks(new FeedbackFilterModel()
-            {
-                Search = SearchTerm,
-                PageNumber = PageNumber,
-                PageSize = PageSize,
-                AccountId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value),
-                TrainingProgramId = Guid.Parse(name),
-            });
-
-            Feedbacks = feedBackQueryResult.Data;
-            TotalFeedbacks = feedBackQueryResult.TotalCount;
-            //fix
             return Page();
         }
 
@@ -102,7 +101,7 @@ namespace IMS.RazorPage.Pages.Mentor
                     if (intern == null)
                     {
                         TempData["ErrorMessage"] = "Intern does not exist!";
-                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
+                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
                     }
 
                     AssignmentCreateModel.InternId = intern.Id;
@@ -111,7 +110,7 @@ namespace IMS.RazorPage.Pages.Mentor
                 if (await _assignmentService.Create(AssignmentCreateModel))
                 {
                     TempData["SuccessMessage"] = "Add successfully!";
-                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
+                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
                 }
                 else
                 {
@@ -119,12 +118,11 @@ namespace IMS.RazorPage.Pages.Mentor
                 }
             }
             TempData["ErrorMessage"] = "Invalid input";
-            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentCreateModel.TrainingProgramId });
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
         }
 
         public async Task<IActionResult> OnPostEditAssignmentAsync()
         {
-            // Remove AssignmentCreateModel from ModelState
             ModelState.Remove("Name");
             ModelState.Remove("Type");
             ModelState.Remove("Duration");
@@ -133,14 +131,13 @@ namespace IMS.RazorPage.Pages.Mentor
             ModelState.Remove("Description");
             if (ModelState.IsValid)
             {
-                //AssignmentUpdateModel.CreatedBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 if (AssignmentUpdateModel.InternEmail != null)
                 {
                     var intern = await _internService.GetByEmail(AssignmentUpdateModel.InternEmail);
                     if (intern == null)
                     {
                         TempData["ErrorMessage"] = "Intern does not exist!";
-                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+                        return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
                     }
 
                     AssignmentUpdateModel.InternId = intern.Id;
@@ -149,7 +146,7 @@ namespace IMS.RazorPage.Pages.Mentor
                 if (await _assignmentService.Update(AssignmentUpdateModel))
                 {
                     TempData["SuccessMessage"] = "Edit successfully!";
-                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
                 }
                 else
                 {
@@ -157,25 +154,21 @@ namespace IMS.RazorPage.Pages.Mentor
                 }
             }
             TempData["ErrorMessage"] = "Invalid input";
-            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name = AssignmentUpdateModel.TrainingProgramId });
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
         }
 
-        public async Task<IActionResult> OnPostDeleteAssignmentAsync(Guid id, string name)
+        public async Task<IActionResult> OnPostDeleteAssignmentAsync(Guid id)
         {
-            //if (ModelState.IsValid)
-            //{
-                if (await _assignmentService.Delete(id))
-                {
-                    TempData["SuccessMessage"] = "Delete successfully!";
-                    return RedirectToPage("/Mentor/TrainingProgramDetail", new { name });
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Something went wrong!";
-                }
-            //}
-            //TempData["ErrorMessage"] = "Invalid input";
-            return RedirectToPage("/Mentor/TrainingProgramDetail", new { name });
+            if (await _assignmentService.Delete(id))
+            {
+                TempData["SuccessMessage"] = "Delete successfully!";
+                return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Something went wrong!";
+            }
+            return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
         }
     }
 }

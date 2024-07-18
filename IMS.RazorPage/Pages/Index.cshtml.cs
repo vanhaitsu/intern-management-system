@@ -27,9 +27,28 @@ namespace IMS.RazorPage.Pages
             _internService = internService;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
-
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToPage("/Admin/Account");
+                }
+                else if (User.IsInRole("HR"))
+                {
+                    return RedirectToPage("/HR/Campaign");
+                }
+                else if (User.IsInRole("Mentor"))
+                {
+                    return RedirectToPage("/Mentor/TrainingProgramList");
+                }
+                else
+                {
+                    return RedirectToPage("/Intern/Campaign");
+                }
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
