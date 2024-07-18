@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IMS.RazorPage.Pages.HR
 {
+
     public class CampaignModel : PageModel
     {
         private readonly ICampaignService _campaignService;
@@ -80,6 +81,7 @@ namespace IMS.RazorPage.Pages.HR
                 return Page(); 
             }
         }
+
         public async Task<IActionResult> OnPostAddAsync()
         {
             if (newCampaign.Name == null || newCampaign.Description == null)
@@ -133,6 +135,7 @@ namespace IMS.RazorPage.Pages.HR
             }
             return RedirectToPage("/HR/Campaign");
         }
+
         public async Task<IActionResult> OnPostActiveAsync(Guid id)
         {
             var campaignToActive = await _campaignService.GetCampaignAsync(id);
