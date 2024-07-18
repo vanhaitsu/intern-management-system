@@ -51,6 +51,7 @@ namespace IMS.Services.Services
         {
             var campaignList = await _unitOfWork.CampaignRepository.GetAllAsync(
                  filter: x =>
+                    x.IsDeleted == false &&
                      (string.IsNullOrEmpty(filterModel.Search) || x.Name.ToLower().Contains(filterModel.Search.ToLower()) ||
                       x.Description.ToLower().Contains(filterModel.Search.ToLower())),
                  orderBy: x => filterModel.OrderByDescending

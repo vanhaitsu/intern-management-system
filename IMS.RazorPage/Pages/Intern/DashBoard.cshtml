@@ -72,7 +72,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Description</th>
+                            @* <th>Description</th> *@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Created By</th>
@@ -84,7 +84,7 @@
                         {
                             <tr>
                                 <td>@tp.Name</td>
-                                <td>@tp.Description</td>
+                                @* <td>@tp.Description</td> *@
                                 <td>@tp.StartDate.Value.ToShortDateString()</td>
                                 <td>@tp.EndDate.Value.ToShortDateString()</td>
                                 <td>@Model.GetNameById(tp.CreatedBy)</td>
