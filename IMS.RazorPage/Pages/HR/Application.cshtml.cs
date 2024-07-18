@@ -14,6 +14,7 @@ using System.Security.Claims;
 
 namespace IMS.RazorPage.Pages.HR
 {
+   
     public class ApplicationModel : PageModel
     {
         private readonly IApplicationService _applicationService;
@@ -60,6 +61,7 @@ namespace IMS.RazorPage.Pages.HR
             Applications = _mapper.Map<List<ApplicationViewModel>>(appList);
             return Page();
         }
+
         public async Task<IActionResult> OnPostUpdateStatusAsync()
         {
             modifiedBy = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
