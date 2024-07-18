@@ -151,7 +151,7 @@
                                                     <div class="modal-header">
                                                         <h1 class="modal-title fs-5" id="@modalId-Label">Edit Account</h1>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
+                                                        </div>
                                                     <div class="modal-body">
                                                         <form id="submit1" method="post">
                                                             <div class="form-floating mb-3">
@@ -302,7 +302,7 @@
                                                 <span asp-validation-for="@newAccount.RoleId" class="text-danger"></span>
                                             </div>
                                             <div class="form-floating flex-fill">
-                                                
+
                                                 <select class="form-select" id="newAccount.Gender" asp-for="@newAccount.Gender" placeholder="">
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
@@ -312,10 +312,11 @@
                                             </div>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            
+
                                             <input type="text" class="form-control" id="newAccount.Address" asp-for="@newAccount.Address" placeholder="">
                                             <label class="form-label" asp-for="@newAccount.Address">Address</label>
                                             <span asp-validation-for="@newAccount.Address" class="text-danger"></span>
+
                                         </div>
                                         <div class="form-floating mb-3 d-flex flex-column flex-md-row">
                                             <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
@@ -400,5 +401,5 @@
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
 
-    </body>
+</body>
 </html>
