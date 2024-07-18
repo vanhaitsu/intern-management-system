@@ -12,6 +12,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<style>
+    body {
+        background-color: ghostwhite;
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row justify-content-center mb-3">
         <div class="col-md-5">
@@ -94,7 +100,7 @@
                                     @foreach (var trainingProgram in Model.TrainingPrograms)
                                     {
                                         <div class="col-md-4 mb-4">
-                                            <div class="border rounded p-3" role="button">
+                                            <div class="border rounded p-3 bg-white" role="button">
                                                 <div class="d-flex" onclick="redirectToProgramDetail('@trainingProgram.Id')">
                                                     <div>
                                                         <h6 class="mb-1"><strong>Name: </strong>@trainingProgram.Name</h6>
