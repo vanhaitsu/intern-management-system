@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
+using RazorPage.Hubs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ namespace IMS.RazorPage.Pages.Admin
     {
         private readonly IAccountService _accountService;
         private readonly IRoleService _roleService;
+        private readonly IHubContext<SignalRServer> _signalRHub;
 
         public string Message { set; get; }
         [BindProperty]
@@ -41,10 +44,11 @@ namespace IMS.RazorPage.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
-        public AccountManagementModel(IAccountService accountService, IRoleService roleService)
+        public AccountManagementModel(IAccountService accountService, IRoleService roleService, IHubContext<SignalRServer> signalRHub)
         {
             _accountService = accountService;
             _roleService = roleService;
+            _signalRHub = signalRHub;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -107,7 +111,7 @@ namespace IMS.RazorPage.Pages.Admin
                 return NotFoundRedirect("Account is not found!");
 
             var deleteResult = await _accountService.Delete(id);
-            return deleteResult ? SuccessRedirect("Account block successfully.") : ErrorRedirect("Failed to block account. Please try again.");
+            return deleteResult ? await SuccessRedirectAsync("Account block successfully.") : ErrorRedirect("Failed to block account. Please try again.");
         }
 
         public async Task<IActionResult> OnPostRestoreAsync(Guid id)
@@ -121,7 +125,7 @@ namespace IMS.RazorPage.Pages.Admin
                 return NotFoundRedirect("Account is not found!");
 
             var restoreResult = await _accountService.Restore(id);
-            return restoreResult ? SuccessRedirect("Account restore successfully.") : ErrorRedirect("Failed to restore account. Please try again.");
+            return restoreResult ? await SuccessRedirectAsync("Account restore successfully.") : ErrorRedirect("Failed to restore account. Please try again.");
         }
 
         private void RemoveModelStateErrors()
@@ -170,9 +174,11 @@ namespace IMS.RazorPage.Pages.Admin
         {
             if (await _accountService.Update(id, updateModel))
             {
+                
                 TempData["Message"] = "Update successfully!";
                 TempData["ToastMessage"] = "Update successfully!";
                 TempData["ToastType"] = "success";
+                await _signalRHub.Clients.All.SendAsync("LoadAccount");
                 return RedirectToPage("./Account");
             }
             else
@@ -191,6 +197,7 @@ namespace IMS.RazorPage.Pages.Admin
                 TempData["Message"] = "Add successfully!";
                 TempData["ToastMessage"] = "Add successfully!";
                 TempData["ToastType"] = "success";
+                await _signalRHub.Clients.All.SendAsync("LoadAccount");
                 return RedirectToPage("./Account");
             }
             else
@@ -202,11 +209,12 @@ namespace IMS.RazorPage.Pages.Admin
             }
         }
 
-        private IActionResult SuccessRedirect(string successMessage)
+        private async Task<IActionResult> SuccessRedirectAsync(string successMessage)
         {
             TempData["Message"] = successMessage;
             TempData["ToastMessage"] = successMessage;
             TempData["ToastType"] = "success";
+            await _signalRHub.Clients.All.SendAsync("LoadAccount");
             return RedirectToPage("./Account");
         }
 
