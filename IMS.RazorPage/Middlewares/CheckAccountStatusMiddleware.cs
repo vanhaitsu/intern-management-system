@@ -19,9 +19,8 @@ public class CheckAccountStatusMiddleware : IMiddleware
 
             if (account == null || account.IsDeleted)
             {
-                context.Response.ContentType = "text/html";
-                await context.Response.WriteAsync("<script>window.location.href = '/Index';</script>");
-                return;
+                context.Response.Redirect("/RedirectPage");
+               
             }
         }
         await next(context);

@@ -90,9 +90,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
-//app.UseMiddleware<CheckAccountStatusMiddleware>();
 
 app.MapHub<SignalRServer>("/signalRServer");
 app.MapRazorPages();
+//app.UseMiddleware<CheckAccountStatusMiddleware>();
 
 app.Run();
