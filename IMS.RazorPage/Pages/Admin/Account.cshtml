@@ -153,7 +153,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                     <div class="modal-body">
-                                                        <form id="submit1" method="post">
+                                                        <form method="post" asp-route-id="@account.Id">
                                                             <div class="form-floating mb-3">
 
                                                                 <input type="text" value="@account.FullName" class="form-control" id="basic-url-@account.Id" aria-describedby="basic-addon3 basic-addon4" asp-for="@accountUpdate.FullName" placeholder="">
@@ -162,14 +162,14 @@
                                                             </div>
 
                                                             <div class="form-floating mb-3">
-                                                                
+
                                                                 <input type="text" value="@account.Email" class="form-control" id="basic-url-email-@account.Id" asp-for="@accountUpdate.Email" placeholder="">
                                                                 <label for="basic-url-email-@account.Id" class="form-label" asp-for="@accountUpdate.Email">Email</label>
                                                                 <span asp-validation-for="@accountUpdate.Email" class="text-danger"></span>
                                                             </div>
 
                                                             <div class="form-floating mb-3">
-                                                                
+
                                                                 <input type="text" value="@account.Address" class="form-control" id="basic-url-address-@account.Id" asp-for="@accountUpdate.Address" placeholder="">
                                                                 <label class="form-label" asp-for="@accountUpdate.Address">Address</label>
                                                                 <span asp-validation-for="@accountUpdate.Address" class="text-danger"></span>
@@ -223,11 +223,11 @@
                                                                     <span asp-validation-for="accountUpdate.RoleId" class="text-danger"></span>
                                                                 </div>
                                                             </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                            </div>
                                                         </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button form="submit1" type="submit" asp-route-id="@account.Id" class="btn btn-primary">Save</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -246,16 +246,16 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="submit" method="post" asp-page-handler="Add">
+                                    <form method="post" asp-page-handler="Add">
                                         <div class="mb-3 d-flex flex-column flex-md-row">
                                             <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
-                                                
+
                                                 <input type="text" class="form-control" id="newAccount.FullName" asp-for="@newAccount.FullName" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.FullName">Full Name</label>
                                                 <span asp-validation-for="@newAccount.FullName" class="text-danger"></span>
                                             </div>
                                             <div class="form-floating flex-fill">
-                                                
+
                                                 <input type="email" class="form-control" id="newAccount.Email" asp-for="@newAccount.Email" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.Email">Email</label>
                                                 <span asp-validation-for="@newAccount.Email" class="text-danger"></span>
@@ -275,9 +275,9 @@
                                         </div>
 
                                         <div class="mb-3 d-flex flex-column flex-md-row">
-                                            
+
                                             <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0 ">
-                                                
+
                                                 <select class="form-select" asp-for="@newAccount.RoleId" placeholder="">
                                                     @if (ViewData["Roles"] != null)
                                                     {
@@ -320,24 +320,24 @@
                                         </div>
                                         <div class="form-floating mb-3 d-flex flex-column flex-md-row">
                                             <div class="form-floating flex-fill me-md-3 mb-3 mb-md-0">
-                                                
+
                                                 <input type="password" class="form-control" id="newAccount.Password" asp-for="@newAccount.Password" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.Password">Password</label>
                                                 <span asp-validation-for="@newAccount.Password" class="text-danger"></span>
                                             </div>
                                             <div class="form-floating flex-fill">
-                                                
+
                                                 <input type="password" class="form-control" id="newAccount.ConfirmPassword" asp-for="@newAccount.ConfirmPassword" placeholder="">
                                                 <label class="form-label" asp-for="@newAccount.ConfirmPassword">Confirm Password</label>
                                                 <span asp-validation-for="@newAccount.ConfirmPassword" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        
-                                    </form>
-                                </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button form="submit" type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
+                                    <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
+                                </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
