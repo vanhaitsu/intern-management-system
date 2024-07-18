@@ -91,6 +91,7 @@ namespace IMS.RazorPage.Pages.Mentor
             ModelState.Remove("StartDate");
             ModelState.Remove("Description");
             ModelState.Remove("Type");
+            ModelState.Remove("TrainingProgramId");
             if (ModelState.IsValid)
             {
                 AssignmentCreateModel.CreatedBy = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -129,6 +130,7 @@ namespace IMS.RazorPage.Pages.Mentor
             ModelState.Remove("StartDate");
             ModelState.Remove("EndDate");
             ModelState.Remove("Description");
+            ModelState.Remove("TrainingProgramId");
             if (ModelState.IsValid)
             {
                 if (AssignmentUpdateModel.InternEmail != null)
