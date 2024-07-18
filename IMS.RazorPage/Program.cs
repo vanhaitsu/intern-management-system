@@ -43,6 +43,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+
 //Repository
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -68,6 +69,7 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IMentorshipService, MentorshipService>();
 builder.Services.AddScoped<IInterviewService, InterviewService>();
 
+builder.Services.AddTransient<CheckAccountStatusMiddleware>();
 builder.Services.AddSignalR();
 builder.Services.AddHostedService<WorkerService>();
 
@@ -88,6 +90,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
+//app.UseMiddleware<CheckAccountStatusMiddleware>();
 
 app.MapHub<SignalRServer>("/signalRServer");
 app.MapRazorPages();

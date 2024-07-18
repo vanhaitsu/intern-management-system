@@ -11,6 +11,7 @@ using System.Security.Claims;
 
 namespace IMS.RazorPage.Pages.HR
 {
+
     public class InterviewModel : PageModel
     {
         private readonly IInterviewService _interviewService;
