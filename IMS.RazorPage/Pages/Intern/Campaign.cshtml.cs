@@ -42,7 +42,8 @@ namespace IMS.RazorPage.Pages.Intern
             filterModel.PageSize = PageSize;
             filterModel.PageNumber = PageNumber;
             filterModel.Search = SearchTerm;
-            campaigns = await _campaignService.GetAllAvailableCampaigns(filterModel);
+            var intern = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            campaigns = await _campaignService.GetAllAvailableCampaigns(filterModel,intern);
             TotalCampaigns = await _campaignService.GetTotalCampaignsCount(filterModel);
             ViewData["Campaigns"] = campaigns;
             ViewData["TotalCampaignsCount"] = TotalCampaigns;
