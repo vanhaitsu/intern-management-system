@@ -79,8 +79,8 @@ namespace IMS.RazorPage.Pages.Admin
 
             if (updateModel.Email != existedAccount.Email)
             {
-                var emailExists = await _accountService.CheckExistedAccount(updateModel.Email);
-                if (emailExists)
+                var checkEmail = await _accountService.CheckExistedAccount(updateModel.Email);
+                if (checkEmail)
                     return EmailExistsRedirect("Email is already existed!");
             }
 
