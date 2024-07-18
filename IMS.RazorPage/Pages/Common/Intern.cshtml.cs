@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using RazorPage.Hubs;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
@@ -20,6 +22,7 @@ namespace IMS.RazorPage.Pages.Common
     public class InternManagementModel : PageModel
     {
         private readonly IInternService _internService;
+        private readonly IHubContext<SignalRServer> _signalRHub;
 
         public string Message { get; set; }
         [BindProperty]
@@ -45,9 +48,10 @@ namespace IMS.RazorPage.Pages.Common
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
-        public InternManagementModel(IInternService internService)
+        public InternManagementModel(IInternService internService, IHubContext<SignalRServer> signalRHub)
         {
             _internService = internService;
+            _signalRHub = signalRHub;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -108,7 +112,7 @@ namespace IMS.RazorPage.Pages.Common
                 return NotFoundRedirect("Intern not found.");
 
             var deleteResult = await _internService.Delete(id);
-            return deleteResult ? SuccessRedirect("Intern block successfully.") : ErrorRedirect("Failed to block intern. Please try again.");
+            return deleteResult ? await SuccessRedirectAsync("Intern block successfully.") : ErrorRedirect("Failed to block intern. Please try again.");
         }
 
         public async Task<IActionResult> OnPostRestoreAsync(Guid id)
@@ -122,7 +126,7 @@ namespace IMS.RazorPage.Pages.Common
                 return NotFoundRedirect("Intern not found.");
 
             var restoreResult = await _internService.Restore(id);
-            return restoreResult ? SuccessRedirect("Intern restore successfully.") : ErrorRedirect("Failed to restore intern. Please try again.");
+            return restoreResult ? await SuccessRedirectAsync("Intern restore successfully.") : ErrorRedirect("Failed to restore intern. Please try again.");
         }
 
         public async Task<IActionResult> OnPostUploadAsync(IFormFile file)
@@ -190,7 +194,7 @@ namespace IMS.RazorPage.Pages.Common
                 }
                 if (await _internService.CreateRange(UploadedInterns))
                 {
-                   return SuccessRedirect("Add successfully!");
+                   return await SuccessRedirectAsync("Add successfully!");
                 }
                 else
                 {
@@ -256,6 +260,7 @@ namespace IMS.RazorPage.Pages.Common
                 TempData["Message"] = "Update successfully!";
                 TempData["ToastMessage"] = "Update successfully!";
                 TempData["ToastType"] = "success";
+                await _signalRHub.Clients.All.SendAsync("LoadIntern");
                 return RedirectToPage("./Intern");
             }
             else
@@ -274,6 +279,7 @@ namespace IMS.RazorPage.Pages.Common
                 TempData["Message"] = "Add successfully!";
                 TempData["ToastMessage"] = "Add successfully!";
                 TempData["ToastType"] = "success";
+                await _signalRHub.Clients.All.SendAsync("LoadIntern");
                 return RedirectToPage("./Intern");
             }
             else
@@ -285,11 +291,12 @@ namespace IMS.RazorPage.Pages.Common
             }
         }
 
-        private IActionResult SuccessRedirect(string successMessage)
+        private async Task<IActionResult> SuccessRedirectAsync(string successMessage)
         {
             TempData["Message"] = successMessage;
             TempData["ToastMessage"] = successMessage;
             TempData["ToastType"] = "success";
+            await _signalRHub.Clients.All.SendAsync("LoadIntern");
             return RedirectToPage("./Intern");
         }
 

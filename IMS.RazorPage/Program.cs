@@ -10,6 +10,7 @@ using IMS.Models.Common;
 using IMS_View.Services.Services;
 using IMS.Models.Interfaces;
 using IMS.Models.Repositories;
+using RazorPage.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,7 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IMentorshipService, MentorshipService>();
 builder.Services.AddScoped<IInterviewService, InterviewService>();
 
+builder.Services.AddSignalR();
 builder.Services.AddHostedService<WorkerService>();
 
 var app = builder.Build();
@@ -87,6 +89,7 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 
+app.MapHub<SignalRServer>("/signalRServer");
 app.MapRazorPages();
 
 app.Run();

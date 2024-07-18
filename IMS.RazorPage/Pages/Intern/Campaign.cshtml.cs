@@ -3,6 +3,8 @@ using IMS.Repositories.Models.CampaignModel;
 using IMS.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
+using RazorPage.Hubs;
 using System.Security.Claims;
 
 namespace IMS.RazorPage.Pages.Intern
@@ -10,6 +12,7 @@ namespace IMS.RazorPage.Pages.Intern
     public class CampaignModel : PageModel
     {
         private readonly ICampaignService _campaignService;
+        private readonly IHubContext<SignalRServer> _signalRHub;
 
         [TempData]
         public string Message { set; get; }
@@ -31,9 +34,10 @@ namespace IMS.RazorPage.Pages.Intern
         [BindProperty(SupportsGet = true)]
         public CampaignFilterModel filterModel { get; set; } = new CampaignFilterModel();
 
-        public CampaignModel(ICampaignService campaignService)
+        public CampaignModel(ICampaignService campaignService, IHubContext<SignalRServer> signalRHub)
         {
             _campaignService = campaignService;
+            _signalRHub = signalRHub;
         }
 
 
@@ -80,6 +84,7 @@ namespace IMS.RazorPage.Pages.Intern
                     Message = "Something went wrong!";
                     TempData["ErrorMessage"] = Message;
                 }
+                await _signalRHub.Clients.All.SendAsync("LoadApplication");
                 return RedirectToPage("/Intern/Campaign");
 
             }
