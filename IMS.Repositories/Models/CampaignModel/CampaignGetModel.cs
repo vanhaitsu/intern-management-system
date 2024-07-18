@@ -12,5 +12,8 @@ namespace IMS.Repositories.Models.CampaignModel
         public string Name { get; set; }
         public string Description { get; set; }
         public bool? IsDelete { get; set; }
+        public bool? IsApplied { get; set; }
+
+
     }
 }

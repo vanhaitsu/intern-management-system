@@ -133,19 +133,20 @@ namespace IMS.Services.Services
             return false;
         }
 
-        public async Task<List<CampaignGetModel>> GetAllAvailableCampaigns(CampaignFilterModel filterModel)
+        public async Task<List<CampaignGetModel>> GetAllAvailableCampaigns(CampaignFilterModel filterModel, Guid internId)
         {
             var campaignList = await _unitOfWork.CampaignRepository.GetAllAsync(
-                filter: x =>
-                    (x.IsDeleted == false) &&
-                    (string.IsNullOrEmpty(filterModel.Search) || x.Name.ToLower().Contains(filterModel.Search.ToLower()) ||
-                        x.Description.ToLower().Contains(filterModel.Search.ToLower())),
+            filter: x =>
+                (x.IsDeleted == false) &&
+                (string.IsNullOrEmpty(filterModel.Search) || x.Name.ToLower().Contains(filterModel.Search.ToLower()) ||
+                x.Description.ToLower().Contains(filterModel.Search.ToLower())),
             orderBy: x => filterModel.OrderByDescending
-                    ? x.OrderByDescending(x => x.CreationDate)
-                    : x.OrderBy(x => x.CreationDate),
+                ? x.OrderByDescending(x => x.CreationDate)
+                : x.OrderBy(x => x.CreationDate),
+            includeProperties: "Applications", 
             pageIndex: filterModel.PageNumber,
             pageSize: filterModel.PageSize
-            );
+    );
 
 
             List<CampaignGetModel> campaignDetailList = null;
@@ -157,7 +158,8 @@ namespace IMS.Services.Services
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    IsDelete = x.IsDeleted
+                    IsDelete = x.IsDeleted,
+                    IsApplied = x.Applications.Any(a => a.InternId == internId)
                 }).ToList();
             }
 
