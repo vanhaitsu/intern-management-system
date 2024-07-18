@@ -90,7 +90,7 @@
                         <th scope="col">Description</th>
                         <th scope="col">Status</th>
                         <th scope="col">Actions</th>
-                        @* <th></th> *@
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +102,7 @@
                             <td>@campaign.Name</td>
                             <td>@campaign.Description</td>
                             <td>@(campaign.IsDelete.HasValue ? (campaign.IsDelete.Value ? "Unavailable" : "Available") : "Unknown")</td>
-                            <td class="d-flex gap-2">
+                            <td class="d-flex">
                                 <div class="dropdown">
                                     <button class="btn btn-secondary" type="button" id="dropdownMenuButton-@campaign.Id" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots"></i>
@@ -117,7 +117,8 @@
                                         </li>
                                     </ul>
                                 </div>
-
+                            </td>
+                            <td>
                                 @if (campaign.IsDelete.HasValue)
                                 {
                                     if (campaign.IsDelete.Value)
@@ -134,23 +135,6 @@
                                     }
                                 }
                             </td>
-                            @* <td>
-                                @if (campaign.IsDelete.HasValue)
-                                {
-                                    if (campaign.IsDelete.Value)
-                                    {
-                                        <form method="post" asp-page-handler="Active" asp-route-id="@campaign.Id">
-                                            <button type="submit" class="btn btn-success">Active</button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <form method="post" asp-page-handler="Unactive" asp-route-id="@campaign.Id">
-                                            <button type="submit" class="btn btn-danger">Unactive</button>
-                                        </form>
-                                    }
-                                }
-                            </td> *@
                         </tr>
 
                         <!-- Modal Edit -->

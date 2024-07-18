@@ -331,13 +331,13 @@
                                                 <span asp-validation-for="@newAccount.ConfirmPassword" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
+                                        </div>
                                     </form>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
