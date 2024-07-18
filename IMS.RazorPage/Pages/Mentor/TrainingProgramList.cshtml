@@ -112,9 +112,9 @@
                                                     <button type="button" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#modalDeleteProgram-@trainingProgram.Id">
                                                         Delete
                                                     </button>
-                                                    <a role="button" href="/Mentor/Feedback?name=@trainingProgram.Id" class="btn btn-outline-secondary w-100">
+                                                    @* <a role="button" href="/Mentor/Feedback?name=@trainingProgram.Id" class="btn btn-outline-secondary w-100">
                                                         Feedback
-                                                    </a>
+                                            </a> *@
 
                                                     <div class="modal fade" id="modalEditProgram-@trainingProgram.Id" tabindex="-1" aria-labelledby="editProgramLabel-@trainingProgram.Id" aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -223,8 +223,7 @@ else
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         function redirectToProgramDetail(trainingProgramId) {
-            window.location.href = `/Mentor/TrainingProgramDetail?name=${encodeURIComponent(trainingProgramId)}`;
-            // window.location.href = "/Mentor/TrainingProgramDetail";
+            window.location.href = `/Mentor/TrainingProgramDetail?trainingProgramId=${encodeURIComponent(trainingProgramId)}`;
         }
     </script>
 }
