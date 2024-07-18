@@ -1,13 +1,22 @@
 ﻿using IMS.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 public class CheckAccountStatusMiddleware : IMiddleware
 {
     private readonly IAccountService _accountService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CheckAccountStatusMiddleware(IAccountService accountService)
+    public CheckAccountStatusMiddleware(IAccountService accountService, IHttpContextAccessor httpContextAccessor)
     {
         _accountService = accountService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -19,11 +28,12 @@ public class CheckAccountStatusMiddleware : IMiddleware
 
             if (account == null || account.IsDeleted)
             {
-                context.Response.ContentType = "text/html";
-                await context.Response.WriteAsync("<script>window.location.href = '/Index';</script>");
+                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                context.Response.Redirect("/Index");
                 return;
             }
         }
+
         await next(context);
     }
 }

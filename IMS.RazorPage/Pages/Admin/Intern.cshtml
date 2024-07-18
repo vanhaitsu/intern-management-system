@@ -217,7 +217,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form id="submit1" method="post">
+                                                    <form method="post" asp-route-id="@intern.Id">
                                                         <div class="row">
                                                             <div class="col-md-6 mb-3">
                                                                 <label for="basic-url-@intern.Id" class="form-label" asp-for="@internUpdate.FullName">Full Name</label>
@@ -279,12 +279,11 @@
                                                             <span asp-validation-for="@internUpdate.WorkHistory" class="text-danger"></span>
                                                         </div>
 
-
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save</button>
+                                                        </div>
                                                     </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button form="submit1" type="submit" asp-route-id="@intern.Id" class="btn btn-primary">Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -386,7 +385,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button form="submit"  type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
+                                <button form="submit" type="submit" asp-page-handler="Add" class="btn btn-primary">Create</button>
                             </div>
                         </div>
                     </div>
