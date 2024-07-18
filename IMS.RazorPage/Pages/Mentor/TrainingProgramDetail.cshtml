@@ -183,6 +183,7 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                     <form method="post" asp-page-handler="DeleteAssignment" asp-route-id="@assignment.Id" asp-route-name="@Model.TrainingProgram.Id">
                                         <input type="hidden" name="AssignmentId" value="@assignment.Id" />
+                                        <input type="hidden" asp-for="TrainingProgramId" value="@Model.TrainingProgramId" />
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
