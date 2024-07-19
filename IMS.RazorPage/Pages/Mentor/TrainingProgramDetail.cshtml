@@ -116,9 +116,15 @@
                         <span asp-validation-for="AssignmentCreateModel.Material" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
-                        <input asp-for="AssignmentCreateModel.InternEmail" type="email" class="form-control" id="assignmentInternEmail" placeholder="Intern Email" />
-                        <label asp-for="AssignmentCreateModel.InternEmail" for="assignmentInternEmail">Intern Email</label>
-                        <span asp-validation-for="AssignmentCreateModel.InternEmail" class="text-danger"></span>
+                        @* <input asp-for="AssignmentCreateModel.InternEmail" type="email" class="form-control" id="assignmentInternEmail" placeholder="Intern Email" /> *@
+                        <select class="form-select" asp-for="AssignmentCreateModel.InternId" id="assignmentInternId">
+                            @foreach(var item in Model.InternList)
+                            {
+                                <option value="@item.Id">@item.FullName</option>
+                            }
+                        </select>
+                        <label asp-for="AssignmentCreateModel.InternId" for="assignmentInternEmail">Intern</label>
+                        <span asp-validation-for="AssignmentCreateModel.InternId" class="text-danger"></span>
                     </div>
                     @if (Model.TrainingProgram != null)
                     {
@@ -152,7 +158,7 @@
 
                     <div class="d-flex flex-column border rounded p-3 mb-3 bg-white">
                         <div class="text-center">
-                            <p class="mb-1"><strong>@assignment.Name</strong></p>
+                            <p class="mb-1"><strong>@assignment.Name (@assignment.Intern.FullName)</strong></p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <div>
@@ -272,8 +278,20 @@
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input asp-for="AssignmentUpdateModel.InternEmail" value="@(assignment.Intern != null ? assignment.Intern?.Email : "")" type="email" class="form-control" id="floatingInput" placeholder="" />
-                                            <label asp-for="AssignmentUpdateModel.InternEmail" for="floatingInput">Intern email</label>
+                                            @* <input asp-for="AssignmentUpdateModel.InternEmail" value="@(assignment.Intern != null ? assignment.Intern?.Email : "")" type="email" class="form-control" id="floatingInput" placeholder="" /> *@
+                                            <select class="form-select" asp-for="AssignmentUpdateModel.InternId" id="assignmentInternId">
+                                                @foreach (var item in Model.InternList)
+                                                {
+                                                    @if(item.Id == assignment.Intern.Id)
+                                                    {
+                                                        <option value="@item.Id" selected>@item.FullName</option>
+                                                    } else
+                                                    {
+                                                        <option value="@item.Id">@item.FullName</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <label asp-for="AssignmentUpdateModel.InternEmail" for="floatingInput">Intern</label>
                                             <span asp-validation-for="AssignmentUpdateModel.InternEmail" class="text-danger"></span>
                                         </div>
 
@@ -349,7 +367,7 @@
         }
         else
         {
-            <div class="text-center" role="alert">
+            <div class="text-center" role="alert" style="margin-left : 10px">
                 No feedback found.
             </div>
         }

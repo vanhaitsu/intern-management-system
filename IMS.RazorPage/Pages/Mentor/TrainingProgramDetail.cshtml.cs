@@ -1,6 +1,7 @@
 using IMS.Repositories.Entities;
 using IMS.Repositories.Models.AssignmentModels;
 using IMS.Repositories.Models.FeedbackModel;
+using IMS.Repositories.Models.InternModel;
 using IMS.Repositories.Models.TrainingProgramModel;
 using IMS.Services.Interfaces;
 using IMS.Services.Services;
@@ -24,6 +25,7 @@ namespace IMS.RazorPage.Pages.Mentor
         public AssignmentCreateModel? AssignmentCreateModel { set; get; }
         [BindProperty]
         public AssignmentUpdateModel? AssignmentUpdateModel { set; get; }
+        public List<InternGetModel> InternList { get; set; }
 
         // Pagination
         public int TotalFeedbacks { get; set; }
@@ -78,6 +80,10 @@ namespace IMS.RazorPage.Pages.Mentor
 
                 Feedbacks = feedBackQueryResult.Data;
                 TotalFeedbacks = feedBackQueryResult.TotalCount;
+                InternList = await _internService.GetAllInterns(new InternFilterModel()
+                {
+                    MentorId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                });
             }
 
             return Page();
@@ -98,7 +104,7 @@ namespace IMS.RazorPage.Pages.Mentor
 
                 if (AssignmentCreateModel.InternEmail != null)
                 {
-                    var intern = await _internService.GetByEmail(AssignmentCreateModel.InternEmail);
+                    var intern = await _internService.GetInternAsync(AssignmentCreateModel.InternId);
                     if (intern == null)
                     {
                         TempData["ErrorMessage"] = "Intern does not exist!";
@@ -135,14 +141,12 @@ namespace IMS.RazorPage.Pages.Mentor
             {
                 if (AssignmentUpdateModel.InternEmail != null)
                 {
-                    var intern = await _internService.GetByEmail(AssignmentUpdateModel.InternEmail);
+                    var intern = await _internService.GetInternAsync(AssignmentUpdateModel.InternId);
                     if (intern == null)
                     {
                         TempData["ErrorMessage"] = "Intern does not exist!";
                         return RedirectToPage("/Mentor/TrainingProgramDetail", new { trainingProgramId = TrainingProgramId });
                     }
-
-                    AssignmentUpdateModel.InternId = intern.Id;
                 }
 
                 if (await _assignmentService.Update(AssignmentUpdateModel))
