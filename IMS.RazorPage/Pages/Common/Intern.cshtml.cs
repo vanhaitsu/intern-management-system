@@ -18,7 +18,6 @@ using System.Text;
 
 namespace IMS.RazorPage.Pages.Common
 {
-    [Authorize]
     public class InternManagementModel : PageModel
     {
         private readonly IInternService _internService;
