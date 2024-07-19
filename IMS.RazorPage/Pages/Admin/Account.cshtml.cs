@@ -174,7 +174,7 @@ namespace IMS.RazorPage.Pages.Admin
         {
             if (await _accountService.Update(id, updateModel))
             {
-                
+
                 TempData["Message"] = "Update successfully!";
                 TempData["ToastMessage"] = "Update successfully!";
                 TempData["ToastType"] = "success";
