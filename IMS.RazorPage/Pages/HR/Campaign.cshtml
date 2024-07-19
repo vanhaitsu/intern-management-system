@@ -102,7 +102,7 @@
                             <td>@campaign.Name</td>
                             <td>@campaign.Description</td>
                             <td>@(campaign.IsDelete.HasValue ? (campaign.IsDelete.Value ? "Unavailable" : "Available") : "Unknown")</td>
-                            <td class="d-flex">
+                            <td >
                                 <div class="dropdown">
                                     <button class="btn btn-secondary" type="button" id="dropdownMenuButton-@campaign.Id" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-three-dots"></i>
