@@ -11,6 +11,7 @@ namespace IMS.Repositories.Models.InternModel
     {
         public string Order { get; set; } = "creationDate";
         public bool OrderByDescending { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
         public Guid? MentorId { get; set; }
         public string? Search { get; set; }
         public int PageSize { get; set; } = 10;

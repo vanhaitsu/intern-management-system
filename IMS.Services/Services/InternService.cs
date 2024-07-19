@@ -174,7 +174,8 @@ namespace IMS_View.Services.Services
         {
             var internList = await _unitOfWork.InternRepository.GetAllAsync(
                 filter: x =>
-                    (filterModel.MentorId == null || x.Mentorships.SingleOrDefault().Id == filterModel.MentorId) &&
+                    x.IsDeleted == filterModel.IsDeleted &&
+                    (filterModel.MentorId == null || x.Mentorships.SingleOrDefault().AccountId == filterModel.MentorId) &&
                     (string.IsNullOrEmpty(filterModel.Search) || x.FullName.ToLower().Contains(filterModel.Search.ToLower()) ||
                      x.Email.ToLower().Contains(filterModel.Search.ToLower())),
                 orderBy: x => filterModel.OrderByDescending
