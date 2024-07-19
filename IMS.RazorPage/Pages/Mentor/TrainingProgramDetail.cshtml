@@ -207,7 +207,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="submit" method="post" asp-page-handler="EditAssignment" class="d-flex flex-column gap-4">
+                                    <form method="post" asp-page-handler="EditAssignment" asp-route-id ="@assignment.Id" class="d-flex flex-column gap-4">
                                         <div class="alert alert-danger" role="alert" asp-validation-summary="ModelOnly"></div>
 
                                         <!-- Include assignment ID for identification -->
@@ -283,11 +283,11 @@
                                             <label asp-for="AssignmentUpdateModel.Comment" for="floatingInput"></label>
                                             <span asp-validation-for="AssignmentUpdateModel.Comment" class="text-danger"></span>
                                         </div>
-                                    </form>
-                                </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" form="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit"  class="btn btn-primary">Save</button>
+                                </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
