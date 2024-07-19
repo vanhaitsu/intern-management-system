@@ -82,10 +82,10 @@ namespace IMS.RazorPage.Pages
             var accountModel = loginResult.LoginModel;
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, accountModel.Id.ToString()),
-        new Claim(ClaimTypes.Name, accountModel.Email)
-    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, accountModel.Id.ToString()),
+                new Claim(ClaimTypes.Name, accountModel.Email)
+            };
 
             if (!string.IsNullOrEmpty(accountModel.Role))
             {
